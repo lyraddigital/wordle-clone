@@ -10,6 +10,7 @@ export default function WordleProvider({ children }: PropsWithChildren) {
     const [history, setHistory] = useState<string[]>([]); // each guess is a string
     const [isCorrect, setIsCorrect] = useState<boolean>(false);
     const [usedKeys, setUsedKeys] = useState<{ [key: string]: string }>({});
+    const [isCurrentGuessIncorrect, setIsCurrentGuessIncorrect] = useState<boolean>(false);
 
     const wordleState = {
         solution,
@@ -19,13 +20,15 @@ export default function WordleProvider({ children }: PropsWithChildren) {
         history,
         isCorrect,
         usedKeys,
+        isCurrentGuessIncorrect,
         setSolution,
         setNumberOfTurns,
         setCurrentGuess,
         setGuesses,
         setHistory,
         setIsCorrect,
-        setUsedKeys
+        setUsedKeys,
+        setIsCurrentGuessIncorrect
     };
 
     return (

@@ -14,6 +14,7 @@ export const useEnterKeyboard = () => {
     setIsCorrect,
     setNumberOfTurns,
     setUsedKeys,
+    setIsCurrentGuessIncorrect,
     solution,
   } = useWordle();
 
@@ -95,18 +96,21 @@ export const useEnterKeyboard = () => {
   useHotkeys("enter", () => {
     if (numberOfTurns > 5) {
       console.log("You used all your guesses");
+      setIsCurrentGuessIncorrect(true);
       return;
     }
 
     // do not allow duplicate words
     if (history.includes(currentGuess)) {
       console.log("You have already tried that word");
+      setIsCurrentGuessIncorrect(true);
       return;
     }
 
     // check word is 5 chars long
     if (currentGuess.length !== 5) {
       console.log("Word must be 5 charas long");
+      setIsCurrentGuessIncorrect(true);
       return;
     }
 

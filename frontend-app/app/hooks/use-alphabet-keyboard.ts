@@ -3,10 +3,12 @@ import { HotkeysEvent } from "react-hotkeys-hook/dist/types";
 
 import useCurrentGuess from "./use-current-guess";
 import useCurrentGuessUpdater from "./use-current-guess-updater";
+import useIsCurrentGuessIncorrectUpdater from "./use-is-current-guess-incorrect-updater";
 
 export const useAlphabetKeyboard = () => {
   const currentGuess = useCurrentGuess();
   const setCurrentGuess = useCurrentGuessUpdater();
+  const setIsCurrentGuessIncorrect = useIsCurrentGuessIncorrectUpdater();
 
   useHotkeys(
     [
@@ -43,6 +45,7 @@ export const useAlphabetKeyboard = () => {
       if (keyPressed) {
         if (currentGuess.length < 5) {
           setCurrentGuess((prevGuess) => prevGuess + keyPressed);
+          setIsCurrentGuessIncorrect(false);
         }
       }
     }

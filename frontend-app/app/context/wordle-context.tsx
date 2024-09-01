@@ -8,6 +8,7 @@ export interface WordleState {
     history: string[];
     isCorrect: boolean;
     usedKeys: { [key: string]: string };
+    isCurrentGuessIncorrect: boolean;
     setSolution: Dispatch<SetStateAction<string>>;
     setNumberOfTurns: Dispatch<SetStateAction<number>>;
     setCurrentGuess: Dispatch<SetStateAction<string>>;
@@ -15,6 +16,7 @@ export interface WordleState {
     setHistory: Dispatch<SetStateAction<string[]>>;
     setIsCorrect: Dispatch<SetStateAction<boolean>>;
     setUsedKeys: Dispatch<SetStateAction<{ [key: string]: string }>>;
+    setIsCurrentGuessIncorrect: Dispatch<SetStateAction<boolean>>;
 }
 
 const WordleContext = createContext<WordleState>({} as WordleState);
