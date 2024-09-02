@@ -23,11 +23,11 @@ export default function KeyPad() {
                 <KeyPadKeySpacer />
             </KeyPadRow>
             <KeyPadRow>
-                <KeyPadKey value="Enter" classes="bg-neutral-500">Enter</KeyPadKey>
+                <KeyPadKey value="Enter" classes="text-[11px] bg-neutral-300 dark:bg-neutral-500">Enter</KeyPadKey>
                 {thirdRowLetters.map(l => (
                     <KeyPadAlphaKey key={l} letter={l} />
                 ))}
-                <KeyPadKey value="Backspace" classes="bg-neutral-500">Delete</KeyPadKey>
+                <KeyPadKey value="Backspace" classes="text-[11px] bg-neutral-300 dark:bg-neutral-500">Delete</KeyPadKey>
             </KeyPadRow>
         </div>
     );

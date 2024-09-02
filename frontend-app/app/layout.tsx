@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   const layoutClasses = clsx(
     inter.className,
-    "bg-stone-900"
+    "dark:bg-stone-900"
   );
 
   return (

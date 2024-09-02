@@ -14,7 +14,7 @@ export default function CurrentRow() {
         guessIsGuessIncorrect ? "incorrect" : undefined
     );
     const unfilledClasses = clsx(
-        "border-neutral-700",
+        "border-neutral-300 dark:border-neutral-700",
         guessIsGuessIncorrect ? "incorrect" : undefined
     );
     const letters = currentGuess.split("");

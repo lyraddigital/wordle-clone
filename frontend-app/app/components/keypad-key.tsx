@@ -11,7 +11,7 @@ interface KeyPadKeyProps extends PropsWithChildren {
 export default function KeyPadKey({ children, classes, value }: KeyPadKeyProps) {
     const handleKeypadPressed = useKeypadPress();
     const keyClasses = clsx(
-        "p-0 flex-1 text-neutral-300 uppercase font-bold h-[58px] rounded-[4px]",
+        "p-0 flex-1 dark:text-neutral-300 uppercase font-bold h-[58px] rounded-[4px]",
         classes
     );
 
