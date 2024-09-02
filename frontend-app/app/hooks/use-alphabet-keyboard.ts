@@ -1,14 +1,10 @@
 import { useHotkeys } from "react-hotkeys-hook";
 import { HotkeysEvent } from "react-hotkeys-hook/dist/types";
 
-import useCurrentGuess from "./use-current-guess";
-import useCurrentGuessUpdater from "./use-current-guess-updater";
-import useIsCurrentGuessIncorrectUpdater from "./use-is-current-guess-incorrect-updater";
+import { useAlphabetBinding } from "./use-alphabet-binding";
 
 export const useAlphabetKeyboard = () => {
-  const currentGuess = useCurrentGuess();
-  const setCurrentGuess = useCurrentGuessUpdater();
-  const setIsCurrentGuessIncorrect = useIsCurrentGuessIncorrectUpdater();
+  const handleAlphabetCharacter = useAlphabetBinding();
 
   useHotkeys(
     [
@@ -43,10 +39,7 @@ export const useAlphabetKeyboard = () => {
       const keyPressed = handler.keys ? handler.keys[0] : null;
 
       if (keyPressed) {
-        if (currentGuess.length < 5) {
-          setCurrentGuess((prevGuess) => prevGuess + keyPressed);
-          setIsCurrentGuessIncorrect(false);
-        }
+        handleAlphabetCharacter(keyPressed);
       }
     }
   );

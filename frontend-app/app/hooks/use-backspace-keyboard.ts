@@ -1,14 +1,11 @@
 import { useHotkeys } from "react-hotkeys-hook";
 
-import useCurrentGuessUpdater from "./use-current-guess-updater";
-import useIsCurrentGuessIncorrectUpdater from "./use-is-current-guess-incorrect-updater";
+import { useBackspaceBinding } from "./use-backspace-binding";
 
 export const useBackspaceKeyboard = () => {
-  const setCurrentGuess = useCurrentGuessUpdater();
-  const setIsCurrentGuessIncorrect = useIsCurrentGuessIncorrectUpdater();
+  const handleBackspace = useBackspaceBinding();
 
   useHotkeys("Backspace", () => {
-    setIsCurrentGuessIncorrect(false);
-    setCurrentGuess((prevGuess) => prevGuess.slice(0, -1));
+    handleBackspace();
   });
 };
