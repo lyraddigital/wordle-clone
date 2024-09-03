@@ -4,9 +4,11 @@ import useWordle from "./use-wordle";
 
 export const useEnterBinding = (): (() => void) => {
   const {
+    isGameOver,
     numberOfTurns,
     currentGuess,
     history,
+    setIsGameOver,
     setCurrentGuess,
     setGuesses,
     setHistory,
@@ -45,6 +47,7 @@ export const useEnterBinding = (): (() => void) => {
   const addNewGuess = (formattedGuess: { key: string; colour: string }[]) => {
     if (currentGuess === solution) {
       setIsCorrect(true);
+      setIsGameOver(true);
     }
 
     setGuesses((prevGuesses) => {
@@ -89,13 +92,15 @@ export const useEnterBinding = (): (() => void) => {
       return newKeys;
     });
 
+    if (numberOfTurns === 5) {
+      setIsGameOver(true);
+    }
+
     setCurrentGuess("");
   };
 
   const handleEnter = () => {
-    if (numberOfTurns > 5) {
-      console.log("You used all your guesses");
-      setIsCurrentGuessIncorrect(true);
+    if (isGameOver) {
       return;
     }
 

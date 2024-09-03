@@ -1,6 +1,6 @@
 import { PropsWithChildren, useState } from "react";
 
-import WordleContext from "../context/wordle-context";
+import WordleContext, { WordleState } from "../context/wordle-context";
 import getRandomWord from "../data/words";
 
 const randomWord = getRandomWord();
@@ -14,8 +14,9 @@ export default function WordleProvider({ children }: PropsWithChildren) {
     const [isCorrect, setIsCorrect] = useState<boolean>(false);
     const [usedKeys, setUsedKeys] = useState<{ [key: string]: string }>({});
     const [isCurrentGuessIncorrect, setIsCurrentGuessIncorrect] = useState<boolean>(false);
+    const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
-    const wordleState = {
+    const wordleState: WordleState = {
         solution,
         numberOfTurns,
         currentGuess,
@@ -24,6 +25,7 @@ export default function WordleProvider({ children }: PropsWithChildren) {
         isCorrect,
         usedKeys,
         isCurrentGuessIncorrect,
+        isGameOver,
         setSolution,
         setNumberOfTurns,
         setCurrentGuess,
@@ -31,7 +33,8 @@ export default function WordleProvider({ children }: PropsWithChildren) {
         setHistory,
         setIsCorrect,
         setUsedKeys,
-        setIsCurrentGuessIncorrect
+        setIsCurrentGuessIncorrect,
+        setIsGameOver
     };
 
     return (
