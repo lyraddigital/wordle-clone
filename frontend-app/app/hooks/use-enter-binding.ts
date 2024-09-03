@@ -1,3 +1,5 @@
+import { wordExists } from "../data/words";
+
 import useWordle from "./use-wordle";
 
 export const useEnterBinding = (): (() => void) => {
@@ -107,6 +109,12 @@ export const useEnterBinding = (): (() => void) => {
     // check word is 5 chars long
     if (currentGuess.length !== 5) {
       console.log("Word must be 5 charas long");
+      setIsCurrentGuessIncorrect(true);
+      return;
+    }
+
+    if (!wordExists(currentGuess)) {
+      console.log("Word does not exist");
       setIsCurrentGuessIncorrect(true);
       return;
     }

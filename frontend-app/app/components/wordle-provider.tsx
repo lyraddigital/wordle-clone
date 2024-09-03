@@ -1,9 +1,12 @@
 import { PropsWithChildren, useState } from "react";
 
 import WordleContext from "../context/wordle-context";
+import getRandomWord from "../data/words";
+
+const randomWord = getRandomWord();
 
 export default function WordleProvider({ children }: PropsWithChildren) {
-    const [solution, setSolution] = useState<string>("daryl");
+    const [solution, setSolution] = useState<string>(randomWord);
     const [numberOfTurns, setNumberOfTurns] = useState<number>(0);
     const [currentGuess, setCurrentGuess] = useState<string>("");
     const [guesses, setGuesses] = useState<({ key: string, colour: string }[] | undefined)[]>([...Array(6)]); // each guess is an array
