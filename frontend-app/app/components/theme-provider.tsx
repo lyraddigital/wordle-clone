@@ -19,6 +19,7 @@ export default function ThemeProvider({ children }: PropsWithChildren) {
     }, [isDarkMode]);
 
     const wordleState: ThemeState = {
+        isDarkMode,
         setIsDarkMode
     };
 
