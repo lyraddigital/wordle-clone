@@ -1,5 +1,6 @@
 import { wordExists } from "../data/words";
 
+import useStatisticsUpdater from "./use-statistics-updater";
 import useWordle from "./use-wordle";
 
 const useEnterBinding = (): (() => void) => {
@@ -18,6 +19,7 @@ const useEnterBinding = (): (() => void) => {
     setIsCurrentGuessIncorrect,
     solution,
   } = useWordle();
+  const updateStatisticsByGameResult = useStatisticsUpdater();
 
   const formatGuess = () => {
     let solutionArray: (string | null)[] = [...solution.split("")];
@@ -48,6 +50,7 @@ const useEnterBinding = (): (() => void) => {
     if (currentGuess === solution) {
       setIsCorrect(true);
       setIsGameOver(true);
+      updateStatisticsByGameResult(true);
     }
 
     setGuesses((prevGuesses) => {
@@ -94,6 +97,7 @@ const useEnterBinding = (): (() => void) => {
 
     if (numberOfTurns === 5) {
       setIsGameOver(true);
+      updateStatisticsByGameResult(false);
     }
 
     setCurrentGuess("");

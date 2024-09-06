@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 
 import useWordle from "../hooks/use-wordle";
+import useStatistics from "../hooks/use-statistics";
 
 export default function Modal() {
     const { isGameOver, isCorrect } = useWordle();
+    const { gamesPlayed, gamesWon, streak, maxStreak } = useStatistics();
     const [showModal, setShowModal] = useState(false);
+    const winPercentage = gamesPlayed === 0 || gamesWon === 0 ? 0 : ((gamesWon / gamesPlayed) * 100).toFixed(0);
 
     useEffect(() => {
         setTimeout(() => {
@@ -20,8 +23,8 @@ export default function Modal() {
 
     return (
         showModal && (
-            <div className="flex justify-center items-center fixed w-full h-full bg-white/50 dark:bg-neutral-600/50">
-                <div className="min-w-[390px] p-[8px] border-1 bg-white dark:bg-neutral-800 dark:text-white border-neutral-500 rounded-[16px] shadow-inner">
+            <div className="flex justify-center items-center fixed w-full h-full bg-neutral-800/50 dark:bg-neutral-600/50">
+                <div className="w-[90%] max-w-[470px] p-[8px] border-1 bg-white dark:bg-neutral-800 dark:text-white border-neutral-500 rounded-[16px] shadow-inner">
                     <div className="flex justify-end">
                         <span className="mr-2 cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
@@ -30,8 +33,26 @@ export default function Modal() {
                         </span>
                     </div>
                     <h2 className="text-center uppercase font-bold">Statistics</h2>
-                    <div className="mt-2 flex justify-center">
-                        <button className="bg-green-500 text-white text-2xl uppercase font-bold px-[6px] py-[1px]" onClick={handlePlayAgainClick}>
+                    <div className="mt-[10px] flex justify-center gap-1 px-12">
+                        <div className="flex-1">
+                            <div className="text-center text-4xl">{gamesPlayed}</div>
+                            <div className="text-center text-xs">Played</div>
+                        </div>
+                        <div className="flex-1">
+                            <div className="text-center text-4xl">{winPercentage}</div>
+                            <div className="text-center text-xs">Win %</div>
+                        </div>
+                        <div className="flex-1">
+                            <div className="text-center text-4xl">{streak}</div>
+                            <div className="text-center text-xs">Current Streak</div>
+                        </div>
+                        <div className="flex-1">
+                            <div className="text-center text-4xl">{maxStreak}</div>
+                            <div className="text-center text-xs">Max Streek</div>
+                        </div>
+                    </div>
+                    <div className="my-[20px] flex justify-center">
+                        <button className="bg-green-500 text-white text-2xl uppercase font-bold px-[10px] py-[4px] rounded-lg" onClick={handlePlayAgainClick}>
                             Play Again
                         </button>
                     </div>
