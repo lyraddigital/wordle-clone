@@ -4,8 +4,8 @@ import useWordle from "../hooks/use-wordle";
 import useStatistics from "../hooks/use-statistics";
 
 export default function Modal() {
-    const { isGameOver, isCorrect } = useWordle();
-    const { gamesPlayed, gamesWon, streak, maxStreak } = useStatistics();
+    const { isGameOver } = useWordle();
+    const { gamesPlayed, gamesWon, streak, maxStreak, guessDistribution } = useStatistics();
     const [showModal, setShowModal] = useState(false);
     const winPercentage = gamesPlayed === 0 || gamesWon === 0 ? 0 : ((gamesWon / gamesPlayed) * 100).toFixed(0);
 
@@ -33,7 +33,7 @@ export default function Modal() {
                         </span>
                     </div>
                     <h2 className="text-center uppercase font-bold">Statistics</h2>
-                    <div className="mt-[10px] flex justify-center gap-1 px-12">
+                    <div className="mt-[10px] flex justify-center gap-1 px-24">
                         <div className="flex-1">
                             <div className="text-center text-4xl">{gamesPlayed}</div>
                             <div className="text-center text-xs">Played</div>
@@ -49,6 +49,33 @@ export default function Modal() {
                         <div className="flex-1">
                             <div className="text-center text-4xl">{maxStreak}</div>
                             <div className="text-center text-xs">Max Streek</div>
+                        </div>
+                    </div>
+                    <h3 className="my-[20px] text-center uppercase font-bold text-lg">Guess Distribution</h3>
+                    <div className="px-16 text-xs">
+                        <div className="flex gap-2 items-center mb-1">
+                            <div className="basis-[10px]">1</div>
+                            <div className="basis-1 flex justify-end px-2 dark:text-white dark:bg-neutral-500 font-bold">{guessDistribution[1]}</div>
+                        </div>
+                        <div className="flex gap-2 items-center mb-1">
+                            <div className="basis-[10px]">2</div>
+                            <div className="basis-12 flex justify-end px-2 dark:text-white dark:bg-neutral-500 font-bold">{guessDistribution[2]}</div>
+                        </div>
+                        <div className="flex gap-2 items-center mb-1">
+                            <div className="basis-[10px]">3</div>
+                            <div className="basis-1 flex justify-end px-2 dark:text-white dark:bg-neutral-500 font-bold">{guessDistribution[3]}</div>
+                        </div>
+                        <div className="flex gap-2 items-center mb-1">
+                            <div className="basis-[10px]">4</div>
+                            <div className="basis-12 flex justify-end px-2 dark:text-white dark:bg-neutral-500 font-bold">{guessDistribution[4]}</div>
+                        </div>
+                        <div className="flex gap-2 items-center mb-1">
+                            <div className="basis-[10px]">5</div>
+                            <div className="basis-12 flex justify-end px-2 dark:text-white dark:bg-neutral-500 font-bold">{guessDistribution[5]}</div>
+                        </div>
+                        <div className="flex gap-2 items-center mb-1">
+                            <div className="basis-[10px]">6</div>
+                            <div className="basis-1 flex justify-end px-2 dark:text-white dark:bg-neutral-500 font-bold">{guessDistribution[6]}</div>
                         </div>
                     </div>
                     <div className="my-[20px] flex justify-center">

@@ -5,7 +5,8 @@ import {
     getGamesPlayedFromLocalStorage,
     getGamesWonFromLocalStorage,
     getStreakFromLocalStorage,
-    getMaxStreakFromLocalStorage
+    getMaxStreakFromLocalStorage,
+    getGuessDistributionFromLocalStorage
 } from "../../utility/utilities";
 
 export default function StatisticsProvider({ children }: PropsWithChildren) {
@@ -13,16 +14,19 @@ export default function StatisticsProvider({ children }: PropsWithChildren) {
     const [gamesWon, setGamesWon] = useState<number>(getGamesWonFromLocalStorage());
     const [streak, setStreak] = useState<number>(getStreakFromLocalStorage());
     const [maxStreak, setMaxStreak] = useState<number>(getMaxStreakFromLocalStorage());
+    const [guessDistribution, setGuessDistribution] = useState<{ [key: number]: number }>(getGuessDistributionFromLocalStorage());
 
     const wordleState: StatisticsState = {
         gamesPlayed,
         gamesWon,
         streak,
         maxStreak,
+        guessDistribution,
         setGamesPlayed,
         setGamesWon,
         setStreak,
-        setMaxStreak
+        setMaxStreak,
+        setGuessDistribution
     };
 
     return (

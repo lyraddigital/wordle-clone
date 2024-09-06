@@ -50,7 +50,7 @@ const useEnterBinding = (): (() => void) => {
     if (currentGuess === solution) {
       setIsCorrect(true);
       setIsGameOver(true);
-      updateStatisticsByGameResult(true);
+      updateStatisticsByGameResult(true, numberOfTurns);
     }
 
     setGuesses((prevGuesses) => {

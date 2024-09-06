@@ -3,14 +3,27 @@ import {
   setGamesWonToLocalStorage,
   setStreakToLocalStorage,
   setMaxStreakToLocalStorage,
+  setGuessDistributionToLocalStorage,
 } from "../utility/utilities";
 
 import useStatistics from "./use-statistics";
 
-const useStatisticsUpdater = (): ((hasWon: boolean) => void) => {
-  const { setGamesPlayed, setGamesWon, setStreak, setMaxStreak, streak } =
-    useStatistics();
-  const updateStatisticsByGameResult = (hasWon: boolean) => {
+const useStatisticsUpdater = (): ((
+  hasWon: boolean,
+  currentTurn?: number
+) => void) => {
+  const {
+    setGamesPlayed,
+    setGamesWon,
+    setGuessDistribution,
+    setStreak,
+    setMaxStreak,
+    streak,
+  } = useStatistics();
+  const updateStatisticsByGameResult = (
+    hasWon: boolean,
+    currentTurn?: number
+  ) => {
     setGamesPlayed((prevGamesPlayed) => {
       const newGamesPlayed = prevGamesPlayed + 1;
       setGamesPlayedToLocalStorage(newGamesPlayed);
@@ -41,6 +54,17 @@ const useStatisticsUpdater = (): ((hasWon: boolean) => void) => {
 
         return newMaxStreak;
       });
+
+      if (currentTurn !== undefined) {
+        setGuessDistribution((prevGuessDistribution) => {
+          const newGuessDistribution = { ...prevGuessDistribution };
+          newGuessDistribution[currentTurn + 1] += 1;
+
+          setGuessDistributionToLocalStorage(newGuessDistribution);
+
+          return newGuessDistribution;
+        });
+      }
     }
   };
 
