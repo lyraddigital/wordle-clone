@@ -11,7 +11,7 @@ export default function Modal() {
             if (isGameOver) {
                 setShowModal(true);
             }
-        }, 3000);
+        }, 1250);
     }, [isGameOver, setShowModal]);
 
     const handlePlayAgainClick = () => {

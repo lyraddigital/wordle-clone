@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-import useUsedKeys from "../hooks/use-used-keys";
+import useWordle from "../../hooks/use-wordle";
 
 import KeyPadKey from "./keypad-key";
 
@@ -9,7 +9,7 @@ interface KeyPadAlphaKeyProps {
 }
 
 export default function KeyPadAlphaKey({ letter }: KeyPadAlphaKeyProps) {
-    const usedKeys = useUsedKeys();
+    const { usedKeys } = useWordle();
     const colour = usedKeys[letter];
     const keyClasses = clsx(
         colour == "yellow" ? "text-neutral-100 bg-yellow-500 dark:bg-yellow-600" : undefined,

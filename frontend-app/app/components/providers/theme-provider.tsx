@@ -1,7 +1,7 @@
 import { PropsWithChildren, useEffect, useState } from "react";
 
-import ThemeContext, { ThemeState } from "../context/theme-context";
-import { getIsDarkModeFromLocalStorage, setIsDarkModelToLocalStorage } from "../utility/utilities";
+import ThemeContext, { ThemeState } from "../../context/theme-context";
+import { getIsDarkModeFromLocalStorage, setIsDarkModelToLocalStorage } from "../../utility/utilities";
 
 export default function ThemeProvider({ children }: PropsWithChildren) {
     const [isDarkMode, setIsDarkMode] = useState<boolean>(getIsDarkModeFromLocalStorage());

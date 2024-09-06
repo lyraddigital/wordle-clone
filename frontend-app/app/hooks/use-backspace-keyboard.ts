@@ -1,11 +1,13 @@
 import { useHotkeys } from "react-hotkeys-hook";
 
-import { useBackspaceBinding } from "./use-backspace-binding";
+import useBackspaceBinding from "./use-backspace-binding";
 
-export const useBackspaceKeyboard = () => {
+const useBackspaceKeyboard = () => {
   const handleBackspace = useBackspaceBinding();
 
   useHotkeys("Backspace", () => {
     handleBackspace();
   });
 };
+
+export default useBackspaceKeyboard;

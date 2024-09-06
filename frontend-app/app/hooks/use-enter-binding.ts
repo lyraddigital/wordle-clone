@@ -2,7 +2,7 @@ import { wordExists } from "../data/words";
 
 import useWordle from "./use-wordle";
 
-export const useEnterBinding = (): (() => void) => {
+const useEnterBinding = (): (() => void) => {
   const {
     isGameOver,
     numberOfTurns,
@@ -130,3 +130,5 @@ export const useEnterBinding = (): (() => void) => {
 
   return handleEnter;
 };
+
+export default useEnterBinding;

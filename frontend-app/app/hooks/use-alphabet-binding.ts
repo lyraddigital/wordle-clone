@@ -1,6 +1,6 @@
 import useWordle from "./use-wordle";
 
-export const useAlphabetBinding = (): ((keyPressed: string) => void) => {
+const useAlphabetBinding = (): ((keyPressed: string) => void) => {
   const {
     currentGuess,
     isGameOver,
@@ -21,3 +21,5 @@ export const useAlphabetBinding = (): ((keyPressed: string) => void) => {
 
   return handleAlphabetCharacter;
 };
+
+export default useAlphabetBinding;

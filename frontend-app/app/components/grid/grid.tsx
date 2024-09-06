@@ -1,12 +1,12 @@
-import useWordleGrid from "../hooks/use-wordle-grid";
-import useWordleKeyboard from "../hooks/use-wordle-keyboard";
+import useWordle from "../../hooks/use-wordle";
+import useWordleKeyboard from "../../hooks/use-wordle-keyboard";
 
 import CurrentRow from "./current-row";
 import EmptyRow from "./empty-row";
 import ExistingRow from "./existing-row";
 
 export default function Grid() {
-    const { guesses, numberOfTurns } = useWordleGrid();
+    const { guesses, numberOfTurns } = useWordle();
 
     useWordleKeyboard();
 

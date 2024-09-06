@@ -1,9 +1,9 @@
 import { useHotkeys } from "react-hotkeys-hook";
 import { HotkeysEvent } from "react-hotkeys-hook/dist/types";
 
-import { useAlphabetBinding } from "./use-alphabet-binding";
+import useAlphabetBinding from "./use-alphabet-binding";
 
-export const useAlphabetKeyboard = () => {
+const useAlphabetKeyboard = () => {
   const handleAlphabetCharacter = useAlphabetBinding();
 
   useHotkeys(
@@ -44,3 +44,5 @@ export const useAlphabetKeyboard = () => {
     }
   );
 };
+
+export default useAlphabetKeyboard;

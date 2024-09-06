@@ -1,7 +1,7 @@
 import { PropsWithChildren, useState } from "react";
 
-import WordleContext, { WordleState } from "../context/wordle-context";
-import getRandomWord from "../data/words";
+import WordleContext, { WordleState } from "../../context/wordle-context";
+import getRandomWord from "../../data/words";
 
 const randomWord = getRandomWord();
 

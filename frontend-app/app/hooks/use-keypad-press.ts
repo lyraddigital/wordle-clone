@@ -1,8 +1,8 @@
-import { useAlphabetBinding } from "./use-alphabet-binding";
-import { useBackspaceBinding } from "./use-backspace-binding";
-import { useEnterBinding } from "./use-enter-binding";
+import useAlphabetBinding from "./use-alphabet-binding";
+import useBackspaceBinding from "./use-backspace-binding";
+import useEnterBinding from "./use-enter-binding";
 
-export const useKeypadPress = (): ((keyPressed: string) => void) => {
+const useKeypadPress = (): ((keyPressed: string) => void) => {
   const handleAlphabetCharacter = useAlphabetBinding();
   const handleBackspace = useBackspaceBinding();
   const handleEnter = useEnterBinding();
@@ -19,3 +19,5 @@ export const useKeypadPress = (): ((keyPressed: string) => void) => {
 
   return handleKeypadPressed;
 };
+
+export default useKeypadPress;

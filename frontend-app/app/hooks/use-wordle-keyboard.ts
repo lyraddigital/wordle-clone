@@ -1,6 +1,6 @@
-import { useAlphabetKeyboard } from "./use-alphabet-keyboard";
-import { useBackspaceKeyboard } from "./use-backspace-keyboard";
-import { useEnterKeyboard } from "./use-enter-keyboard";
+import useAlphabetKeyboard from "./use-alphabet-keyboard";
+import useBackspaceKeyboard from "./use-backspace-keyboard";
+import useEnterKeyboard from "./use-enter-keyboard";
 
 const useWordleKeyboard = () => {
   useAlphabetKeyboard();

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { PropsWithChildren } from "react";
 
-import { useKeypadPress } from "../hooks/use-keypad-press";
+import useKeypadPress from "../../hooks/use-keypad-press";
 
 interface KeyPadKeyProps extends PropsWithChildren {
     value: string;

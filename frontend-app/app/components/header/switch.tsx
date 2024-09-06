@@ -1,7 +1,7 @@
-import useTheme from "../hooks/use-theme";
+import useTheme from "../../hooks/use-theme";
 
-import MoonIcon from "./moon-icon";
-import SunIcon from "./sun-icon";
+import MoonIcon from "../icons/moon-icon";
+import SunIcon from "../icons/sun-icon";
 
 export default function Switch() {
     const { isDarkMode, setIsDarkMode } = useTheme();
