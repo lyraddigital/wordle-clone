@@ -20,8 +20,8 @@ export default function Modal() {
 
     return (
         showModal && (
-            <div className="flex justify-center items-center fixed w-full h-full bg-white/50">
-                <div className="min-w-[390px] p-[8px] border-1 bg-white border-neutral-500 rounded-[16px] shadow-inner">
+            <div className="flex justify-center items-center fixed w-full h-full bg-white/50 dark:bg-neutral-600/50">
+                <div className="min-w-[390px] p-[8px] border-1 bg-white dark:bg-neutral-800 dark:text-white border-neutral-500 rounded-[16px] shadow-inner">
                     <div className="flex justify-end">
                         <span className="mr-2 cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
