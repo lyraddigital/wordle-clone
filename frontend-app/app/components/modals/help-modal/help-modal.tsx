@@ -19,7 +19,7 @@ export default function HelpModal() {
                     <section>
                         <h4 className="mt-[10px] text-sm font-bold">Examples</h4>
                         <div className="mt-[10px] flex gap-1">
-                            <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400 bg-green-600 text-white">B</div>
+                            <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400 bg-green-700 text-white">B</div>
                             <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400">E</div>
                             <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400">A</div>
                             <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400">S</div>
@@ -33,7 +33,7 @@ export default function HelpModal() {
                             <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400">S</div>
                             <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400">C</div>
                             <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400">O</div>
-                            <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400 bg-yellow-400 text-white">R</div>
+                            <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400 bg-yellow-500 text-white">R</div>
                             <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400">E</div>
                         </div>
                         <p className="my-3">
@@ -41,7 +41,7 @@ export default function HelpModal() {
                             contains the letter <strong>R</strong>, but it&apos;s not the 4th letter.
                         </p>
                         <div className="mt-[10px] flex gap-1">
-                            <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400 bg-neutral-500 text-white">A</div>
+                            <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400 bg-neutral-600 text-white">A</div>
                             <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400">P</div>
                             <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400">P</div>
                             <div className="py-2 px-3 text-3xl font-bold upper border-2 border-neutral-400">L</div>

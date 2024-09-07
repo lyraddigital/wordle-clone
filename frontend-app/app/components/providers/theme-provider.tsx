@@ -1,10 +1,11 @@
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect } from "react";
 
 import ThemeContext, { ThemeState } from "../../context/theme-context";
-import { getIsDarkModeFromLocalStorage, setIsDarkModelToLocalStorage } from "../../utility/utilities";
+import useLocalStorage from "../../hooks/use-local-storage";
+import { isDarkModeKey } from "../../utility/utilities";
 
 export default function ThemeProvider({ children }: PropsWithChildren) {
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(getIsDarkModeFromLocalStorage());
+    const [isDarkMode, setIsDarkMode] = useLocalStorage(isDarkModeKey, false);
 
     useEffect(() => {
         const htmlElement = document.getElementsByTagName("html")[0];
@@ -14,8 +15,6 @@ export default function ThemeProvider({ children }: PropsWithChildren) {
         } else {
             htmlElement.classList.remove("dark");
         }
-
-        setIsDarkModelToLocalStorage(isDarkMode);
     }, [isDarkMode]);
 
     const wordleState: ThemeState = {

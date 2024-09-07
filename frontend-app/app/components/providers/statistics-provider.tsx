@@ -1,20 +1,21 @@
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren } from "react";
 
 import StatisticsContext, { StatisticsState } from "../../context/statistics-context";
+import useLocalStorage from "../../hooks/use-local-storage";
 import {
-    getGamesPlayedFromLocalStorage,
-    getGamesWonFromLocalStorage,
-    getStreakFromLocalStorage,
-    getMaxStreakFromLocalStorage,
-    getGuessDistributionFromLocalStorage
+    gamesPlayedKey,
+    gamesWonKey,
+    streakKey,
+    maxStreakKey,
+    guessDistributionKey
 } from "../../utility/utilities";
 
 export default function StatisticsProvider({ children }: PropsWithChildren) {
-    const [gamesPlayed, setGamesPlayed] = useState<number>(getGamesPlayedFromLocalStorage());
-    const [gamesWon, setGamesWon] = useState<number>(getGamesWonFromLocalStorage());
-    const [streak, setStreak] = useState<number>(getStreakFromLocalStorage());
-    const [maxStreak, setMaxStreak] = useState<number>(getMaxStreakFromLocalStorage());
-    const [guessDistribution, setGuessDistribution] = useState<{ [key: number]: number }>(getGuessDistributionFromLocalStorage());
+    const [gamesPlayed, setGamesPlayed] = useLocalStorage(gamesPlayedKey, 0);
+    const [gamesWon, setGamesWon] = useLocalStorage(gamesWonKey, 0);
+    const [streak, setStreak] = useLocalStorage(streakKey, 0);
+    const [maxStreak, setMaxStreak] = useLocalStorage(maxStreakKey, 0);
+    const [guessDistribution, setGuessDistribution] = useLocalStorage(guessDistributionKey, { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 } as { [key: number]: number });
 
     const wordleState: StatisticsState = {
         gamesPlayed,
