@@ -49,7 +49,7 @@ export default function HelpModal() {
                         </div>
                         <p className="my-3">
                             When a letter is marked in a dark grey color, this means that this letter does not exist anywhere in the word. In the case of above the <span>A</span> letter does not appear anywhere
-                            in the word you're trying to guess, so you should not guess words with the letter A going forward.
+                            in the word you&apos;re trying to guess, so you should not guess words with the letter A going forward.
                         </p>
                     </section>
                 </section>

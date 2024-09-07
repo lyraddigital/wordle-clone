@@ -4,12 +4,13 @@ const useAlphabetBinding = (): ((keyPressed: string) => void) => {
   const {
     currentGuess,
     isGameOver,
+    isGuessAnimationFiring,
     setCurrentGuess,
     setIsCurrentGuessIncorrect,
   } = useWordle();
 
   const handleAlphabetCharacter = (keyPressed: string) => {
-    if (isGameOver) {
+    if (isGameOver || isGuessAnimationFiring) {
       return;
     }
 

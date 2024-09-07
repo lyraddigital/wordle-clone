@@ -8,6 +8,7 @@ const useEnterBinding = (): (() => void) => {
     isGameOver,
     numberOfTurns,
     currentGuess,
+    isGuessAnimationFiring,
     history,
     setIsGameOver,
     setCurrentGuess,
@@ -17,6 +18,7 @@ const useEnterBinding = (): (() => void) => {
     setNumberOfTurns,
     setUsedKeys,
     setIsCurrentGuessIncorrect,
+    setIsGuessAnimationFiring,
     solution,
   } = useWordle();
   const updateStatisticsByGameResult = useStatisticsUpdater();
@@ -98,13 +100,18 @@ const useEnterBinding = (): (() => void) => {
     if (numberOfTurns === 5) {
       setIsGameOver(true);
       updateStatisticsByGameResult(false);
+    } else {
+      setIsGuessAnimationFiring(true);
+      setTimeout(() => {
+        setIsGuessAnimationFiring(false);
+      }, 750);
     }
 
     setCurrentGuess("");
   };
 
   const handleEnter = () => {
-    if (isGameOver) {
+    if (isGameOver || isGuessAnimationFiring) {
       return;
     }
 

@@ -1,11 +1,15 @@
 import useWordle from "./use-wordle";
 
 const useBackspaceBinding = (): (() => void) => {
-  const { isGameOver, setCurrentGuess, setIsCurrentGuessIncorrect } =
-    useWordle();
+  const {
+    isGameOver,
+    isGuessAnimationFiring,
+    setCurrentGuess,
+    setIsCurrentGuessIncorrect,
+  } = useWordle();
 
   const handleBackspace = () => {
-    if (isGameOver) {
+    if (isGameOver || isGuessAnimationFiring) {
       return;
     }
 

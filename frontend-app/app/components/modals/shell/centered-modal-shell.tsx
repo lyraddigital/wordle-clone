@@ -14,7 +14,7 @@ export default function CenteredModalShell({ children, footerContent, onClose, s
     return (
         showModal && (
             <ModalOverlay showModal={showModal}>
-                <div className="w-[90%] max-w-[570px] p-[8px] pt-[20px] pb-[40px] border-1 bg-white dark:bg-neutral-800 dark:text-white border-neutral-500 rounded-[16px] shadow-inner">
+                <div className="w-[90%] max-w-[470px] p-[8px] pt-[20px] pb-[40px] border-1 bg-white dark:bg-neutral-800 dark:text-white border-neutral-500 rounded-[16px] shadow-inner">
                     {showCloseBox && <div className="flex justify-end">
                         <span className="mr-2 cursor-pointer" onClick={onClose}>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">

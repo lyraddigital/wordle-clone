@@ -15,6 +15,7 @@ export default function WordleProvider({ children }: PropsWithChildren) {
     const [usedKeys, setUsedKeys] = useState<{ [key: string]: string }>({});
     const [isCurrentGuessIncorrect, setIsCurrentGuessIncorrect] = useState<boolean>(false);
     const [isGameOver, setIsGameOver] = useState<boolean>(false);
+    const [isGuessAnimationFiring, setIsGuessAnimationFiring] = useState<boolean>(false);
 
     const wordleState: WordleState = {
         solution,
@@ -26,6 +27,7 @@ export default function WordleProvider({ children }: PropsWithChildren) {
         usedKeys,
         isCurrentGuessIncorrect,
         isGameOver,
+        isGuessAnimationFiring,
         setSolution,
         setNumberOfTurns,
         setCurrentGuess,
@@ -34,7 +36,8 @@ export default function WordleProvider({ children }: PropsWithChildren) {
         setIsCorrect,
         setUsedKeys,
         setIsCurrentGuessIncorrect,
-        setIsGameOver
+        setIsGameOver,
+        setIsGuessAnimationFiring
     };
 
     return (
