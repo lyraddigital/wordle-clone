@@ -8,7 +8,7 @@ import Tile from "./tile";
 export default function CurrentRow() {
     const { currentGuess, isCurrentGuessIncorrect } = useWordle();
     const filledClasses = clsx(
-        "filled",
+        " ",
         isCurrentGuessIncorrect ? "incorrect" : undefined
     );
     const unfilledClasses = clsx(

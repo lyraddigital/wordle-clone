@@ -1,7 +1,5 @@
 'use client';
 
-import { Toaster } from "react-hot-toast";
-
 import Help from "./header/help";
 import Statistics from "./header/statistics";
 import Switch from "./header/switch";
@@ -20,7 +18,6 @@ export default function GameBoard() {
             <StatisticsProvider>
                 <WordleProvider>
                     <ModalsProvider>
-                        <Toaster />
                         <Help />
                         <Statistics />
                         <Switch />

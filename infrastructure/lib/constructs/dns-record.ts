@@ -3,7 +3,7 @@ import { IDistribution } from "aws-cdk-lib/aws-cloudfront";
 import { ARecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 
-import { SITE_ROOT_DOMAIN } from "../constants";
+import { SITE_ROOT_DOMAIN } from "../constants/constants";
 import { DomainProps } from "../props/domain-props";
 
 export interface DNSRecordProps extends DomainProps {

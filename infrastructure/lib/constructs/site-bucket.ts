@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { RemovalPolicy } from "aws-cdk-lib";
 import { BlockPublicAccess, Bucket, IBucket } from "aws-cdk-lib/aws-s3";
 
-import { SITE_ROOT_DOMAIN } from "../constants";
+import { SITE_ROOT_DOMAIN } from "../constants/constants";
 import { DomainProps } from "../props/domain-props";
 
 export class SiteBucket extends Construct {

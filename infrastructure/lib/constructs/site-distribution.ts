@@ -1,21 +1,19 @@
 import { Construct } from "constructs";
 import { IBucket } from "aws-cdk-lib/aws-s3";
 import {
-  CloudFrontWebDistribution,
+  Distribution,
+  HttpVersion,
   IDistribution,
-  OriginAccessIdentity,
   PriceClass,
-  SecurityPolicyProtocol,
   SSLMethod,
-  ViewerCertificate,
 } from "aws-cdk-lib/aws-cloudfront";
-import { HostedZone } from "aws-cdk-lib/aws-route53";
+import { S3StaticWebsiteOrigin } from "aws-cdk-lib/aws-cloudfront-origins";
 import {
   CertificateValidation,
-  DnsValidatedCertificate,
+  Certificate,
 } from "aws-cdk-lib/aws-certificatemanager";
 
-import { SITE_ROOT_DOMAIN } from "../constants";
+import { SITE_ROOT_DOMAIN } from "../constants/constants";
 import { DomainProps } from "../props/domain-props";
 
 export interface SiteDistributionProps extends DomainProps {
@@ -28,54 +26,37 @@ export class SiteDistribution extends Construct {
   constructor(parent: Construct, id: string, props: SiteDistributionProps) {
     super(parent, id);
 
-    const zone = HostedZone.fromLookup(this, "Zone", {
-      domainName: SITE_ROOT_DOMAIN,
-    });
     const domainName = props.subDomain
       ? `${props.subDomain}.${SITE_ROOT_DOMAIN}`
       : SITE_ROOT_DOMAIN;
 
-    const certificate = new DnsValidatedCertificate(
-      this,
-      "WebsiteCertificate",
-      {
-        domainName: domainName,
-        validation: CertificateValidation.fromDns(),
-        hostedZone: zone,
-        region: "us-east-1",
-      }
-    );
+    const certificate = new Certificate(this, "WebsiteCertificate", {
+      domainName: domainName,
+      validation: CertificateValidation.fromDns(),
+    });
 
-    const originIdentity = new OriginAccessIdentity(
-      this,
-      "WebsiteDistributionOriginIdentity"
-    );
-    props.siteBucket.grantRead(originIdentity);
-
-    this.instance = new CloudFrontWebDistribution(this, "WebsiteDistribution", {
-      viewerCertificate: ViewerCertificate.fromAcmCertificate(certificate, {
-        sslMethod: SSLMethod.SNI,
-        securityPolicy: SecurityPolicyProtocol.TLS_V1_2_2021,
-        aliases: [domainName],
-      }),
-      errorConfigurations: [
+    this.instance = new Distribution(this, "WebsiteDistribution", {
+      // certificate: ViewerCertificate.fromAcmCertificate(certificate, {
+      //   sslMethod: SSLMethod.SNI,
+      //   securityPolicy: SecurityPolicyProtocol.TLS_V1_2_2021,
+      //   aliases: [domainName],
+      // }),
+      certificate,
+      defaultBehavior: {
+        origin: new S3StaticWebsiteOrigin(props.siteBucket),
+        compress: true,
+      },
+      domainNames: [domainName],
+      errorResponses: [
         {
-          errorCode: 404,
-          responseCode: 200,
+          httpStatus: 404,
+          responseHttpStatus: 200,
           responsePagePath: "/index.html",
         },
       ],
-      originConfigs: [
-        {
-          s3OriginSource: {
-            s3BucketSource: props.siteBucket,
-            originAccessIdentity: originIdentity,
-          },
-
-          behaviors: [{ isDefaultBehavior: true }],
-        },
-      ],
+      httpVersion: HttpVersion.HTTP2,
       priceClass: PriceClass.PRICE_CLASS_ALL,
+      sslSupportMethod: SSLMethod.SNI,
     });
   }
 }

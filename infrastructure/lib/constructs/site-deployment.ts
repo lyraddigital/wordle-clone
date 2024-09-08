@@ -17,7 +17,7 @@ export class SiteDeployment extends Construct {
       sources: [Source.asset(props.sourceCodeFolder)],
       destinationBucket: props.bucket,
       distribution: props.distribution,
-      distributionPaths: ["/index.html", "/static/js/weatherConfig.js"],
+      distributionPaths: ["/index.html"],
     });
   }
 }
