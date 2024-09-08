@@ -1,0 +1,19 @@
+name: Deployment Flow
+concurrency: deployment-flow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Next.js dependencies
+        run: |
+          cd frontend-app
+          npm install
