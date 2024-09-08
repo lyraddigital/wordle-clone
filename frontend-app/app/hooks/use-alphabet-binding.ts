@@ -1,3 +1,4 @@
+import useModals from "./use-modals";
 import useWordle from "./use-wordle";
 
 const useAlphabetBinding = (): ((keyPressed: string) => void) => {
@@ -8,9 +9,15 @@ const useAlphabetBinding = (): ((keyPressed: string) => void) => {
     setCurrentGuess,
     setIsCurrentGuessIncorrect,
   } = useWordle();
+  const { showStatisticsModal, showHelpModal } = useModals();
 
   const handleAlphabetCharacter = (keyPressed: string) => {
-    if (isGameOver || isGuessAnimationFiring) {
+    if (
+      isGameOver ||
+      isGuessAnimationFiring ||
+      showStatisticsModal ||
+      showHelpModal
+    ) {
       return;
     }
 

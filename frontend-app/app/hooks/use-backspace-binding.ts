@@ -1,3 +1,4 @@
+import useModals from "./use-modals";
 import useWordle from "./use-wordle";
 
 const useBackspaceBinding = (): (() => void) => {
@@ -7,9 +8,15 @@ const useBackspaceBinding = (): (() => void) => {
     setCurrentGuess,
     setIsCurrentGuessIncorrect,
   } = useWordle();
+  const { showStatisticsModal, showHelpModal } = useModals();
 
   const handleBackspace = () => {
-    if (isGameOver || isGuessAnimationFiring) {
+    if (
+      isGameOver ||
+      isGuessAnimationFiring ||
+      showStatisticsModal ||
+      showHelpModal
+    ) {
       return;
     }
 

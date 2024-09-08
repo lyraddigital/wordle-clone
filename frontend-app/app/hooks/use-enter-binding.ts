@@ -1,7 +1,9 @@
+import toast from "react-hot-toast";
 import { wordExists } from "../data/words";
 
 import useStatisticsUpdater from "./use-statistics-updater";
 import useWordle from "./use-wordle";
+import useModals from "./use-modals";
 
 const useEnterBinding = (): (() => void) => {
   const {
@@ -21,6 +23,7 @@ const useEnterBinding = (): (() => void) => {
     setIsGuessAnimationFiring,
     solution,
   } = useWordle();
+  const { showStatisticsModal, showHelpModal } = useModals();
   const updateStatisticsByGameResult = useStatisticsUpdater();
 
   const formatGuess = () => {
@@ -111,26 +114,31 @@ const useEnterBinding = (): (() => void) => {
   };
 
   const handleEnter = () => {
-    if (isGameOver || isGuessAnimationFiring) {
+    if (
+      isGameOver ||
+      isGuessAnimationFiring ||
+      showStatisticsModal ||
+      showHelpModal
+    ) {
       return;
     }
 
     // do not allow duplicate words
     if (history.includes(currentGuess)) {
-      console.log("You have already tried that word");
+      toast("You have already tried that word");
       setIsCurrentGuessIncorrect(true);
       return;
     }
 
     // check word is 5 chars long
     if (currentGuess.length !== 5) {
-      console.log("Word must be 5 charas long");
+      toast("Word must be 5 characters long");
       setIsCurrentGuessIncorrect(true);
       return;
     }
 
     if (!wordExists(currentGuess)) {
-      console.log("Word does not exist");
+      toast("Word does not exist");
       setIsCurrentGuessIncorrect(true);
       return;
     }
