@@ -30,7 +30,7 @@ export class InfrastructureStack extends cdk.Stack {
     });
     new SiteDeployment(this, "SiteDeployment", {
       bucket: siteBucket.instance,
-      sourceCodeFolder: "../../frontend-app/out",
+      sourceCodeFolder: "../frontend-app/out",
       distribution: distribution.instance,
     });
   }

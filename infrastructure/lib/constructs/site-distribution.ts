@@ -7,14 +7,15 @@ import {
   PriceClass,
   SSLMethod,
 } from "aws-cdk-lib/aws-cloudfront";
-import { S3StaticWebsiteOrigin } from "aws-cdk-lib/aws-cloudfront-origins";
+import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
 import {
   CertificateValidation,
-  Certificate,
+  DnsValidatedCertificate,
 } from "aws-cdk-lib/aws-certificatemanager";
 
 import { SITE_ROOT_DOMAIN } from "../constants/constants";
 import { DomainProps } from "../props/domain-props";
+import { HostedZone } from "aws-cdk-lib/aws-route53";
 
 export interface SiteDistributionProps extends DomainProps {
   siteBucket: IBucket;
@@ -26,26 +27,32 @@ export class SiteDistribution extends Construct {
   constructor(parent: Construct, id: string, props: SiteDistributionProps) {
     super(parent, id);
 
+    const zone = HostedZone.fromLookup(this, "Zone", {
+      domainName: SITE_ROOT_DOMAIN,
+    });
+
     const domainName = props.subDomain
       ? `${props.subDomain}.${SITE_ROOT_DOMAIN}`
       : SITE_ROOT_DOMAIN;
 
-    const certificate = new Certificate(this, "WebsiteCertificate", {
-      domainName: domainName,
-      validation: CertificateValidation.fromDns(),
-    });
+    const certificate = new DnsValidatedCertificate(
+      this,
+      "WebsiteCertificate",
+      {
+        domainName: domainName,
+        validation: CertificateValidation.fromDns(),
+        hostedZone: zone,
+        region: "us-east-1",
+      }
+    );
 
     this.instance = new Distribution(this, "WebsiteDistribution", {
-      // certificate: ViewerCertificate.fromAcmCertificate(certificate, {
-      //   sslMethod: SSLMethod.SNI,
-      //   securityPolicy: SecurityPolicyProtocol.TLS_V1_2_2021,
-      //   aliases: [domainName],
-      // }),
       certificate,
       defaultBehavior: {
-        origin: new S3StaticWebsiteOrigin(props.siteBucket),
+        origin: new S3Origin(props.siteBucket),
         compress: true,
       },
+      defaultRootObject: "index.html",
       domainNames: [domainName],
       errorResponses: [
         {
