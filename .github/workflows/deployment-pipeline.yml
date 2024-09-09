@@ -17,11 +17,21 @@ jobs:
         run: npm install
         working-directory: frontend-app
 
-      - name: Upload dependencies as an artifact
+      - name: Install AWS CDK dependencies
+        run: npm install
+        working-directory: infrastructure
+
+      - name: Upload Next.js dependencies as an artifact
         uses: actions/upload-artifact@v4
         with:
           name: next-app-node-modules
           path: frontend-app/node_modules
+
+      - name: Upload AWS CDK dependencies as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aws-cdk-node-modules
+          path: infrastructure/node_modules
 
   # deploy-to-dev:
   #   needs: prepare-code
