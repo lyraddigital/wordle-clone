@@ -18,4 +18,5 @@ jobs:
         working-directory: frontend-app
 
   deploy-to-dev:
+    needs: prepare-code
     uses: ./.github/workflows/deployment.yml
