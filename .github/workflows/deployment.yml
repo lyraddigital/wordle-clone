@@ -20,6 +20,10 @@ jobs:
           name: aws-cdk
           path: infrastructure
 
+      - name: Listing files in frontend-app folder
+        run: ls -l
+        working-directory: frontend-app
+
       - name: Build Next App for environment
         run: npm run build
         working-directory: frontend-app
