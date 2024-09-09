@@ -28,6 +28,7 @@ jobs:
         with:
           name: next-app-node-modules
           path: node_modules
+          working-directory: frontend-app
   # deploy-to-dev:
   #   needs: prepare-code
   #   uses: ./.github/workflows/deployment.yml
