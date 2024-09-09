@@ -18,7 +18,6 @@ jobs:
         working-directory: frontend-app
 
   deploy-to-dev:
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/deployment.yml
     environment:
       name: Development

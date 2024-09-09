@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
   
   steps:
-    - name: Build Next application as static website
+    - name: Build Next App
       run: npm run build
       working-directory: frontend-app
 
