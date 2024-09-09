@@ -11,24 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v4   
-
-      - name: CD before npm install
-        run: ls -l
+      - uses: actions/checkout@v4
 
       - name: Install Next.js dependencies
         run: npm install
         working-directory: frontend-app
 
-      - name: CD after npm install
-        run: ls -l
-
       - name: Upload dependencies as an artifact
         uses: actions/upload-artifact@v4
         with:
           name: next-app-node-modules
-          path: node_modules
-          working-directory: frontend-app
+          path: frontend-app/node_modules
+
   # deploy-to-dev:
   #   needs: prepare-code
   #   uses: ./.github/workflows/deployment.yml
