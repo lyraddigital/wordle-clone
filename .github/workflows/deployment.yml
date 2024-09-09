@@ -20,19 +20,9 @@ jobs:
           name: aws-cdk
           path: infrastructure
 
-      - name: See what's in this child workflow
-        run: ls -l
-      # - name: Install Next.js dependencies
-      #   run: npm install
-      #   working-directory: frontend-app
-
-      # - name: Build Next App for environment
-      #   run: npm run build
-      #   working-directory: frontend-app
-
-      # - name: Install AWS CDK dependencies
-      #   run: npm install
-      #   working-directory: infrastructure
+      - name: Build Next App for environment
+        run: npm run build
+        working-directory: frontend-app
 
       # - name: Creating / Updating Infrastructure
       #   uses: youyo/aws-cdk-github-actions@v2
