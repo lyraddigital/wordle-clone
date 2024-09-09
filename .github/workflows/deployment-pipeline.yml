@@ -1,0 +1,23 @@
+name: Deployment Pipeline
+concurrency: deployment-pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  prepare-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4   
+
+      - name: Install Next.js dependencies
+        run: npm install
+        working-directory: frontend-app
+
+  deploy-to-dev:
+    runs-on: ubuntu-latest
+    uses ./.github/workflows/deployment.yml
+    environment:
+      name: Development

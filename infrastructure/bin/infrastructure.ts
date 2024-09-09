@@ -17,3 +17,10 @@ new InfrastructureStack(app, "DevelopmentWordleStack", {
     region: process.env.CDK_DEFAULT_REGION,
   },
 });
+
+new InfrastructureStack(app, "TestWordleStack", {
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  },
+});

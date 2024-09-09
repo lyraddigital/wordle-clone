@@ -1,41 +1,30 @@
-name: Deployment Flow
-concurrency: deployment-flow
+name: Deploy To Environment
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
 
-jobs:       
-  deploy-to-dev:
+jobs:
+  deploy-infrastructure:
     runs-on: ubuntu-latest
-    environment:
-      name: Development
+  
+  steps:
+    - name: Build Next.js application as static website
+      run: npm run build
+      working-directory: frontend-app
 
-    steps:
-      - uses: actions/checkout@v4
+    - name: Install AWS CDK dependencies
+      run: npm install
+      working-directory: infrastructure
 
-      - name: Install Next.js dependencies
-        run: npm install
-        working-directory: frontend-app
-
-      - name: Build Next.js application as static website
-        run: npm run build
-        working-directory: frontend-app
-
-      - name: Install AWS CDK dependencies
-        run: npm install
-        working-directory: infrastructure
-
-      - name: Creating / Updating Infrastructure
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: 'deploy'
-          cdk_stack: ${{ vars.SITE_STACK_NAME }}
-          cdk_args: '--parameters subDomainName=${{ vars.SITE_SUB_DOMAIN }} --require-approval never'
-          working_dir: 'infrastructure'
-          actions_comment: false
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-          AWS_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}        
+    - name: Creating / Updating Infrastructure
+      uses: youyo/aws-cdk-github-actions@v2
+      with:
+        cdk_subcommand: 'deploy'
+        cdk_stack: ${{ vars.SITE_STACK_NAME }}
+        cdk_args: '--parameters subDomainName=${{ vars.SITE_SUB_DOMAIN }} --require-approval never'
+        working_dir: 'infrastructure'
+        actions_comment: false
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        AWS_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }} 
