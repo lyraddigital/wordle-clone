@@ -19,5 +19,3 @@ jobs:
 
   deploy-to-dev:
     uses: ./.github/workflows/deployment.yml
-    environment:
-      name: Development
