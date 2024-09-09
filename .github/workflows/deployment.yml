@@ -8,7 +8,17 @@ jobs:
     runs-on: ubuntu-latest
   
     steps:
-      # - uses: actions/checkout@v4   
+      - name: Download Next.js app
+        uses: actions/download-artifact@v2
+        with:
+          name: next-app
+          path: frontend-app
+
+      - name: Download AWS CDK
+        uses: actions/download-artifact@v2
+        with:
+          name: aws-cdk
+          path: infrastructure
 
       - name: See what's in this child workflow
         run: ls -l
