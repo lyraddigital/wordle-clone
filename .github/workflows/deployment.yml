@@ -1,7 +1,9 @@
 name: Deploy To Environment
 
 on:
-  workflow_call:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy-infrastructure:
