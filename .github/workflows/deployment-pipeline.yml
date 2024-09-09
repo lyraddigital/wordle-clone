@@ -17,6 +17,11 @@ jobs:
         run: npm install
         working-directory: frontend-app
 
-  deploy-to-dev:
-    needs: prepare-code
-    uses: ./.github/workflows/deployment.yml
+      - name: Upload dependencies as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: next-app-node-modules
+          path: node_modules
+  # deploy-to-dev:
+  #   needs: prepare-code
+  #   uses: ./.github/workflows/deployment.yml
