@@ -9,13 +9,13 @@ jobs:
   
     steps:
       - name: Download Next.js app
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: next-app
           path: frontend-app
 
       - name: Download AWS CDK
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: aws-cdk
           path: infrastructure
