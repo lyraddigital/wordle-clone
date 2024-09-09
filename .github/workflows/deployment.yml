@@ -29,7 +29,6 @@ jobs:
 
       - name: Creating / Updating Infrastructure
         uses: youyo/aws-cdk-github-actions@v2
-        working-directory: infrastructure
         with:
           cdk_subcommand: 'deploy'
           cdk_stack: ${{ env.SITE_STACK_NAME }}
