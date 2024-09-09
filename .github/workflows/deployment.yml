@@ -31,11 +31,11 @@ jobs:
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'deploy'
-          cdk_stack: ${{ env.SITE_STACK_NAME }}
-          cdk_args: '--parameters subDomainName=${{ env.SITE_SUB_DOMAIN }} --require-approval never'
+          cdk_stack: ${{ SITE_STACK_NAME }}
+          cdk_args: '--parameters subDomainName=${{ SITE_SUB_DOMAIN }} --require-approval never'
           working_dir: 'infrastructure'
           actions_comment: false
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-          AWS_DEFAULT_REGION: ${{ env.CDK_DEFAULT_REGION }}        
+          AWS_DEFAULT_REGION: ${{ CDK_DEFAULT_REGION }}        
