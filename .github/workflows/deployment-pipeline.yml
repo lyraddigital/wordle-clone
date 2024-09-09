@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  prepare-code:
+  prepare-dependencies:
     runs-on: ubuntu-latest
     
     steps:
@@ -33,6 +33,6 @@ jobs:
           name: aws-cdk-node-modules
           path: infrastructure/node_modules
 
-  # deploy-to-dev:
-  #   needs: prepare-code
-  #   uses: ./.github/workflows/deployment.yml
+  deploy-to-dev:
+    needs: prepare-dependencies
+    uses: ./.github/workflows/deployment.yml
