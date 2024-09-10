@@ -5,6 +5,23 @@ import { InfrastructureStack } from "../lib/infrastructure-stack";
 
 const app = new cdk.App();
 
-new InfrastructureStack(app, "DevelopmentWordleStack", {});
-new InfrastructureStack(app, "TestWordleStack", {});
-new InfrastructureStack(app, "WordleStack", {});
+new InfrastructureStack(app, "DevelopmentWordleStack", {
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  },
+});
+
+new InfrastructureStack(app, "TestWordleStack", {
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  },
+});
+
+new InfrastructureStack(app, "WordleStack", {
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  },
+});
