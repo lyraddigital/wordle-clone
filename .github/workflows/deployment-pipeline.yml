@@ -6,18 +6,15 @@ on:
     branches:
       - main
 
-jobs:  
+jobs:
   deploy-to-dev:
-    runs-on: ubuntu-latest
-    environment: Development
-    
-    steps: 
-      - name: Running Deployment Workflow
-        uses: ./.github/workflows/deploy-to-environment.yml
-        with:
-          site_stack_name: test-a
-          aws_cdk_region: test-b
-          site_sub_domain: test-c
-        secrets:
-          aws_access_key: test-d
-          aws_secret_key: test-e
+    uses: ./.github/workflows/deploy-to-environment.yml
+    with:
+      environment: Development
+
+    #         site_stack_name: test-a
+    #   aws_cdk_region: test-b
+    #   site_sub_domain: test-c
+    # secrets:
+    #   aws_access_key: test-d
+    #   aws_secret_key: test-e

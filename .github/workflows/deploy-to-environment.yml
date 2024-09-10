@@ -3,18 +3,21 @@ name: Deploy To Environment
 on:
   workflow_call:
     inputs:
-      site_stack_name:
-        description: The name of the AWS Stack to deploy
+      environment:
         required: true
         type: string
-      aws_cdk_region:
-        description: The region to deploy the AWS Stack to
-        required: true
-        type: string
-      site_sub_domain:
-        description: The sub domain name for this deployment
-        required: true
-        type: string
+      # site_stack_name:
+      #   description: The name of the AWS Stack to deploy
+      #   required: true
+      #   type: string
+      # aws_cdk_region:
+      #   description: The region to deploy the AWS Stack to
+      #   required: true
+      #   type: string
+      # site_sub_domain:
+      #   description: The sub domain name for this deployment
+      #   required: true
+      #   type: string
     secrets:
       aws_access_key:
         description: The AWS access key that represents the AWS Account needed to run this deployment
@@ -26,10 +29,11 @@ on:
 jobs:
   deploy-infrastructure:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
   
     steps:
       - name: Print out variables
-        run: echo ${{ inputs.siteStackName }}
+        run: echo ${{ inputs.SITE_SUB_DOMAIN }}
 
       - uses: actions/checkout@v4
 
@@ -44,7 +48,7 @@ jobs:
       - name: Install AWS CDK dependencies
         run: npm install
         working-directory: infrastructure
-        
+
       - name: Creating / Updating Infrastructure
         uses: youyo/aws-cdk-github-actions@v2
         with:
