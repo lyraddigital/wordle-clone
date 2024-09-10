@@ -6,25 +6,6 @@ on:
       environment:
         required: true
         type: string
-      # site_stack_name:
-      #   description: The name of the AWS Stack to deploy
-      #   required: true
-      #   type: string
-      # aws_cdk_region:
-      #   description: The region to deploy the AWS Stack to
-      #   required: true
-      #   type: string
-      # site_sub_domain:
-      #   description: The sub domain name for this deployment
-      #   required: true
-      #   type: string
-    # secrets:
-    #   aws_access_key:
-    #     description: The AWS access key that represents the AWS Account needed to run this deployment
-    #     required: true
-    #   aws_secret_key:
-    #     description: The AWS secret key that represents the AWS Account needed to run this deployment
-    #     required: true
 
 jobs:
   deploy-infrastructure:
@@ -53,11 +34,11 @@ jobs:
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'deploy'
-          cdk_stack: ${{ inputs.site_stack_name }}
-          cdk_args: '--parameters subDomainName=${{ inputs.site_sub_domain }} --require-approval never'
+          cdk_stack: ${{ vars.SITE_STACK_NAME }}
+          cdk_args: '--parameters subDomainName=${{ vars.SITE_SUB_DOMAIN }} --require-approval never'
           working_dir: 'infrastructure'
           actions_comment: false
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_key }}
-          AWS_DEFAULT_REGION: ${{ inputs.aws_cdk_region }} 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_DEFAULT_REGION: ${{ inputs.AWS_CDK_REGION }} 
