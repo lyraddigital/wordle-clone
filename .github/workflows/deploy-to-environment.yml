@@ -28,6 +28,9 @@ jobs:
     runs-on: ubuntu-latest
   
     steps:
+      - name: Print out variables
+        run: echo ${{ inputs.siteStackName }}
+
       - uses: actions/checkout@v4
 
       - name: Install Next.js dependencies
