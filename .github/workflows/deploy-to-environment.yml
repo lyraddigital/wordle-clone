@@ -3,10 +3,25 @@ name: Deploy To Environment
 on:
   workflow_call:
     inputs:
-      aws_access_key:
-        description: 'The AWS Access key that represents the AWS Account needed to run this deployment'
+      siteStackName:
+        description: The name of the AWS Stack to deploy
         required: true
         type: string
+      awsCDKRegion:
+        description: The region to deploy the AWS Stack to
+        required: true
+        type: string
+      siteSubDomain:
+        description: The sub domain name for this deployment
+        required: true
+        type: string
+    secrets:
+      awsAccessKey:
+        description: The AWS access key that represents the AWS Account needed to run this deployment
+        required: true
+      awsSecretKey:
+        description: The AWS secret key that represents the AWS Account needed to run this deployment
+        required: true
 
 jobs:
   deploy-infrastructure:

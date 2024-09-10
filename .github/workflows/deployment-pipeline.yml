@@ -10,4 +10,8 @@ jobs:
   deploy-to-dev:    
     uses: ./.github/workflows/deploy-to-environment.yml
     with:
-      aws_access_key: 'test'
+      siteStackName: test-a
+      awsCDKRegion: test-b
+      siteSubDomain: test-c
+      awsAccessKey: test-d
+      awsSecretKey: test-e
