@@ -7,7 +7,8 @@ on:
       - main
 
 jobs:
-  deploy-to-dev:    
+  deploy-to-dev:
+    environment: Development
     uses: ./.github/workflows/deploy-to-environment.yml
     with:
       site_stack_name: test-a
