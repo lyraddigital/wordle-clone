@@ -11,10 +11,3 @@ jobs:
     uses: ./.github/workflows/deploy-to-environment.yml
     with:
       environment: Development
-
-    #         site_stack_name: test-a
-    #   aws_cdk_region: test-b
-    #   site_sub_domain: test-c
-    # secrets:
-    #   aws_access_key: test-d
-    #   aws_secret_key: test-e
