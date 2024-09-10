@@ -33,7 +33,7 @@ jobs:
   
     steps:
       - name: Print out variables
-        run: echo ${{ inputs.SITE_SUB_DOMAIN }}
+        run: echo Site Subdomain is ${{ var.SITE_SUB_DOMAIN }}
 
       - uses: actions/checkout@v4
 
