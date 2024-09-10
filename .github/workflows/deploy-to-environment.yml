@@ -22,7 +22,7 @@ jobs:
 
       - name: Listing files in frontend-app folder
         run: ls -l
-        working-directory: frontend-app
+        working-directory: frontend-app/node_modules/next
 
       - name: Build Next App for environment
         run: npm run build
