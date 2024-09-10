@@ -2,6 +2,10 @@ name: Deploy To Environment
 
 on:
   workflow_call:
+    inputs:
+      aws_access_key:
+        description: 'The AWS Access key that represents the AWS Account needed to run this deployment'
+        required: true
 
 jobs:
   deploy-infrastructure:
