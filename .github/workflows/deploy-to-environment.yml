@@ -18,13 +18,13 @@ on:
       #   description: The sub domain name for this deployment
       #   required: true
       #   type: string
-    secrets:
-      aws_access_key:
-        description: The AWS access key that represents the AWS Account needed to run this deployment
-        required: true
-      aws_secret_key:
-        description: The AWS secret key that represents the AWS Account needed to run this deployment
-        required: true
+    # secrets:
+    #   aws_access_key:
+    #     description: The AWS access key that represents the AWS Account needed to run this deployment
+    #     required: true
+    #   aws_secret_key:
+    #     description: The AWS secret key that represents the AWS Account needed to run this deployment
+    #     required: true
 
 jobs:
   deploy-infrastructure:
