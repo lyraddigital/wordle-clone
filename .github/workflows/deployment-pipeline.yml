@@ -9,3 +9,5 @@ on:
 jobs:
   deploy-to-dev:    
     uses: ./.github/workflows/deploy-to-environment.yml
+    with:
+      aws_access_key: 'test'
