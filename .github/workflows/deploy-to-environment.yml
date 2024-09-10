@@ -14,7 +14,10 @@ jobs:
   
     steps:
       - name: Print out variables
-        run: echo Site Subdomain is ${{ vars.SITE_SUB_DOMAIN }}
+        run: |
+          echo AWS_ACCESS_KEY_ID is ${{ secrets.AWS_ACCESS_KEY_ID }}
+          echo AWS_SECRET_ACCESS_KEY is ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          echo CDK_DEFAULT_REGION is ${{ vars.CDK_DEFAULT_REGION }}
 
       - uses: actions/checkout@v4
 
