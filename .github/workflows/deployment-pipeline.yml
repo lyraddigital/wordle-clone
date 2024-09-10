@@ -13,5 +13,6 @@ jobs:
       siteStackName: test-a
       awsCDKRegion: test-b
       siteSubDomain: test-c
+    secrets:
       awsAccessKey: test-d
       awsSecretKey: test-e
