@@ -8,7 +8,9 @@ on:
 
 jobs:  
   deploy-to-dev:
+    runs-on: ubuntu-latest
     environment: Development
+    
     steps: 
       - name: Running Deployment Workflow
         uses: ./.github/workflows/deploy-to-environment.yml
