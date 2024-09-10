@@ -8,26 +8,19 @@ jobs:
     runs-on: ubuntu-latest
   
     steps:
-      - name: Download Next.js app
-        uses: actions/download-artifact@v4
-        with:
-          name: next-app
-          path: frontend-app
+      - uses: actions/checkout@v4
 
-      - name: Download AWS CDK
-        uses: actions/download-artifact@v4
-        with:
-          name: aws-cdk
-          path: infrastructure
-
-      - name: Listing files in frontend-app folder
-        run: ls -l
-        working-directory: frontend-app/node_modules/next
+      - name: Install Next.js dependencies
+        run: npm install
+        working-directory: frontend-app
 
       - name: Build Next App for environment
         run: npm run build
         working-directory: frontend-app
 
+      - name: Install AWS CDK dependencies
+        run: npm install
+        working-directory: infrastructure
       # - name: Creating / Updating Infrastructure
       #   uses: youyo/aws-cdk-github-actions@v2
       #   with:

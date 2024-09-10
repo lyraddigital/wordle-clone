@@ -7,32 +7,5 @@ on:
       - main
 
 jobs:
-  prepare-dependencies:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Next.js dependencies
-        run: npm install
-        working-directory: frontend-app
-
-      - name: Install AWS CDK dependencies
-        run: npm install
-        working-directory: infrastructure
-
-      - name: Upload Next.js app as an artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: next-app
-          path: frontend-app
-
-      - name: Upload AWS CDK as an artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: aws-cdk
-          path: infrastructure
-
   deploy-to-dev:
-    needs: prepare-dependencies
     uses: ./.github/workflows/deploy-to-environment.yml
