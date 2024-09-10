@@ -8,4 +8,7 @@ on:
 
 jobs:
   deploy-to-dev:
+    environment: Development
     uses: ./.github/workflows/deploy-to-environment.yml
+    secrets:
+      token: "${{ secrets.AWS_ACCESS_KEY }}"
