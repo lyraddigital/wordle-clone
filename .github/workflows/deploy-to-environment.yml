@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Print out variables
         run: |
-          echo AWS_ACCESS_KEY is ${{ vars.AWS_ACCESS_KEY }}
+          echo AWS_ACCESS_KEY is ${{ secrets.AWS_ACCESS_KEY }}
           echo AWS_SECRET_KEY is ${{ vars.AWS_SECRET_KEY }}
           echo CDK_DEFAULT_REGION is ${{ vars.CDK_DEFAULT_REGION }}
           echo CDK_DEFAULT_ACCOUNT is ${{ vars.CDK_DEFAULT_ACCOUNT }}
@@ -44,7 +44,7 @@ jobs:
           working_dir: 'infrastructure'
           actions_comment: false
         env:
-          AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ vars.AWS_SECRET_KEY }}
           AWS_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}
           CDK_DEFAULT_ACCOUNT: ${{ vars.CDK_DEFAULT_ACCOUNT }}
