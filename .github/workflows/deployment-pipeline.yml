@@ -7,9 +7,11 @@ on:
       - main
 
 jobs:
-  environment: Development
-
   deploy-to-dev:
-    uses: ./.github/workflows/deploy-to-environment.yml
-    with:
-      environment: Development
+    environment: Development
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: ./.github/workflows/deploy-to-environment.yml
+        with:
+          environment: Development
