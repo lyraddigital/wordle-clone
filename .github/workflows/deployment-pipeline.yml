@@ -20,6 +20,7 @@ jobs:
       CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
 
   deploy-to-test:
+    needs: deploy-to-dev
     uses: ./.github/workflows/deploy-to-environment.yml
     with:            
       CDK_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}      
