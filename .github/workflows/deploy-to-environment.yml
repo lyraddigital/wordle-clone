@@ -15,7 +15,10 @@ jobs:
     steps:
       - name: Print out variables
         run: |
+          echo CDK_DEFAULT_REGION is ${{ vars.AWS_ACCESS_KEY }}
+          echo CDK_DEFAULT_REGION is ${{ vars.AWS_SECRET_KEY }}
           echo CDK_DEFAULT_REGION is ${{ vars.CDK_DEFAULT_REGION }}
+          echo CDK_DEFAULT_REGION is ${{ vars.CDK_DEFAULT_ACCOUNT }}
 
       - uses: actions/checkout@v4
 
