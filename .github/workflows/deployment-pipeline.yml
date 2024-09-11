@@ -7,6 +7,8 @@ on:
       - main
 
 jobs:
+  environment: Development
+
   deploy-to-dev:
     uses: ./.github/workflows/deploy-to-environment.yml
     with:
