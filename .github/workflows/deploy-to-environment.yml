@@ -12,7 +12,13 @@ on:
       CDK_DEFAULT_ACCOUNT:
         required: true
         type: string
-      environment:
+      ENVIRONMENT:
+        required: true
+        type: string
+      SITE_STACK_NAME:
+        required: true
+        type: string
+      SITE_SUB_DOMAIN:
         required: true
         type: string
     secrets:
@@ -30,9 +36,8 @@ jobs:
           echo environment is ${{ inputs.environment }}
           echo AWS_ACCESS_KEY is ${{ secrets.AWS_ACCESS_KEY }}
           echo AWS_SECRET_KEY is ${{ vars.AWS_SECRET_KEY }}
-          echo CDK_DEFAULT_REGION is ${{ inputs.CDK_DEFAULT_REGION }}
-          echo CDK_DEFAULT_ACCOUNT is ${{ inputs.CDK_DEFAULT_ACCOUNT }}
-          echo secrets is ${{ secrets }}
+          echo CDK_DEFAULT_REGION is ${{ vars.CDK_DEFAULT_REGION }}
+          echo CDK_DEFAULT_ACCOUNT is ${{ vars.CDK_DEFAULT_ACCOUNT }}
 
       - uses: actions/checkout@v4
 
@@ -52,12 +57,12 @@ jobs:
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'deploy'
-          cdk_stack: ${{ inputs.SITE_STACK_NAME }}
-          cdk_args: '--parameters subDomainName=${{ inputs.SITE_SUB_DOMAIN }} --require-approval never'
+          cdk_stack: ${{ vars.SITE_STACK_NAME }}
+          cdk_args: '--parameters subDomainName=${{ vars.SITE_SUB_DOMAIN }} --require-approval never'
           working_dir: 'infrastructure'
           actions_comment: false
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_KEY }}
-          AWS_DEFAULT_REGION: ${{ inputs.CDK_DEFAULT_REGION }}
-          CDK_DEFAULT_ACCOUNT: ${{ inputs.CDK_DEFAULT_ACCOUNT }}
+          AWS_SECRET_ACCESS_KEY: ${{ vars.AWS_SECRET_KEY }}
+          AWS_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}
+          CDK_DEFAULT_ACCOUNT: ${{ vars.CDK_DEFAULT_ACCOUNT }}
