@@ -3,14 +3,19 @@ name: Deploy To Environment
 on:
   workflow_call:
     inputs:
-      environment:
+      AWS_SECRET_KEY:
+        required: true
+        type: string
+      CDK_DEFAULT_REGION:
+        required: true
+        type: string
+      CDK_DEFAULT_ACCOUNT:
         required: true
         type: string
 
 jobs:
   deploy-infrastructure:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
   
     steps:
       - name: Print out variables

@@ -9,10 +9,12 @@ on:
 jobs:
   deploy-to-dev:
     environment: Development
-    runs-on: ubuntu-latest
 
     steps:
       - name: Deploying to Development Environment
         uses: ./.github/workflows/deploy-to-environment.yml
         with:
-          environment: Development
+          AWS_SECRET_KEY: ${{ vars.AWS_SECRET_KEY }}
+          CDK_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}
+          CDK_DEFAULT_ACCOUNT: ${{ vars.CDK_DEFAULT_ACCOUNT }}
+        secrets: inherit
