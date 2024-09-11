@@ -12,6 +12,10 @@ on:
       CDK_DEFAULT_ACCOUNT:
         required: true
         type: string
+    secrets:
+      AWS_ACCESS_KEY:
+        required: true
+        type: string
 
 jobs:
   deploy-infrastructure:
