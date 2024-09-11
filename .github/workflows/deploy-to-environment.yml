@@ -2,16 +2,10 @@ name: Deploy To Environment
 
 on:
   workflow_call:
-    inputs:
-      AWS_SECRET_KEY:
-        required: true
-        type: string
+    inputs:      
       CDK_DEFAULT_REGION:
         required: true
-        type: string
-      CDK_DEFAULT_ACCOUNT:
-        required: true
-        type: string
+        type: string      
       ENVIRONMENT:
         required: true
         type: string
@@ -24,6 +18,10 @@ on:
     secrets:
       AWS_ACCESS_KEY:
         required: true
+      AWS_SECRET_KEY:
+        required: true
+      CDK_DEFAULT_ACCOUNT:
+        required: true        
 
 jobs:
   deploy-infrastructure:
@@ -35,9 +33,9 @@ jobs:
         run: |
           echo environment is ${{ inputs.environment }}
           echo AWS_ACCESS_KEY is ${{ secrets.AWS_ACCESS_KEY }}
-          echo AWS_SECRET_KEY is ${{ vars.AWS_SECRET_KEY }}
+          echo AWS_SECRET_KEY is ${{ secrets.AWS_SECRET_KEY }}
           echo CDK_DEFAULT_REGION is ${{ vars.CDK_DEFAULT_REGION }}
-          echo CDK_DEFAULT_ACCOUNT is ${{ vars.CDK_DEFAULT_ACCOUNT }}
+          echo CDK_DEFAULT_ACCOUNT is ${{ secrets.CDK_DEFAULT_ACCOUNT }}
 
       - uses: actions/checkout@v4
 
@@ -63,6 +61,6 @@ jobs:
           actions_comment: false
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ vars.AWS_SECRET_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           AWS_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}
-          CDK_DEFAULT_ACCOUNT: ${{ vars.CDK_DEFAULT_ACCOUNT }}
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
