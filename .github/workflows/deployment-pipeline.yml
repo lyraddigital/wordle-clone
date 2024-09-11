@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: ./.github/workflows/deploy-to-environment.yml
+      - name: Deploying to Development Environment
+        uses: ./.github/workflows/deploy-to-environment.yml
         with:
           environment: Development
