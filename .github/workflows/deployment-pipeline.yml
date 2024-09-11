@@ -9,9 +9,11 @@ on:
 jobs:
   deploy-to-dev:
     uses: ./.github/workflows/deploy-to-environment.yml
-    with:
-      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+    with:      
       AWS_SECRET_KEY: ${{ vars.AWS_SECRET_KEY }}
       CDK_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}
       CDK_DEFAULT_ACCOUNT: ${{ vars.CDK_DEFAULT_ACCOUNT }}
+      environment: Development
+    secrets:
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
         
