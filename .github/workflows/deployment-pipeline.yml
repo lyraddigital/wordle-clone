@@ -31,4 +31,17 @@ jobs:
       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
       AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
       CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+
+  deploy-to-production:
+    needs: deploy-to-test
+    uses: ./.github/workflows/deploy-to-environment.yml
+    with:            
+      CDK_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}      
+      ENVIRONMENT: Production
+      SITE_STACK_NAME: ${{ vars.SITE_STACK_NAME }}
+      SITE_SUB_DOMAIN: ${{ vars.SITE_SUB_DOMAIN }}
+    secrets:
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
         
