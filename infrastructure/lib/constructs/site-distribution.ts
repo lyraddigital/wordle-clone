@@ -54,7 +54,7 @@ export class SiteDistribution extends Construct {
         name: "WhiteListIPSet",
         addresses: [props.allowedIPSet],
         ipAddressVersion: "IPV4",
-        scope: 'CLOUDFRONT',        
+        scope: "CLOUDFRONT",
       });
 
       const whiteListIPSetRuleProperty: CfnWebACL.RuleProperty = {
@@ -83,9 +83,7 @@ export class SiteDistribution extends Construct {
           sampledRequestsEnabled: false,
         },
         scope: "CLOUDFRONT",
-        rules: [
-          whiteListIPSetRuleProperty.
-        ]
+        rules: [whiteListIPSetRuleProperty],
       });
     }
 
