@@ -50,7 +50,7 @@ jobs:
         with:
           cdk_subcommand: 'deploy'
           cdk_stack: ${{ vars.SITE_STACK_NAME }}
-          cdk_args: '--parameters subDomainName=${{ vars.SITE_SUB_DOMAIN }} allowedIPSet=${{ vars.ALLOWED_IP_SET }} --require-approval never'
+          cdk_args: '--parameters subDomainName=${{ vars.SITE_SUB_DOMAIN }} --parameters allowedIPSet=${{ vars.ALLOWED_IP_SET }} --require-approval never'
           working_dir: 'infrastructure'
           actions_comment: false
         env:
