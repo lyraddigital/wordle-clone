@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { IBucket } from "aws-cdk-lib/aws-s3";
+import * as wafv2 from "aws-cdk-lib/aws-wafv2";
 import {
   Distribution,
   HttpVersion,
@@ -19,6 +20,7 @@ import { HostedZone } from "aws-cdk-lib/aws-route53";
 
 export interface SiteDistributionProps extends DomainProps {
   siteBucket: IBucket;
+  allowedIPSet: string;
 }
 
 export class SiteDistribution extends Construct {
@@ -46,6 +48,20 @@ export class SiteDistribution extends Construct {
       }
     );
 
+    let webAcl: wafv2.CfnWebACL | undefined;
+
+    if (props.allowedIPSet) {
+      webAcl = new wafv2.CfnWebACL(this, "WebACL", {
+        defaultAction: { block: {} },
+        visibilityConfig: {
+          cloudWatchMetricsEnabled: true,
+          metricName: `WAF-${domainName}`,
+          sampledRequestsEnabled: false,
+        },
+        scope: "REGIONAL",
+      });
+    }
+
     this.instance = new Distribution(this, "WebsiteDistribution", {
       certificate,
       defaultBehavior: {
@@ -64,6 +80,7 @@ export class SiteDistribution extends Construct {
       httpVersion: HttpVersion.HTTP2,
       priceClass: PriceClass.PRICE_CLASS_ALL,
       sslSupportMethod: SSLMethod.SNI,
+      webAclId: webAcl?.id,
     });
   }
 }

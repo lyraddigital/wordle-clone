@@ -17,12 +17,19 @@ export class InfrastructureStack extends cdk.Stack {
         "The name of the sub domain that will be set as an alias record in Route53 and be used by Cloudfront.",
     });
 
+    const allowedIPSet = new cdk.CfnParameter(this, "allowedIPSet", {
+      type: "String",
+      description:
+        "The name of the IP Set that is allowed to view the site. If not set, then all ip addresses are allowed",
+    });
+
     const subDomain = subDomainName.valueAsString;
     const domainProps: DomainProps = { subDomain };
     const siteBucket = new SiteBucket(this, "SiteBucket", domainProps);
     const distribution = new SiteDistribution(this, "SiteDistribution", {
       ...domainProps,
       siteBucket: siteBucket.instance,
+      allowedIPSet: allowedIPSet.valueAsString,
     });
     new DNSRecord(this, "SiteDNSRecord", {
       ...domainProps,
