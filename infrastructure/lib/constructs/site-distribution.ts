@@ -50,7 +50,7 @@ export class SiteDistribution extends Construct {
 
     let webAcl: wafv2.CfnWebACL | undefined;
 
-    if (props.allowedIPSet) {
+    if (props.allowedIPSet?.length > 0) {
       webAcl = new wafv2.CfnWebACL(this, "WebACL", {
         defaultAction: { block: {} },
         visibilityConfig: {
