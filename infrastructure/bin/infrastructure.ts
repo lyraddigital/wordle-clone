@@ -10,6 +10,7 @@ new InfrastructureStack(app, "DevelopmentWordleStack", {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: process.env.CDK_DEFAULT_REGION,
   },
+  includeWAF: true,
 });
 
 new InfrastructureStack(app, "TestingWordleStack", {
@@ -17,6 +18,7 @@ new InfrastructureStack(app, "TestingWordleStack", {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: process.env.CDK_DEFAULT_REGION,
   },
+  includeWAF: true,
 });
 
 new InfrastructureStack(app, "WordleStack", {
@@ -24,4 +26,5 @@ new InfrastructureStack(app, "WordleStack", {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: process.env.CDK_DEFAULT_REGION,
   },
+  includeWAF: false,
 });

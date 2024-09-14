@@ -20,6 +20,7 @@ import { HostedZone } from "aws-cdk-lib/aws-route53";
 
 export interface SiteDistributionProps extends DomainProps {
   siteBucket: IBucket;
+  includeWAF: boolean;
   allowedIPSet: string;
 }
 
@@ -48,10 +49,8 @@ export class SiteDistribution extends Construct {
       }
     );
 
-    let webAcl: wafv2.CfnWebACL | undefined;
-
-    if (props.allowedIPSet?.length > 0) {
-      webAcl = new wafv2.CfnWebACL(this, "WebACL", {
+    if (props.includeWAF) {
+      new wafv2.CfnWebACL(this, "WebACL", {
         defaultAction: { block: {} },
         visibilityConfig: {
           cloudWatchMetricsEnabled: true,

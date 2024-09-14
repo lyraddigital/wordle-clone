@@ -7,8 +7,12 @@ import { DNSRecord } from "./constructs/dns-record";
 import { SiteDeployment } from "./constructs/site-deployment";
 import { DomainProps } from "./props/domain-props";
 
+interface InfrastructureStackProps extends cdk.StackProps {
+  includeWAF: boolean;
+}
+
 export class InfrastructureStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: InfrastructureStackProps) {
     super(scope, id, props);
 
     const subDomainName = new cdk.CfnParameter(this, "subDomainName", {
@@ -29,6 +33,7 @@ export class InfrastructureStack extends cdk.Stack {
     const distribution = new SiteDistribution(this, "SiteDistribution", {
       ...domainProps,
       siteBucket: siteBucket.instance,
+      includeWAF: props.includeWAF,
       allowedIPSet: allowedIPSet.valueAsString,
     });
     new DNSRecord(this, "SiteDNSRecord", {
