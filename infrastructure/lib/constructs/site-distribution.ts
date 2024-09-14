@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { IBucket } from "aws-cdk-lib/aws-s3";
-import * as wafv2 from "aws-cdk-lib/aws-wafv2";
+import { CfnIPSet, CfnWebACL } from "aws-cdk-lib/aws-wafv2";
 import {
   Distribution,
   HttpVersion,
@@ -50,14 +50,42 @@ export class SiteDistribution extends Construct {
     );
 
     if (props.includeWAF) {
-      new wafv2.CfnWebACL(this, "WebACL", {
+      const whiteListIPSet = new CfnIPSet(this, "IPSet", {
+        name: "WhiteListIPSet",
+        addresses: [props.allowedIPSet],
+        ipAddressVersion: "IPV4",
+        scope: 'CLOUDFRONT',        
+      });
+
+      const whiteListIPSetRuleProperty: CfnWebACL.RuleProperty = {
+        priority: 0,
+        name: "WhiteListIPSet-Rule",
+        action: {
+          allow: {},
+        },
+        statement: {
+          ipSetReferenceStatement: {
+            arn: whiteListIPSet.attrArn,
+          },
+        },
+        visibilityConfig: {
+          cloudWatchMetricsEnabled: true,
+          metricName: "WhiteListIPSet-Rule",
+          sampledRequestsEnabled: true,
+        },
+      };
+
+      new CfnWebACL(this, "WebACL", {
         defaultAction: { block: {} },
         visibilityConfig: {
           cloudWatchMetricsEnabled: true,
           metricName: `WAF-${domainName}`,
           sampledRequestsEnabled: false,
         },
-        scope: "REGIONAL",
+        scope: "CLOUDFRONT",
+        rules: [
+          whiteListIPSetRuleProperty.
+        ]
       });
     }
 
