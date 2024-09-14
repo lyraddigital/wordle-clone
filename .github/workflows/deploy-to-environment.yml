@@ -15,6 +15,8 @@ on:
       SITE_SUB_DOMAIN:
         required: true
         type: string
+      ALLOWED_IP_SET:
+        type: string
     secrets:
       AWS_ACCESS_KEY:
         required: true
@@ -29,14 +31,6 @@ jobs:
     environment: ${{ inputs.environment }}
   
     steps:
-      - name: Print out variables
-        run: |
-          echo environment is ${{ inputs.environment }}
-          echo AWS_ACCESS_KEY is ${{ secrets.AWS_ACCESS_KEY }}
-          echo AWS_SECRET_KEY is ${{ secrets.AWS_SECRET_KEY }}
-          echo CDK_DEFAULT_REGION is ${{ vars.CDK_DEFAULT_REGION }}
-          echo CDK_DEFAULT_ACCOUNT is ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-
       - uses: actions/checkout@v4
 
       - name: Install Next.js dependencies
@@ -56,7 +50,7 @@ jobs:
         with:
           cdk_subcommand: 'deploy'
           cdk_stack: ${{ vars.SITE_STACK_NAME }}
-          cdk_args: '--parameters subDomainName=${{ vars.SITE_SUB_DOMAIN }} --require-approval never'
+          cdk_args: '--parameters subDomainName=${{ vars.SITE_SUB_DOMAIN }} allowedIPSet=${{ vars.ALLOWED_IP_SET }} --require-approval never'
           working_dir: 'infrastructure'
           actions_comment: false
         env:

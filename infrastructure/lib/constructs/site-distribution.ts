@@ -80,7 +80,6 @@ export class SiteDistribution extends Construct {
       httpVersion: HttpVersion.HTTP2,
       priceClass: PriceClass.PRICE_CLASS_ALL,
       sslSupportMethod: SSLMethod.SNI,
-      webAclId: webAcl?.id,
     });
   }
 }
