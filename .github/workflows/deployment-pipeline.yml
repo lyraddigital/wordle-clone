@@ -6,6 +6,27 @@ on:
       - main
 
 jobs:
+  setting-up:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install AWS CDK dependencies
+        run: npm install
+        working-directory: infrastructure
+
+      - name: Creating / Updating Infrastructure
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: 'bootstrap'
+          cdk_stack: ${{ vars.SITE_STACK_NAME }}          
+          working_dir: 'infrastructure'
+          actions_comment: false
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+
   deploy-to-dev:
     concurrency: development-deploy
     uses: ./.github/workflows/deploy-to-environment.yml
