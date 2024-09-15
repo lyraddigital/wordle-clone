@@ -6,42 +6,8 @@ on:
       - main
 
 jobs:
-  setting-up:
-    runs-on: ubuntu-latest
-    environment: Development
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Next.js dependencies
-        run: npm install
-        working-directory: frontend-app
-
-      - name: Build Next App for environment
-        run: npm run build
-        working-directory: frontend-app
-
-      - name: Install AWS CDK dependencies
-        run: npm install
-        working-directory: infrastructure
-
-      - name: Creating / Updating Infrastructure
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: 'bootstrap'
-          cdk_stack: aws://767013533477/us-east-1
-          cdk_args: '--require-approval never'
-          working_dir: 'infrastructure'
-          actions_comment: false
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-          AWS_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}
-          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-
   deploy-to-dev:
-    concurrency: development-deploy
-    needs: setting-up
+    concurrency: development-deploy    
     uses: ./.github/workflows/deploy-to-environment.yml
     with:            
       CDK_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}      
