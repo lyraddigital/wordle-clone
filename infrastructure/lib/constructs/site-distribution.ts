@@ -41,7 +41,6 @@ export class SiteDistribution extends Construct {
 
     if (props.includeWAF) {
       const whiteListIPSet = new CfnIPSet(this, "IPSet", {
-        name: "WhiteListIPSet",
         addresses: [props.allowedIPSet],
         ipAddressVersion: "IPV4",
         scope: "CLOUDFRONT",
