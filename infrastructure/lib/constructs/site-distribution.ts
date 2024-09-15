@@ -45,7 +45,6 @@ export class SiteDistribution extends Construct {
         domainName: domainName,
         validation: CertificateValidation.fromDns(),
         hostedZone: zone,
-        region: "us-east-1",
       }
     );
 
