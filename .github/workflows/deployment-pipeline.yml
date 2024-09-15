@@ -9,8 +9,7 @@ jobs:
   deploy-to-dev:
     concurrency: development-deploy    
     uses: ./.github/workflows/deploy-to-environment.yml
-    with:            
-      CDK_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}      
+    with:                
       ENVIRONMENT: Development
       SITE_STACK_NAME: ${{ vars.SITE_STACK_NAME }}
       SITE_SUB_DOMAIN: ${{ vars.SITE_SUB_DOMAIN }}
@@ -24,8 +23,7 @@ jobs:
     needs: deploy-to-dev
     concurrency: testing-deploy
     uses: ./.github/workflows/deploy-to-environment.yml
-    with:            
-      CDK_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}      
+    with:                 
       ENVIRONMENT: Testing
       SITE_STACK_NAME: ${{ vars.SITE_STACK_NAME }}
       SITE_SUB_DOMAIN: ${{ vars.SITE_SUB_DOMAIN }}
@@ -39,8 +37,7 @@ jobs:
     needs: deploy-to-test
     concurrency: production-deploy
     uses: ./.github/workflows/deploy-to-environment.yml
-    with:            
-      CDK_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}      
+    with:
       ENVIRONMENT: Production
       SITE_STACK_NAME: ${{ vars.SITE_STACK_NAME }}
       SITE_SUB_DOMAIN: ${{ vars.SITE_SUB_DOMAIN }}
