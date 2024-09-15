@@ -10,6 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Next App for environment
+        run: npm run build
+        working-directory: frontend-app
+
       - name: Install AWS CDK dependencies
         run: npm install
         working-directory: infrastructure
@@ -29,6 +35,7 @@ jobs:
 
   deploy-to-dev:
     concurrency: development-deploy
+    needs: setting-up
     uses: ./.github/workflows/deploy-to-environment.yml
     with:            
       CDK_DEFAULT_REGION: ${{ vars.CDK_DEFAULT_REGION }}      
