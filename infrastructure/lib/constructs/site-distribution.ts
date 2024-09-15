@@ -9,7 +9,7 @@ import {
   SSLMethod,
   ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront";
-import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
+import { S3BucketOrigin } from "aws-cdk-lib/aws-cloudfront-origins";
 import {
   Certificate,
   CertificateValidation,
@@ -80,7 +80,7 @@ export class SiteDistribution extends Construct {
     this.instance = new Distribution(this, "WebsiteDistribution", {
       certificate,
       defaultBehavior: {
-        origin: new S3Origin(props.siteBucket),
+        origin: S3BucketOrigin.withOriginAccessControl(props.siteBucket),
         compress: true,
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
