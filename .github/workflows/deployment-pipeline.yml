@@ -12,10 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Next App for environment
-        run: npm run build
-        working-directory: frontend-app
-
       - name: Install AWS CDK dependencies
         run: npm install
         working-directory: infrastructure
