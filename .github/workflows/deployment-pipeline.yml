@@ -8,6 +8,7 @@ on:
 jobs:
   setting-up:
     runs-on: ubuntu-latest
+    environment: Development
 
     steps:
       - uses: actions/checkout@v4
