@@ -9,14 +9,10 @@ import {
   SSLMethod,
 } from "aws-cdk-lib/aws-cloudfront";
 import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
-import {
-  CertificateValidation,
-  DnsValidatedCertificate,
-} from "aws-cdk-lib/aws-certificatemanager";
+import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 
 import { SITE_ROOT_DOMAIN } from "../constants/constants";
 import { DomainProps } from "../props/domain-props";
-import { HostedZone } from "aws-cdk-lib/aws-route53";
 
 export interface SiteDistributionProps extends DomainProps {
   siteBucket: IBucket;
@@ -30,23 +26,13 @@ export class SiteDistribution extends Construct {
   constructor(parent: Construct, id: string, props: SiteDistributionProps) {
     super(parent, id);
 
-    const zone = HostedZone.fromLookup(this, "Zone", {
-      domainName: SITE_ROOT_DOMAIN,
-    });
-
     const domainName = props.subDomain
       ? `${props.subDomain}.${SITE_ROOT_DOMAIN}`
       : SITE_ROOT_DOMAIN;
 
-    const certificate = new DnsValidatedCertificate(
-      this,
-      "WebsiteCertificate",
-      {
-        domainName: domainName,
-        validation: CertificateValidation.fromDns(),
-        hostedZone: zone,
-      }
-    );
+    const certificate = new Certificate(this, "WebsiteCertificate", {
+      domainName: domainName,
+    });
 
     if (props.includeWAF) {
       const whiteListIPSet = new CfnIPSet(this, "IPSet", {
