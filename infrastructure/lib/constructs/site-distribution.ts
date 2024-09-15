@@ -9,7 +9,10 @@ import {
   SSLMethod,
 } from "aws-cdk-lib/aws-cloudfront";
 import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
-import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
+import {
+  Certificate,
+  CertificateValidation,
+} from "aws-cdk-lib/aws-certificatemanager";
 
 import { SITE_ROOT_DOMAIN } from "../constants/constants";
 import { DomainProps } from "../props/domain-props";
@@ -32,6 +35,7 @@ export class SiteDistribution extends Construct {
 
     const certificate = new Certificate(this, "WebsiteCertificate", {
       domainName: domainName,
+      validation: CertificateValidation.fromDns(),
     });
 
     if (props.includeWAF) {
