@@ -21,7 +21,8 @@ jobs:
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'bootstrap'
-          cdk_stack: ${{ vars.SITE_STACK_NAME }}          
+          cdk_stack: aws://767013533477/us-east-1
+          cdk_args: '--require-approval never'
           working_dir: 'infrastructure'
           actions_comment: false
         env:
