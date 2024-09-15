@@ -7,6 +7,7 @@ import {
   IDistribution,
   PriceClass,
   SSLMethod,
+  ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront";
 import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
 import {
@@ -81,6 +82,7 @@ export class SiteDistribution extends Construct {
       defaultBehavior: {
         origin: new S3Origin(props.siteBucket),
         compress: true,
+        viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
       defaultRootObject: "index.html",
       domainNames: [domainName],
