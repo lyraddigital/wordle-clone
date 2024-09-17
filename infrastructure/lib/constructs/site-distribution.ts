@@ -39,6 +39,8 @@ export class SiteDistribution extends Construct {
       validation: CertificateValidation.fromDns(),
     });
 
+    let webACL: CfnWebACL | undefined;
+
     if (props.includeWAF) {
       const whiteListIPSet = new CfnIPSet(this, "IPSet", {
         addresses: [props.allowedIPSet],
@@ -64,7 +66,7 @@ export class SiteDistribution extends Construct {
         },
       };
 
-      new CfnWebACL(this, "WebACL", {
+      webACL = new CfnWebACL(this, "WebACL", {
         defaultAction: { block: {} },
         visibilityConfig: {
           cloudWatchMetricsEnabled: true,
@@ -83,6 +85,7 @@ export class SiteDistribution extends Construct {
         compress: true,
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
+      webAclId: webACL?.attrArn,
       defaultRootObject: "index.html",
       domainNames: [domainName],
       errorResponses: [

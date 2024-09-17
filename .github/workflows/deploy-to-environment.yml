@@ -20,7 +20,9 @@ on:
       AWS_SECRET_KEY:
         required: true
       CDK_DEFAULT_ACCOUNT:
-        required: true        
+        required: true
+      GOOGLE_ANALYTICS_ID:
+        required: false
 
 jobs:
   deploy-infrastructure:
@@ -36,6 +38,8 @@ jobs:
 
       - name: Build Next App for environment
         run: npm run build
+        env:
+          GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
         working-directory: frontend-app
 
       - name: Install AWS CDK dependencies
