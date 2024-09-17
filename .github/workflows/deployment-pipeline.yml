@@ -6,35 +6,35 @@ on:
       - main
 
 jobs:
-  # deploy-to-dev:
-  #   concurrency: development-deploy    
-  #   uses: ./.github/workflows/deploy-to-environment.yml
-  #   with:                
-  #     ENVIRONMENT: Development
-  #     SITE_STACK_NAME: ${{ vars.SITE_STACK_NAME }}
-  #     SITE_SUB_DOMAIN: ${{ vars.SITE_SUB_DOMAIN }}
-  #     ALLOWED_IP_SET: ${{ vars.ALLOWED_IP_SET }}
-  #   secrets:
-  #     AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-  #     AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-  #     CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+  deploy-to-dev:
+    concurrency: development-deploy    
+    uses: ./.github/workflows/deploy-to-environment.yml
+    with:                
+      ENVIRONMENT: Development
+      SITE_STACK_NAME: ${{ vars.SITE_STACK_NAME }}
+      SITE_SUB_DOMAIN: ${{ vars.SITE_SUB_DOMAIN }}
+      ALLOWED_IP_SET: ${{ vars.ALLOWED_IP_SET }}
+    secrets:
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
 
-  # deploy-to-test:    
-  #   needs: deploy-to-dev
-  #   concurrency: testing-deploy
-  #   uses: ./.github/workflows/deploy-to-environment.yml
-  #   with:                 
-  #     ENVIRONMENT: Testing
-  #     SITE_STACK_NAME: ${{ vars.SITE_STACK_NAME }}
-  #     SITE_SUB_DOMAIN: ${{ vars.SITE_SUB_DOMAIN }}
-  #     ALLOWED_IP_SET: ${{ vars.ALLOWED_IP_SET }}
-  #   secrets:
-  #     AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-  #     AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-  #     CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+  deploy-to-test:    
+    needs: deploy-to-dev
+    concurrency: testing-deploy
+    uses: ./.github/workflows/deploy-to-environment.yml
+    with:                 
+      ENVIRONMENT: Testing
+      SITE_STACK_NAME: ${{ vars.SITE_STACK_NAME }}
+      SITE_SUB_DOMAIN: ${{ vars.SITE_SUB_DOMAIN }}
+      ALLOWED_IP_SET: ${{ vars.ALLOWED_IP_SET }}
+    secrets:
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
 
   deploy-to-production:
-    #needs: deploy-to-test
+    needs: deploy-to-test
     concurrency: production-deploy
     uses: ./.github/workflows/deploy-to-environment.yml
     with:
