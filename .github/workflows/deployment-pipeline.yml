@@ -34,7 +34,7 @@ jobs:
   #     CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
 
   deploy-to-production:
-    needs: deploy-to-test
+    #needs: deploy-to-test
     concurrency: production-deploy
     uses: ./.github/workflows/deploy-to-environment.yml
     with:
