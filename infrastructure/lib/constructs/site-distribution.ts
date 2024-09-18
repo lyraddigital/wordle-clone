@@ -6,6 +6,7 @@ import {
   HttpVersion,
   IDistribution,
   PriceClass,
+  ResponseHeadersPolicy,
   SSLMethod,
   ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront";
@@ -78,6 +79,24 @@ export class SiteDistribution extends Construct {
       });
     }
 
+    // const cacheControlHeaderPolicy = new ResponseHeadersPolicy(
+    //   this,
+    //   "CacheControlHeaderPolicy",
+    //   {
+    //     comment:
+    //       "Cache-Control policy for optimizing caching static content on the client side",
+    //     customHeadersBehavior: {
+    //       customHeaders: [
+    //         {
+    //           header: "Cache-Control",
+    //           value: "private, max-age=86400",
+    //           override: true,
+    //         },
+    //       ],
+    //     },
+    //   }
+    // );
+
     this.instance = new Distribution(this, "WebsiteDistribution", {
       certificate,
       defaultBehavior: {
@@ -90,9 +109,9 @@ export class SiteDistribution extends Construct {
       domainNames: [domainName],
       errorResponses: [
         {
-          httpStatus: 404,
+          httpStatus: 403,
           responseHttpStatus: 200,
-          responsePagePath: "/index.html",
+          responsePagePath: "/404.html",
         },
       ],
       httpVersion: HttpVersion.HTTP2,
