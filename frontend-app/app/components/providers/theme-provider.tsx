@@ -17,13 +17,13 @@ export default function ThemeProvider({ children }: PropsWithChildren) {
         }
     }, [isDarkMode]);
 
-    const wordleState: ThemeState = {
+    const themeState: ThemeState = {
         isDarkMode,
         setIsDarkMode
     };
 
     return (
-        <ThemeContext.Provider value={wordleState}>
+        <ThemeContext.Provider value={themeState}>
             {children}
         </ThemeContext.Provider>
     );
