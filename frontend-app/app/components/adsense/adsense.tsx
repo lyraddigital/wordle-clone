@@ -12,7 +12,7 @@ export default function Adsense({ pId }: AdsenseProps) {
   return (
     <Script
       async
-      src={`pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${pId}`}
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${pId}`}
       crossOrigin="anonymous"
       strategy="afterInteractive"
     />
