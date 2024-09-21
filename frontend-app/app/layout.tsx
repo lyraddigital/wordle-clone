@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { GoogleAnalytics } from '@next/third-parties/google';
 
-import { GOOGLE_ANALYTICS_ID } from "./environment/environment-variables";
+import Adsense from "./components/adsense/adsense";
+import { GOOGLE_ADSENSE_PUB_ID, GOOGLE_ANALYTICS_ID } from "./environment/environment-variables";
 
 import "./globals.css";
 
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body className={layoutClasses}>
         {children}
         {GOOGLE_ANALYTICS_ID && <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />}
+        <Adsense pId={GOOGLE_ADSENSE_PUB_ID} />
       </body>
     </html>
   );
