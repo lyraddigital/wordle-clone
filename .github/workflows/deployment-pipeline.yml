@@ -46,5 +46,4 @@ jobs:
       AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
       CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
       GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
-      GOOGLE_ADSENSE_PUB_ID: ${{ secrets.GOOGLE_ADSENSE_PUB_ID }}
         
