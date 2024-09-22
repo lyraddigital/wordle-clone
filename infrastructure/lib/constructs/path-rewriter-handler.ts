@@ -12,7 +12,7 @@ export class PathRewriterLambda extends Construct {
     this.lambdaFunction = new NodejsFunction(this, "LambdaFunction", {
       runtime: Runtime.NODEJS_18_X,
       handler: "handler",
-      entry: join(__dirname, "../../lambda/path-rewriter-handler.js"),
+      entry: join(__dirname, "../../lambda/path-rewriter-handler.ts"),
       bundling: {
         format: OutputFormat.ESM,
       },
