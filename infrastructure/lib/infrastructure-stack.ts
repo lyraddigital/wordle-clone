@@ -6,6 +6,7 @@ import { SiteDistribution } from "./constructs/site-distribution";
 import { DNSRecord } from "./constructs/dns-record";
 import { SiteDeployment } from "./constructs/site-deployment";
 import { DomainProps } from "./props/domain-props";
+import { ViewerRequestLambda } from "./constructs/viewer-request-lambda";
 
 interface InfrastructureStackProps extends cdk.StackProps {
   includeWAF: boolean;
@@ -30,11 +31,16 @@ export class InfrastructureStack extends cdk.Stack {
     const subDomain = subDomainName.valueAsString;
     const domainProps: DomainProps = { subDomain };
     const siteBucket = new SiteBucket(this, "SiteBucket", domainProps);
+    const viewerRequestLambda = new ViewerRequestLambda(
+      this,
+      "ViewerRequestLambda"
+    );
     const distribution = new SiteDistribution(this, "SiteDistribution", {
       ...domainProps,
       siteBucket: siteBucket.instance,
       includeWAF: props.includeWAF,
       allowedIPSet: allowedIPSet.valueAsString,
+      viewerRequestFunction: viewerRequestLambda.lambda,
     });
     new DNSRecord(this, "SiteDNSRecord", {
       ...domainProps,

@@ -11,20 +11,19 @@ import {
   SSLMethod,
   ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront";
-import { NodejsFunction, OutputFormat } from "aws-cdk-lib/aws-lambda-nodejs";
 import { S3BucketOrigin } from "aws-cdk-lib/aws-cloudfront-origins";
 import {
   Certificate,
   CertificateValidation,
 } from "aws-cdk-lib/aws-certificatemanager";
-import { Runtime } from "aws-cdk-lib/aws-lambda";
-import { join } from "path";
+import { IFunction } from "aws-cdk-lib/aws-lambda";
 
 import { SITE_ROOT_DOMAIN } from "../constants/constants";
 import { DomainProps } from "../props/domain-props";
 
 export interface SiteDistributionProps extends DomainProps {
   siteBucket: IBucket;
+  viewerRequestFunction: IFunction;
   includeWAF: boolean;
   allowedIPSet: string;
 }
@@ -101,19 +100,6 @@ export class SiteDistribution extends Construct {
     //   }
     // );
 
-    const viewerRequestLambdaFunction = new NodejsFunction(
-      this,
-      "ViewerRequestFunction",
-      {
-        runtime: Runtime.NODEJS_18_X,
-        handler: "handler",
-        entry: join(__dirname, "../../lambda/path-rewriter-handler.ts"),
-        bundling: {
-          format: OutputFormat.ESM,
-        },
-      }
-    );
-
     this.instance = new Distribution(this, "WebsiteDistribution", {
       certificate,
       defaultBehavior: {
@@ -123,7 +109,7 @@ export class SiteDistribution extends Construct {
         functionAssociations: [
           {
             eventType: FunctionEventType.VIEWER_REQUEST,
-            function: viewerRequestLambdaFunction,
+            function: props.viewerRequestFunction,
           },
         ],
       },
