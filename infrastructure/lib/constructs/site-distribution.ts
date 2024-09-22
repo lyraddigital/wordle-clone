@@ -3,6 +3,7 @@ import { IBucket } from "aws-cdk-lib/aws-s3";
 import { CfnIPSet, CfnWebACL } from "aws-cdk-lib/aws-wafv2";
 import {
   Distribution,
+  FunctionEventType,
   HttpVersion,
   IDistribution,
   PriceClass,
@@ -18,6 +19,7 @@ import {
 
 import { SITE_ROOT_DOMAIN } from "../constants/constants";
 import { DomainProps } from "../props/domain-props";
+import { PathRewriterLambda } from "./path-rewriter-handler";
 
 export interface SiteDistributionProps extends DomainProps {
   siteBucket: IBucket;
@@ -97,12 +99,23 @@ export class SiteDistribution extends Construct {
     //   }
     // );
 
+    const viewerRequestFunction = new PathRewriterLambda(
+      this,
+      "PathRewriterLambda"
+    );
+
     this.instance = new Distribution(this, "WebsiteDistribution", {
       certificate,
       defaultBehavior: {
         origin: S3BucketOrigin.withOriginAccessControl(props.siteBucket),
         compress: true,
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        functionAssociations: [
+          {
+            eventType: FunctionEventType.VIEWER_REQUEST,
+            function: viewerRequestFunction.lambdaFunction,
+          },
+        ],
       },
       webAclId: webACL?.attrArn,
       defaultRootObject: "index.html",
