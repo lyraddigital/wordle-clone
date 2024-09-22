@@ -7,6 +7,7 @@ import Adsense from "./components/adsense/adsense";
 import { GOOGLE_ADSENSE_PUB_ID, GOOGLE_ANALYTICS_ID } from "./environment/environment-variables";
 
 import "./globals.css";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,10 +28,12 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <Head>
+        {GOOGLE_ADSENSE_PUB_ID && <Adsense pId={GOOGLE_ADSENSE_PUB_ID} />}
+      </Head>
       <body className={layoutClasses}>
         {children}
         {GOOGLE_ANALYTICS_ID && <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />}
-        <Adsense pId={GOOGLE_ADSENSE_PUB_ID} />
       </body>
     </html>
   );
