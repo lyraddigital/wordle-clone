@@ -42,6 +42,10 @@ jobs:
           GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
         working-directory: frontend-app
 
+      - name: Global Install ESBuild for AWS CDK
+        run: npm i esbuild -g
+        working-directory: infrastructure
+
       - name: Install AWS CDK dependencies
         run: npm install
         working-directory: infrastructure
