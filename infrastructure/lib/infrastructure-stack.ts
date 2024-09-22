@@ -33,18 +33,14 @@ export class InfrastructureStack extends cdk.Stack {
     const subDomain = subDomainName.valueAsString;
     const domainProps: DomainProps = { subDomain };
     const siteBucket = new SiteBucket(this, "SiteBucket", domainProps);
-    const viewerRequestLambda = new NodejsFunction(
-      this,
-      "ViewerRequestFunction",
-      {
-        runtime: Runtime.NODEJS_18_X,
-        handler: "handler",
-        entry: join(__dirname, "../lambda/path-rewriter-handler.ts"),
-        bundling: {
-          format: OutputFormat.ESM,
-        },
-      }
-    );
+    const viewerRequestLambda = new NodejsFunction(this, "VRF", {
+      runtime: Runtime.NODEJS_18_X,
+      handler: "handler",
+      entry: join(__dirname, "../lambda/path-rewriter-handler.ts"),
+      bundling: {
+        format: OutputFormat.ESM,
+      },
+    });
     const distribution = new SiteDistribution(this, "SiteDistribution", {
       ...domainProps,
       siteBucket: siteBucket.instance,
