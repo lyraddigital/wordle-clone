@@ -3,6 +3,8 @@ import { IBucket } from "aws-cdk-lib/aws-s3";
 import { CfnIPSet, CfnWebACL } from "aws-cdk-lib/aws-wafv2";
 import {
   Distribution,
+  Function,
+  FunctionCode,
   FunctionEventType,
   HttpVersion,
   IDistribution,
@@ -16,14 +18,12 @@ import {
   Certificate,
   CertificateValidation,
 } from "aws-cdk-lib/aws-certificatemanager";
-import { IFunction } from "aws-cdk-lib/aws-lambda";
 
 import { SITE_ROOT_DOMAIN } from "../constants/constants";
 import { DomainProps } from "../props/domain-props";
 
 export interface SiteDistributionProps extends DomainProps {
   siteBucket: IBucket;
-  viewerRequestFunction: IFunction;
   includeWAF: boolean;
   allowedIPSet: string;
 }
@@ -100,6 +100,12 @@ export class SiteDistribution extends Construct {
     //   }
     // );
 
+    const viewerRequestLambda = new Function(this, "VRF", {
+      code: FunctionCode.fromFile({
+        filePath: "./lambda/path-rewriter-handler.ts",
+      }),
+    });
+
     this.instance = new Distribution(this, "WebsiteDistribution", {
       certificate,
       defaultBehavior: {
@@ -109,7 +115,7 @@ export class SiteDistribution extends Construct {
         functionAssociations: [
           {
             eventType: FunctionEventType.VIEWER_REQUEST,
-            function: props.viewerRequestFunction,
+            function: viewerRequestLambda,
           },
         ],
       },
