@@ -11,15 +11,17 @@ import {
   SSLMethod,
   ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront";
+import { NodejsFunction, OutputFormat } from "aws-cdk-lib/aws-lambda-nodejs";
 import { S3BucketOrigin } from "aws-cdk-lib/aws-cloudfront-origins";
 import {
   Certificate,
   CertificateValidation,
 } from "aws-cdk-lib/aws-certificatemanager";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
+import { join } from "path";
 
 import { SITE_ROOT_DOMAIN } from "../constants/constants";
 import { DomainProps } from "../props/domain-props";
-import { PathRewriterLambda } from "./path-rewriter-handler";
 
 export interface SiteDistributionProps extends DomainProps {
   siteBucket: IBucket;
@@ -99,9 +101,17 @@ export class SiteDistribution extends Construct {
     //   }
     // );
 
-    const viewerRequestFunction = new PathRewriterLambda(
+    const viewerRequestLambdaFunction = new NodejsFunction(
       this,
-      "PathRewriterLambda"
+      "ViewerRequestFunction",
+      {
+        runtime: Runtime.NODEJS_18_X,
+        handler: "handler",
+        entry: join(__dirname, "../../lambda/path-rewriter-handler.ts"),
+        bundling: {
+          format: OutputFormat.ESM,
+        },
+      }
     );
 
     this.instance = new Distribution(this, "WebsiteDistribution", {
@@ -113,7 +123,7 @@ export class SiteDistribution extends Construct {
         functionAssociations: [
           {
             eventType: FunctionEventType.VIEWER_REQUEST,
-            function: viewerRequestFunction.lambdaFunction,
+            function: viewerRequestLambdaFunction,
           },
         ],
       },
