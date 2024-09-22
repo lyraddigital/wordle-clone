@@ -1,10 +1,14 @@
 import Script from "next/script";
 
 type AdsenseProps = {
-  pId: string;
+  pId?: string;
 };
 
 export default function Adsense({ pId }: AdsenseProps) {
+  if (!pId) {
+    return null;
+  }
+
   return (
     <Script
       async
