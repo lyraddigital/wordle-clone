@@ -102,7 +102,7 @@ export class SiteDistribution extends Construct {
 
     const viewerRequestLambda = new Function(this, "VRF", {
       code: FunctionCode.fromFile({
-        filePath: "./lambda/path-rewriter-handler.ts",
+        filePath: "./lambda/path-rewriter-handler.js",
       }),
     });
 
