@@ -6,6 +6,7 @@ import {
   Function,
   FunctionCode,
   FunctionEventType,
+  FunctionRuntime,
   HttpVersion,
   IDistribution,
   PriceClass,
@@ -104,6 +105,7 @@ export class SiteDistribution extends Construct {
       code: FunctionCode.fromFile({
         filePath: "./lambda/path-rewriter-handler.js",
       }),
+      runtime: FunctionRuntime.JS_2_0,
     });
 
     this.instance = new Distribution(this, "WebsiteDistribution", {
