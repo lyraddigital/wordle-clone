@@ -77,7 +77,7 @@ export class SiteDistribution extends Construct {
                   textTransformations: [
                     {
                       priority: 0,
-                      type: "None",
+                      type: "NONE",
                     },
                   ],
                 },
