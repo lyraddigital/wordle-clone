@@ -60,8 +60,23 @@ export class SiteDistribution extends Construct {
           allow: {},
         },
         statement: {
-          ipSetReferenceStatement: {
-            arn: whiteListIPSet.attrArn,
+          orStatement: {
+            statements: [
+              {
+                ipSetReferenceStatement: {
+                  arn: whiteListIPSet.attrArn,
+                },
+              },
+              {
+                byteMatchStatement: {
+                  fieldToMatch: {
+                    uriPath: "/_next",
+                  },
+                  positionalConstraint: "STARTS_WITH",
+                  textTransformations: [],
+                },
+              },
+            ],
           },
         },
         visibilityConfig: {
