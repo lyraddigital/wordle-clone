@@ -74,7 +74,12 @@ export class SiteDistribution extends Construct {
                     uriPath: {},
                   },
                   positionalConstraint: "STARTS_WITH",
-                  textTransformations: [],
+                  textTransformations: [
+                    {
+                      priority: 0,
+                      type: "None",
+                    },
+                  ],
                 },
               },
             ],
