@@ -128,7 +128,7 @@ export class SiteDistribution extends Construct {
         {
           httpStatus: 403,
           responseHttpStatus: 200,
-          responsePagePath: "/404.html",
+          responsePagePath: "/not-authorized.html",
         },
       ],
       httpVersion: HttpVersion.HTTP2,
