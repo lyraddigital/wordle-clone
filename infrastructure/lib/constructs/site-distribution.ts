@@ -149,7 +149,9 @@ export class SiteDistribution extends Construct {
         {
           httpStatus: 403,
           responseHttpStatus: 200,
-          responsePagePath: "/not-authorized.html",
+          responsePagePath: props.includeWAF
+            ? "/not-authorized.html"
+            : "/404.html",
         },
       ],
       httpVersion: HttpVersion.HTTP2,
