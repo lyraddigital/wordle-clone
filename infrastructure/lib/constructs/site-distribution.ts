@@ -148,7 +148,7 @@ export class SiteDistribution extends Construct {
       errorResponses: [
         {
           httpStatus: 403,
-          responseHttpStatus: 200,
+          responseHttpStatus: props.includeWAF ? 403 : 404,
           responsePagePath: props.includeWAF
             ? "/not-authorized.html"
             : "/404.html",
