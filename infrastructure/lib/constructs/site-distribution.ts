@@ -69,8 +69,9 @@ export class SiteDistribution extends Construct {
               },
               {
                 byteMatchStatement: {
+                  searchString: "/_next",
                   fieldToMatch: {
-                    uriPath: "/_next",
+                    uriPath: {},
                   },
                   positionalConstraint: "STARTS_WITH",
                   textTransformations: [],
