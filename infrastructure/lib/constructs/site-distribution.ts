@@ -104,24 +104,6 @@ export class SiteDistribution extends Construct {
       });
     }
 
-    // const cacheControlHeaderPolicy = new ResponseHeadersPolicy(
-    //   this,
-    //   "CacheControlHeaderPolicy",
-    //   {
-    //     comment:
-    //       "Cache-Control policy for optimizing caching static content on the client side",
-    //     customHeadersBehavior: {
-    //       customHeaders: [
-    //         {
-    //           header: "Cache-Control",
-    //           value: "private, max-age=86400",
-    //           override: true,
-    //         },
-    //       ],
-    //     },
-    //   }
-    // );
-
     const viewerRequestLambda = new Function(this, "VRF", {
       code: FunctionCode.fromFile({
         filePath: "./lambda/path-rewriter-handler.js",
@@ -148,10 +130,13 @@ export class SiteDistribution extends Construct {
       errorResponses: [
         {
           httpStatus: 403,
-          responseHttpStatus: props.includeWAF ? 403 : 404,
-          responsePagePath: props.includeWAF
-            ? "/not-authorized.html"
-            : "/404.html",
+          responseHttpStatus: 403,
+          responsePagePath: "/not-authorized.html",
+        },
+        {
+          httpStatus: 404,
+          responseHttpStatus: 404,
+          responsePagePath: "/404.html",
         },
       ],
       httpVersion: HttpVersion.HTTP2,
