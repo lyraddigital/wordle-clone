@@ -1,9 +1,5 @@
 import * as cdk from "aws-cdk-lib";
-import { Runtime } from "aws-cdk-lib/aws-lambda";
-import { NodejsFunction, OutputFormat } from "aws-cdk-lib/aws-lambda-nodejs";
-import { FunctionCode, Function } from "aws-cdk-lib/aws-cloudfront";
 import { Construct } from "constructs";
-import { join } from "path";
 
 import { SiteBucket } from "./constructs/site-bucket";
 import { SiteDistribution } from "./constructs/site-distribution";
@@ -39,7 +35,6 @@ export class InfrastructureStack extends cdk.Stack {
       siteBucket: siteBucket.instance,
       includeWAF: props.includeWAF,
       allowedIPSet: allowedIPSet.valueAsString,
-      account: this.account,
     });
     new DNSRecord(this, "SiteDNSRecord", {
       ...domainProps,
