@@ -10,7 +10,6 @@ import {
   HttpVersion,
   IDistribution,
   PriceClass,
-  ResponseHeadersPolicy,
   SSLMethod,
   ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront";
@@ -22,11 +21,13 @@ import {
 
 import { SITE_ROOT_DOMAIN } from "../constants/constants";
 import { DomainProps } from "../props/domain-props";
+import { Effect, PolicyStatement, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 
 export interface SiteDistributionProps extends DomainProps {
   siteBucket: IBucket;
   includeWAF: boolean;
   allowedIPSet: string;
+  account: string;
 }
 
 export class SiteDistribution extends Construct {
@@ -143,5 +144,19 @@ export class SiteDistribution extends Construct {
       priceClass: PriceClass.PRICE_CLASS_ALL,
       sslSupportMethod: SSLMethod.SNI,
     });
+
+    props.siteBucket.addToResourcePolicy(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: ["s3:ListBucket"],
+        resources: [props.siteBucket.arnForObjects("/")],
+        principals: [new ServicePrincipal("cloudfront.amazonaws.com")],
+        conditions: {
+          StringEquals: {
+            "AWS:SourceArn": `arn:aws:cloudfront::${props.account}:distribution/${this.instance.distributionId}`,
+          },
+        },
+      })
+    );
   }
 }

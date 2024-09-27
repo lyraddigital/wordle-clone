@@ -39,6 +39,7 @@ export class InfrastructureStack extends cdk.Stack {
       siteBucket: siteBucket.instance,
       includeWAF: props.includeWAF,
       allowedIPSet: allowedIPSet.valueAsString,
+      account: this.account,
     });
     new DNSRecord(this, "SiteDNSRecord", {
       ...domainProps,
