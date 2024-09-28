@@ -149,7 +149,7 @@ export class SiteDistribution extends Construct {
       new PolicyStatement({
         effect: Effect.ALLOW,
         actions: ["s3:ListBucket"],
-        resources: [props.siteBucket.arnForObjects("")],
+        resources: [props.siteBucket.bucketArn],
         principals: [new ServicePrincipal("cloudfront.amazonaws.com")],
         conditions: {
           StringEquals: {
