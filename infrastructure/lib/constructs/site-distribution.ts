@@ -145,18 +145,18 @@ export class SiteDistribution extends Construct {
       sslSupportMethod: SSLMethod.SNI,
     });
 
-    // props.siteBucket.addToResourcePolicy(
-    //   new PolicyStatement({
-    //     effect: Effect.ALLOW,
-    //     actions: ["s3:ListBucket"],
-    //     resources: [props.siteBucket.arnForObjects("/")],
-    //     principals: [new ServicePrincipal("cloudfront.amazonaws.com")],
-    //     conditions: {
-    //       StringEquals: {
-    //         "AWS:SourceArn": `arn:${Aws.PARTITION}:cloudfront::${Aws.ACCOUNT_ID}:distribution/${this.instance.distributionId}`,
-    //       },
-    //     },
-    //   })
-    // );
+    props.siteBucket.addToResourcePolicy(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: ["s3:ListBucket"],
+        resources: [props.siteBucket.arnForObjects("/")],
+        principals: [new ServicePrincipal("cloudfront.amazonaws.com")],
+        conditions: {
+          StringEquals: {
+            "AWS:SourceArn": `arn:${Aws.PARTITION}:cloudfront::${Aws.ACCOUNT_ID}:distribution/${this.instance.distributionId}`,
+          },
+        },
+      })
+    );
   }
 }
