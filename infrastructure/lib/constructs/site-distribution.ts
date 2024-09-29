@@ -1,4 +1,5 @@
-import { Construct } from "constructs";
+import { Effect, PolicyStatement, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { Aws, Duration } from "aws-cdk-lib";
 import { IBucket } from "aws-cdk-lib/aws-s3";
 import { CfnIPSet, CfnWebACL } from "aws-cdk-lib/aws-wafv2";
 import {
@@ -7,9 +8,12 @@ import {
   FunctionCode,
   FunctionEventType,
   FunctionRuntime,
+  HeadersFrameOption,
+  HeadersReferrerPolicy,
   HttpVersion,
   IDistribution,
   PriceClass,
+  ResponseHeadersPolicy,
   SSLMethod,
   ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront";
@@ -18,11 +22,10 @@ import {
   Certificate,
   CertificateValidation,
 } from "aws-cdk-lib/aws-certificatemanager";
+import { Construct } from "constructs";
 
 import { SITE_ROOT_DOMAIN } from "../constants/constants";
 import { DomainProps } from "../props/domain-props";
-import { Effect, PolicyStatement, ServicePrincipal } from "aws-cdk-lib/aws-iam";
-import { Aws } from "aws-cdk-lib";
 
 export interface SiteDistributionProps extends DomainProps {
   siteBucket: IBucket;
@@ -127,6 +130,53 @@ export class SiteDistribution extends Construct {
       runtime: FunctionRuntime.JS_2_0,
     });
 
+    const cspHeadersPolicy = new ResponseHeadersPolicy(
+      this,
+      "ResponseHeadersPolicy",
+      {
+        securityHeadersBehavior: {
+          contentSecurityPolicy: {
+            contentSecurityPolicy: `default-src 'self' 'unsafe-inline'${
+              !props.includeWAF
+                ? `; script-src 'self' www.googletagmanager.com 'unsafe-inline'; connect-src www.google-analytics.com`
+                : ""
+            }`,
+            override: true,
+          },
+          strictTransportSecurity: {
+            accessControlMaxAge: Duration.days(365),
+            override: true,
+          },
+          contentTypeOptions: {
+            override: true,
+          },
+          frameOptions: {
+            frameOption: HeadersFrameOption.SAMEORIGIN,
+            override: true,
+          },
+          xssProtection: {
+            protection: true,
+            modeBlock: true,
+            override: true,
+          },
+          referrerPolicy: {
+            referrerPolicy:
+              HeadersReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN,
+            override: true,
+          },
+        },
+        customHeadersBehavior: {
+          customHeaders: [
+            {
+              header: "Permissions-Policy",
+              value: "",
+              override: true,
+            },
+          ],
+        },
+      }
+    );
+
     this.instance = new Distribution(this, "WebsiteDistribution", {
       certificate,
       defaultBehavior: {
@@ -139,6 +189,7 @@ export class SiteDistribution extends Construct {
             function: viewerRequestLambda,
           },
         ],
+        responseHeadersPolicy: cspHeadersPolicy,
       },
       webAclId: webACL?.attrArn,
       defaultRootObject: "index.html",
