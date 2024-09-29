@@ -1,15 +1,14 @@
 const hasExtension = /(.+)\.[a-zA-Z0-9]{2,5}$/;
-const hasSlash = /\/$/;
 
 function handler(event) {
-  const uri = event.request.uri;
+  const uri = event.request?.uri?.replace(/^\//, "");
 
-  if (uri && !uri.match(hasExtension) && !uri.match(hasSlash)) {
-    event.request.uri = `${uri}.html`;
-  }
-
-  if (uri && !uri.match(hasExtension) && uri.match(hasSlash) && uri !== "/") {
-    event.request.uri = `${uri}index.html`;
+  if (uri && uri !== "/") {
+    if (!uri.match(hasExtension)) {
+      event.request.uri = `/${uri.replace(/\/$/, "")}.html`;
+    }
+  } else if (event.request) {
+    event.request.uri = "/index.html";
   }
 
   return event.request;
