@@ -77,6 +77,21 @@ export class SiteDistribution extends Construct {
                   positionalConstraint: "STARTS_WITH",
                   textTransformations: [
                     {
+                      priority: 1,
+                      type: "NONE",
+                    },
+                  ],
+                },
+              },
+              {
+                byteMatchStatement: {
+                  searchString: "favicon.ico",
+                  fieldToMatch: {
+                    uriPath: {},
+                  },
+                  positionalConstraint: "ENDS_WITH",
+                  textTransformations: [
+                    {
                       priority: 0,
                       type: "NONE",
                     },
