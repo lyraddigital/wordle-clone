@@ -1,7 +1,10 @@
 const hasExtension = /(.+)\.[a-zA-Z0-9]{2,5}$/;
 
 function handler(event) {
-  const uri = event.request?.uri?.replace(/^\//, "");
+  const uri =
+    event && event.request && event.request.uri
+      ? event.request.uri.replace(/^\//, "")
+      : "";
 
   if (uri && uri !== "/") {
     if (!uri.match(hasExtension)) {
