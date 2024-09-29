@@ -17,7 +17,7 @@ export class SiteDeployment extends Construct {
       sources: [Source.asset(props.sourceCodeFolder)],
       destinationBucket: props.bucket,
       distribution: props.distribution,
-      distributionPaths: ["/index.html"],
+      distributionPaths: ["/*"],
     });
   }
 }
