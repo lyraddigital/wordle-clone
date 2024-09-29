@@ -15,7 +15,7 @@ export default function NotAuthorized() {
                             <div className="my-5">
                                 <LockIcon />
                             </div>
-                            <h2 className="text-4xl uppercase font-bold">Not Authorized</h2>
+                            <h2 className="text-4xl uppercase font-bold">Not Authorized. Is this still cached?</h2>
                         </header>
 
                         <p className="mt-5 md:text-2xl">
