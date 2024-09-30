@@ -1,5 +1,5 @@
-import GameBoard from "./components/game-board";
-import Header from "./components/header/header";
+import GameBoard from "@/components/game-board";
+import Header from "@/components/header";
 
 export default function Home() {
   return (

@@ -1,8 +1,8 @@
 'use client';
 
-import Header from "../components/header/header";
-import LockIcon from "../components/icons/lock-icon";
-import ThemeProvider from "../components/providers/theme-provider";
+import Header from "@/components/header";
+import LockIcon from "@/components/icons/lock-icon";
+import ThemeProvider from "@/components/providers/theme-provider";
 
 export default function NotAuthorized() {
     return (

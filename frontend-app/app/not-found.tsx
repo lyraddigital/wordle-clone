@@ -1,7 +1,7 @@
 'use client';
 
-import Header from "./components/header/header";
-import ThemeProvider from "./components/providers/theme-provider";
+import Header from "@/components/header";
+import ThemeProvider from "@/components/providers/theme-provider";
 
 export default function NotFound() {
     return (
