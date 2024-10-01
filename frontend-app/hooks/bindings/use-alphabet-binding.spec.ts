@@ -3,9 +3,16 @@ import useWordle from "@/hooks/wordle/use-wordle";
 
 import useAlphabetBinding from "./use-alphabet-binding";
 
-jest.mock("@/hooks/modals/use-modals");
-jest.mock("@/hooks/modals/use-wordle");
-
 describe("useAlphabetBinding", () => {
-  it("first scenario", () => {});
+  it("first scenario", () => {
+    jest.mock<typeof import("@/hooks/modals/use-modals")>(
+      "@/hooks/modals/use-modals",
+      () => ({
+        showStatisticsModal: false,
+        showHelpModal: false,
+        setShowStatisticsModal: jest.fn<Dispatch<SetStateAction<boolean>>>(),
+        setShowHelpModal: jest.fn<Dispatch<SetStateAction<boolean>>>(),
+      })
+    );
+  });
 });
