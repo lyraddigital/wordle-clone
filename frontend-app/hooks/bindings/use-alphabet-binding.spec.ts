@@ -1,7 +1,6 @@
 jest.mock("@/hooks/modals/use-modals");
 jest.mock("@/hooks/wordle/use-wordle");
 
-import { ModalsState } from "@/contexts/modals-context";
 import useModals from "@/hooks/modals/use-modals";
 import useWordle from "@/hooks/wordle/use-wordle";
 
@@ -214,8 +213,9 @@ describe("useAlphabetBinding", () => {
     const bindingFn = useAlphabetBinding();
     bindingFn("a");
 
-    expect(mockSetCurrentGuessFn.mock.calls.length).toBe(1);
-    expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(1);
+    expect(mockSetCurrentGuessFn).toHaveBeenCalled();
+    expect(mockSetIsCurrentGuessIncorrect).toHaveBeenCalled();
+    expect(mockSetIsCurrentGuessIncorrect.mock.calls[0][0]).toBe(false);
   });
 
   it("current guess is 5 characters, does not update state", () => {
