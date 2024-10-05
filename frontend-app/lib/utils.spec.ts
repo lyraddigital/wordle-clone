@@ -9,6 +9,7 @@ import {
 
 describe("utils", () => {
   it("all local storage keys are correct", () => {
+    // Arrange / Action / Assert
     expect(gamesPlayedKey).toBe("ld:wordle:gamesPlayed");
     expect(gamesWonKey).toBe("ld:wordle:gamesWon");
     expect(guessDistributionKey).toBe("ld:wordle:guessDistribution");

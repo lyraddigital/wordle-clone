@@ -4,10 +4,10 @@ jest.mock("@/hooks/wordle/use-wordle");
 import useModals from "@/hooks/modals/use-modals";
 import useWordle from "@/hooks/wordle/use-wordle";
 
-import useAlphabetBinding from "./use-alphabet-binding";
+import useBackspaceBinding from "./use-backspace-binding";
 
-describe("useAlphabetBinding", () => {
-  it("current guess is less than 5 characters, but game is over, does not update state", () => {
+describe("useBackspaceBinding", () => {
+  it("game is over, does not update state", () => {
     (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
       showStatisticsModal: false,
       showHelpModal: false,
@@ -42,15 +42,15 @@ describe("useAlphabetBinding", () => {
     });
 
     // Action
-    const bindingFn = useAlphabetBinding();
-    bindingFn("a");
+    const bindingFn = useBackspaceBinding();
+    bindingFn();
 
     // Assert
     expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
     expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
   });
 
-  it("current guess is less than 5 characters, but guess animation is firing, does not update state", () => {
+  it("game animation is firing, does not update state", () => {
     (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
       showStatisticsModal: false,
       showHelpModal: false,
@@ -62,7 +62,7 @@ describe("useAlphabetBinding", () => {
     const mockSetIsCurrentGuessIncorrect = jest.fn();
 
     (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
-      currentGuess: "game",
+      currentGuess: "test",
       guesses: [],
       history: [],
       isCorrect: false,
@@ -85,15 +85,15 @@ describe("useAlphabetBinding", () => {
     });
 
     // Action
-    const bindingFn = useAlphabetBinding();
-    bindingFn("a");
+    const bindingFn = useBackspaceBinding();
+    bindingFn();
 
     // Assert
     expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
     expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
   });
 
-  it("current guess is less than 5 characters, but statistic modal is showing, does not update state", () => {
+  it("statistic modal is showing, does not update state", () => {
     (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
       showStatisticsModal: true,
       showHelpModal: false,
@@ -105,7 +105,7 @@ describe("useAlphabetBinding", () => {
     const mockSetIsCurrentGuessIncorrect = jest.fn();
 
     (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
-      currentGuess: "game",
+      currentGuess: "test",
       guesses: [],
       history: [],
       isCorrect: false,
@@ -128,15 +128,15 @@ describe("useAlphabetBinding", () => {
     });
 
     // Action
-    const bindingFn = useAlphabetBinding();
-    bindingFn("a");
+    const bindingFn = useBackspaceBinding();
+    bindingFn();
 
     // Assert
     expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
     expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
   });
 
-  it("current guess is less than 5 characters, but help modal is showing, does not update state", () => {
+  it("help modal is showing, does not update state", () => {
     (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
       showStatisticsModal: false,
       showHelpModal: true,
@@ -148,7 +148,7 @@ describe("useAlphabetBinding", () => {
     const mockSetIsCurrentGuessIncorrect = jest.fn();
 
     (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
-      currentGuess: "game",
+      currentGuess: "test",
       guesses: [],
       history: [],
       isCorrect: false,
@@ -171,15 +171,15 @@ describe("useAlphabetBinding", () => {
     });
 
     // Action
-    const bindingFn = useAlphabetBinding();
-    bindingFn("a");
+    const bindingFn = useBackspaceBinding();
+    bindingFn();
 
     // Assert
     expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
     expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
   });
 
-  it("current guess is less than 5 characters, and everything is fine, updates the state", () => {
+  it("everything is fine, updates the state", () => {
     (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
       showStatisticsModal: false,
       showHelpModal: false,
@@ -191,7 +191,7 @@ describe("useAlphabetBinding", () => {
     const mockSetIsCurrentGuessIncorrect = jest.fn();
 
     (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
-      currentGuess: "game",
+      currentGuess: "test",
       guesses: [],
       history: [],
       isCorrect: false,
@@ -214,55 +214,12 @@ describe("useAlphabetBinding", () => {
     });
 
     // Action
-    const bindingFn = useAlphabetBinding();
-    bindingFn("a");
+    const bindingFn = useBackspaceBinding();
+    bindingFn();
 
     // Assert
     expect(mockSetCurrentGuessFn).toHaveBeenCalled();
     expect(mockSetIsCurrentGuessIncorrect).toHaveBeenCalled();
     expect(mockSetIsCurrentGuessIncorrect.mock.calls[0][0]).toBe(false);
-  });
-
-  it("current guess is 5 characters, does not update state", () => {
-    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
-      showStatisticsModal: false,
-      showHelpModal: false,
-      setShowStatisticsModal: jest.fn(),
-      setShowHelpModal: jest.fn(),
-    });
-
-    const mockSetCurrentGuessFn = jest.fn();
-    const mockSetIsCurrentGuessIncorrect = jest.fn();
-
-    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
-      currentGuess: "games",
-      guesses: [],
-      history: [],
-      isCorrect: false,
-      isCurrentGuessIncorrect: false,
-      isGameOver: false,
-      isGuessAnimationFiring: false,
-      numberOfTurns: 0,
-      solution: "passe",
-      usedKeys: {},
-      setCurrentGuess: mockSetCurrentGuessFn,
-      setGuesses: jest.fn(),
-      setHistory: jest.fn(),
-      setIsCorrect: jest.fn(),
-      setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
-      setIsGameOver: jest.fn(),
-      setIsGuessAnimationFiring: jest.fn(),
-      setNumberOfTurns: jest.fn(),
-      setSolution: jest.fn(),
-      setUsedKeys: jest.fn(),
-    });
-
-    // Action
-    const bindingFn = useAlphabetBinding();
-    bindingFn("a");
-
-    // Assert
-    expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
-    expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
   });
 });
