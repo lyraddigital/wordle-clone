@@ -46,8 +46,8 @@ describe("useBackspaceBinding", () => {
     bindingFn();
 
     // Assert
-    expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
-    expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
+    expect(mockSetCurrentGuessFn).not.toHaveBeenCalled();
+    expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
   });
 
   it("game animation is firing, does not update state", () => {
@@ -89,8 +89,8 @@ describe("useBackspaceBinding", () => {
     bindingFn();
 
     // Assert
-    expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
-    expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
+    expect(mockSetCurrentGuessFn).not.toHaveBeenCalled();
+    expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
   });
 
   it("statistic modal is showing, does not update state", () => {
@@ -132,8 +132,8 @@ describe("useBackspaceBinding", () => {
     bindingFn();
 
     // Assert
-    expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
-    expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
+    expect(mockSetCurrentGuessFn).not.toHaveBeenCalled();
+    expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
   });
 
   it("help modal is showing, does not update state", () => {
@@ -175,8 +175,8 @@ describe("useBackspaceBinding", () => {
     bindingFn();
 
     // Assert
-    expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
-    expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
+    expect(mockSetCurrentGuessFn).not.toHaveBeenCalled();
+    expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
   });
 
   it("everything is fine, updates the state", () => {
@@ -220,6 +220,6 @@ describe("useBackspaceBinding", () => {
     // Assert
     expect(mockSetCurrentGuessFn).toHaveBeenCalled();
     expect(mockSetIsCurrentGuessIncorrect).toHaveBeenCalled();
-    expect(mockSetIsCurrentGuessIncorrect.mock.calls[0][0]).toBe(false);
+    expect(mockSetIsCurrentGuessIncorrect).toHaveBeenCalledWith(false);
   });
 });

@@ -46,8 +46,8 @@ describe("useAlphabetBinding", () => {
     bindingFn("a");
 
     // Assert
-    expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
-    expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
+    expect(mockSetCurrentGuessFn).not.toHaveBeenCalled();
+    expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
   });
 
   it("current guess is less than 5 characters, but guess animation is firing, does not update state", () => {
@@ -89,8 +89,8 @@ describe("useAlphabetBinding", () => {
     bindingFn("a");
 
     // Assert
-    expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
-    expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
+    expect(mockSetCurrentGuessFn).not.toHaveBeenCalled();
+    expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
   });
 
   it("current guess is less than 5 characters, but statistic modal is showing, does not update state", () => {
@@ -132,8 +132,8 @@ describe("useAlphabetBinding", () => {
     bindingFn("a");
 
     // Assert
-    expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
-    expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
+    expect(mockSetCurrentGuessFn).not.toHaveBeenCalled();
+    expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
   });
 
   it("current guess is less than 5 characters, but help modal is showing, does not update state", () => {
@@ -175,8 +175,8 @@ describe("useAlphabetBinding", () => {
     bindingFn("a");
 
     // Assert
-    expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
-    expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
+    expect(mockSetCurrentGuessFn).not.toHaveBeenCalled();
+    expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
   });
 
   it("current guess is less than 5 characters, and everything is fine, updates the state", () => {
@@ -219,8 +219,7 @@ describe("useAlphabetBinding", () => {
 
     // Assert
     expect(mockSetCurrentGuessFn).toHaveBeenCalled();
-    expect(mockSetIsCurrentGuessIncorrect).toHaveBeenCalled();
-    expect(mockSetIsCurrentGuessIncorrect.mock.calls[0][0]).toBe(false);
+    expect(mockSetIsCurrentGuessIncorrect).toHaveBeenCalledWith(false);
   });
 
   it("current guess is 5 characters, does not update state", () => {
@@ -262,7 +261,7 @@ describe("useAlphabetBinding", () => {
     bindingFn("a");
 
     // Assert
-    expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
-    expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
+    expect(mockSetCurrentGuessFn).not.toHaveBeenCalled();
+    expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
   });
 });

@@ -60,7 +60,7 @@ describe("useEnterBinding", () => {
     bindingFn();
 
     // Assert
-    expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
+    expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
   });
 
   // it("game animation is firing, does not update state", () => {
