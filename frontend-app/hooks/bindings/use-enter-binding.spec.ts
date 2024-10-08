@@ -2,6 +2,10 @@ jest.mock("@/hooks/modals/use-modals");
 jest.mock("@/hooks/wordle/use-wordle");
 jest.mock("@/hooks/statistics/use-statistics-updater");
 
+import { Dispatch, SetStateAction } from "react";
+
+import { ModalsState } from "@/contexts/modals-context";
+import { WordleState } from "@/contexts/wordle-context";
 import useModals from "@/hooks/modals/use-modals";
 import useWordle from "@/hooks/wordle/use-wordle";
 import useStatisticsUpdater from "@/hooks/statistics/use-statistics-updater";
@@ -13,43 +17,45 @@ describe("useEnterBinding", () => {
     (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
       showStatisticsModal: false,
       showHelpModal: false,
-      setShowStatisticsModal: jest.fn(),
-      setShowHelpModal: jest.fn(),
-    });
+    } as ModalsState);
 
-    const mockSetIsCorrect = jest.fn();
-    const mockSetIsCurrentGuessIncorrect = jest.fn();
-    const mockUseStatisticsHelper = jest.fn();
-    const mockSetIsGameOver = jest.fn();
-    const mockSetGuesses = jest.fn();
-    const mockSetHistory = jest.fn();
-    const mockSetNumberOfTurns = jest.fn();
-    const mockSetUsedKeys = jest.fn();
-    const mockSetIsGuessAnimationFiring = jest.fn();
-    const mockSetCurrentGuess = jest.fn();
+    const mockSetIsCorrect = jest.fn() as Dispatch<SetStateAction<boolean>>;
+    const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
+      SetStateAction<boolean>
+    >;
+    const mockUseStatisticsHelper = jest.fn() as Dispatch<
+      SetStateAction<boolean>
+    >;
+    const mockSetIsGameOver = jest.fn() as Dispatch<SetStateAction<boolean>>;
+    const mockSetGuesses = jest.fn() as Dispatch<
+      SetStateAction<({ key: string; colour: string }[] | undefined)[]>
+    >;
+    const mockSetHistory = jest.fn() as Dispatch<SetStateAction<string[]>>;
+    const mockSetNumberOfTurns = jest.fn() as Dispatch<SetStateAction<number>>;
+    const mockSetUsedKeys = jest.fn() as Dispatch<
+      SetStateAction<{ [key: string]: string }>
+    >;
+    const mockSetIsGuessAnimationFiring = jest.fn() as Dispatch<
+      SetStateAction<boolean>
+    >;
+    const mockSetCurrentGuess = jest.fn() as Dispatch<SetStateAction<string>>;
 
     (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
       currentGuess: "test",
-      guesses: [],
-      history: [],
-      isCorrect: false,
-      isCurrentGuessIncorrect: false,
+      history: [] as string[],
+      numberOfTurns: 0,
       isGameOver: true,
       isGuessAnimationFiring: false,
-      numberOfTurns: 0,
-      solution: "passe",
-      usedKeys: {},
       setCurrentGuess: mockSetCurrentGuess,
+      setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
       setGuesses: mockSetGuesses,
       setHistory: mockSetHistory,
       setIsCorrect: mockSetIsCorrect,
-      setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
       setIsGameOver: mockSetIsGameOver,
       setIsGuessAnimationFiring: mockSetIsGuessAnimationFiring,
       setNumberOfTurns: mockSetNumberOfTurns,
-      setSolution: jest.fn(),
       setUsedKeys: mockSetUsedKeys,
-    });
+    } as WordleState);
 
     (
       useStatisticsUpdater as jest.MockedFunction<typeof useStatisticsUpdater>
