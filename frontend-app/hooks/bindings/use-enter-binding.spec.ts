@@ -1,65 +1,58 @@
+jest.mock("react-hot-toast");
+jest.mock("@/data/words");
 jest.mock("@/hooks/modals/use-modals");
 jest.mock("@/hooks/wordle/use-wordle");
-jest.mock("@/hooks/statistics/use-statistics-updater");
+jest.mock("@/hooks/wordle/use-wordle/use-add-new-guess-handler");
+jest.mock("@/hooks/wordle/use-wordle/use-guess-formatter");
 
 import { Dispatch, SetStateAction } from "react";
+import { toast } from "react-hot-toast";
 
+import { wordExists } from "@/data/words";
 import { ModalsState } from "@/contexts/modals-context";
 import { WordleState } from "@/contexts/wordle-context";
 import useModals from "@/hooks/modals/use-modals";
 import useWordle from "@/hooks/wordle/use-wordle";
-import useStatisticsUpdater from "@/hooks/statistics/use-statistics-updater";
+import useAddNewGuessHandler from "@/hooks/wordle/use-wordle/use-add-new-guess-handler";
+import useGuessFormatter from "@/hooks/wordle/use-wordle/use-guess-formatter";
 
 import useEnterBinding from "./use-enter-binding";
 
 describe("useEnterBinding", () => {
-  it("game is over, does not update state", () => {
-    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
+  it("game is over, does not handle new guess", () => {
+    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValueOnce({
       showStatisticsModal: false,
       showHelpModal: false,
     } as ModalsState);
 
-    const mockSetIsCorrect = jest.fn() as Dispatch<SetStateAction<boolean>>;
+    const mockAddNewGuess = jest.fn() as (
+      formattedGuess: { key: string; colour: string }[]
+    ) => void;
+
+    const mockGuessFormatter = jest.fn() as () => {
+      key: string;
+      colour: string;
+    }[];
+
     const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
       SetStateAction<boolean>
     >;
-    const mockUseStatisticsHelper = jest.fn() as Dispatch<
-      SetStateAction<boolean>
-    >;
-    const mockSetIsGameOver = jest.fn() as Dispatch<SetStateAction<boolean>>;
-    const mockSetGuesses = jest.fn() as Dispatch<
-      SetStateAction<({ key: string; colour: string }[] | undefined)[]>
-    >;
-    const mockSetHistory = jest.fn() as Dispatch<SetStateAction<string[]>>;
-    const mockSetNumberOfTurns = jest.fn() as Dispatch<SetStateAction<number>>;
-    const mockSetUsedKeys = jest.fn() as Dispatch<
-      SetStateAction<{ [key: string]: string }>
-    >;
-    const mockSetIsGuessAnimationFiring = jest.fn() as Dispatch<
-      SetStateAction<boolean>
-    >;
-    const mockSetCurrentGuess = jest.fn() as Dispatch<SetStateAction<string>>;
-
-    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
-      currentGuess: "test",
-      history: [] as string[],
-      numberOfTurns: 0,
-      isGameOver: true,
-      isGuessAnimationFiring: false,
-      setCurrentGuess: mockSetCurrentGuess,
-      setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
-      setGuesses: mockSetGuesses,
-      setHistory: mockSetHistory,
-      setIsCorrect: mockSetIsCorrect,
-      setIsGameOver: mockSetIsGameOver,
-      setIsGuessAnimationFiring: mockSetIsGuessAnimationFiring,
-      setNumberOfTurns: mockSetNumberOfTurns,
-      setUsedKeys: mockSetUsedKeys,
-    } as WordleState);
 
     (
-      useStatisticsUpdater as jest.MockedFunction<typeof useStatisticsUpdater>
-    ).mockReturnValue(mockUseStatisticsHelper);
+      useAddNewGuessHandler as jest.MockedFunction<typeof useAddNewGuessHandler>
+    ).mockReturnValueOnce(mockAddNewGuess);
+
+    (
+      useGuessFormatter as jest.MockedFunction<typeof useGuessFormatter>
+    ).mockReturnValueOnce(mockGuessFormatter);
+
+    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValueOnce({
+      currentGuess: "test",
+      history: [] as string[],
+      isGameOver: true,
+      isGuessAnimationFiring: false,
+      setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
+    } as WordleState);
 
     // Action
     const bindingFn = useEnterBinding();
@@ -67,178 +60,344 @@ describe("useEnterBinding", () => {
 
     // Assert
     expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
+    expect(mockAddNewGuess).not.toHaveBeenCalled();
+    expect(mockGuessFormatter).not.toHaveBeenCalled();
+    expect(toast).not.toHaveBeenCalled();
   });
 
-  // it("game animation is firing, does not update state", () => {
-  //   (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
-  //     showStatisticsModal: false,
-  //     showHelpModal: false,
-  //     setShowStatisticsModal: jest.fn(),
-  //     setShowHelpModal: jest.fn(),
-  //   });
+  it("guess is animating, does not handle new guess", () => {
+    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValueOnce({
+      showStatisticsModal: false,
+      showHelpModal: false,
+    } as ModalsState);
 
-  //   const mockSetCurrentGuessFn = jest.fn();
-  //   const mockSetIsCurrentGuessIncorrect = jest.fn();
+    const mockAddNewGuess = jest.fn() as (
+      formattedGuess: { key: string; colour: string }[]
+    ) => void;
 
-  //   (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
-  //     currentGuess: "test",
-  //     guesses: [],
-  //     history: [],
-  //     isCorrect: false,
-  //     isCurrentGuessIncorrect: false,
-  //     isGameOver: false,
-  //     isGuessAnimationFiring: true,
-  //     numberOfTurns: 0,
-  //     solution: "passe",
-  //     usedKeys: {},
-  //     setCurrentGuess: mockSetCurrentGuessFn,
-  //     setGuesses: jest.fn(),
-  //     setHistory: jest.fn(),
-  //     setIsCorrect: jest.fn(),
-  //     setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
-  //     setIsGameOver: jest.fn(),
-  //     setIsGuessAnimationFiring: jest.fn(),
-  //     setNumberOfTurns: jest.fn(),
-  //     setSolution: jest.fn(),
-  //     setUsedKeys: jest.fn(),
-  //   });
+    const mockGuessFormatter = jest.fn() as () => {
+      key: string;
+      colour: string;
+    }[];
 
-  //   // Action
-  //   const bindingFn = useBackspaceBinding();
-  //   bindingFn();
+    const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
+      SetStateAction<boolean>
+    >;
 
-  //   // Assert
-  //   expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
-  //   expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
-  // });
+    (
+      useAddNewGuessHandler as jest.MockedFunction<typeof useAddNewGuessHandler>
+    ).mockReturnValueOnce(mockAddNewGuess);
 
-  // it("statistic modal is showing, does not update state", () => {
-  //   (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
-  //     showStatisticsModal: true,
-  //     showHelpModal: false,
-  //     setShowStatisticsModal: jest.fn(),
-  //     setShowHelpModal: jest.fn(),
-  //   });
+    (
+      useGuessFormatter as jest.MockedFunction<typeof useGuessFormatter>
+    ).mockReturnValueOnce(mockGuessFormatter);
 
-  //   const mockSetCurrentGuessFn = jest.fn();
-  //   const mockSetIsCurrentGuessIncorrect = jest.fn();
+    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValueOnce({
+      currentGuess: "test",
+      history: [] as string[],
+      isGameOver: false,
+      isGuessAnimationFiring: true,
+      setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
+    } as WordleState);
 
-  //   (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
-  //     currentGuess: "test",
-  //     guesses: [],
-  //     history: [],
-  //     isCorrect: false,
-  //     isCurrentGuessIncorrect: false,
-  //     isGameOver: false,
-  //     isGuessAnimationFiring: false,
-  //     numberOfTurns: 0,
-  //     solution: "passe",
-  //     usedKeys: {},
-  //     setCurrentGuess: mockSetCurrentGuessFn,
-  //     setGuesses: jest.fn(),
-  //     setHistory: jest.fn(),
-  //     setIsCorrect: jest.fn(),
-  //     setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
-  //     setIsGameOver: jest.fn(),
-  //     setIsGuessAnimationFiring: jest.fn(),
-  //     setNumberOfTurns: jest.fn(),
-  //     setSolution: jest.fn(),
-  //     setUsedKeys: jest.fn(),
-  //   });
+    // Action
+    const bindingFn = useEnterBinding();
+    bindingFn();
 
-  //   // Action
-  //   const bindingFn = useBackspaceBinding();
-  //   bindingFn();
+    // Assert
+    expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
+    expect(mockAddNewGuess).not.toHaveBeenCalled();
+    expect(mockGuessFormatter).not.toHaveBeenCalled();
+    expect(toast).not.toHaveBeenCalled();
+  });
 
-  //   // Assert
-  //   expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
-  //   expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
-  // });
+  it("statistics modal is showing, does not handle new guess", () => {
+    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValueOnce({
+      showStatisticsModal: true,
+      showHelpModal: false,
+    } as ModalsState);
 
-  // it("help modal is showing, does not update state", () => {
-  //   (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
-  //     showStatisticsModal: false,
-  //     showHelpModal: true,
-  //     setShowStatisticsModal: jest.fn(),
-  //     setShowHelpModal: jest.fn(),
-  //   });
+    const mockAddNewGuess = jest.fn() as (
+      formattedGuess: { key: string; colour: string }[]
+    ) => void;
 
-  //   const mockSetCurrentGuessFn = jest.fn();
-  //   const mockSetIsCurrentGuessIncorrect = jest.fn();
+    const mockGuessFormatter = jest.fn() as () => {
+      key: string;
+      colour: string;
+    }[];
 
-  //   (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
-  //     currentGuess: "test",
-  //     guesses: [],
-  //     history: [],
-  //     isCorrect: false,
-  //     isCurrentGuessIncorrect: false,
-  //     isGameOver: false,
-  //     isGuessAnimationFiring: false,
-  //     numberOfTurns: 0,
-  //     solution: "passe",
-  //     usedKeys: {},
-  //     setCurrentGuess: mockSetCurrentGuessFn,
-  //     setGuesses: jest.fn(),
-  //     setHistory: jest.fn(),
-  //     setIsCorrect: jest.fn(),
-  //     setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
-  //     setIsGameOver: jest.fn(),
-  //     setIsGuessAnimationFiring: jest.fn(),
-  //     setNumberOfTurns: jest.fn(),
-  //     setSolution: jest.fn(),
-  //     setUsedKeys: jest.fn(),
-  //   });
+    const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
+      SetStateAction<boolean>
+    >;
 
-  //   // Action
-  //   const bindingFn = useBackspaceBinding();
-  //   bindingFn();
+    (
+      useAddNewGuessHandler as jest.MockedFunction<typeof useAddNewGuessHandler>
+    ).mockReturnValueOnce(mockAddNewGuess);
 
-  //   // Assert
-  //   expect(mockSetCurrentGuessFn.mock.calls.length).toBe(0);
-  //   expect(mockSetIsCurrentGuessIncorrect.mock.calls.length).toBe(0);
-  // });
+    (
+      useGuessFormatter as jest.MockedFunction<typeof useGuessFormatter>
+    ).mockReturnValueOnce(mockGuessFormatter);
 
-  // it("everything is fine, updates the state", () => {
-  //   (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
-  //     showStatisticsModal: false,
-  //     showHelpModal: false,
-  //     setShowStatisticsModal: jest.fn(),
-  //     setShowHelpModal: jest.fn(),
-  //   });
+    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValueOnce({
+      currentGuess: "test",
+      history: [] as string[],
+      isGameOver: false,
+      isGuessAnimationFiring: false,
+      setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
+    } as WordleState);
 
-  //   const mockSetCurrentGuessFn = jest.fn();
-  //   const mockSetIsCurrentGuessIncorrect = jest.fn();
+    // Action
+    const bindingFn = useEnterBinding();
+    bindingFn();
 
-  //   (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
-  //     currentGuess: "test",
-  //     guesses: [],
-  //     history: [],
-  //     isCorrect: false,
-  //     isCurrentGuessIncorrect: false,
-  //     isGameOver: false,
-  //     isGuessAnimationFiring: false,
-  //     numberOfTurns: 0,
-  //     solution: "passe",
-  //     usedKeys: {},
-  //     setCurrentGuess: mockSetCurrentGuessFn,
-  //     setGuesses: jest.fn(),
-  //     setHistory: jest.fn(),
-  //     setIsCorrect: jest.fn(),
-  //     setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
-  //     setIsGameOver: jest.fn(),
-  //     setIsGuessAnimationFiring: jest.fn(),
-  //     setNumberOfTurns: jest.fn(),
-  //     setSolution: jest.fn(),
-  //     setUsedKeys: jest.fn(),
-  //   });
+    // Assert
+    expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
+    expect(mockAddNewGuess).not.toHaveBeenCalled();
+    expect(mockGuessFormatter).not.toHaveBeenCalled();
+    expect(toast).not.toHaveBeenCalled();
+  });
 
-  //   // Action
-  //   const bindingFn = useBackspaceBinding();
-  //   bindingFn();
+  it("help modal is showing, does not handle new guess", () => {
+    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValueOnce({
+      showStatisticsModal: false,
+      showHelpModal: true,
+    } as ModalsState);
 
-  //   // Assert
-  //   expect(mockSetCurrentGuessFn).toHaveBeenCalled();
-  //   expect(mockSetIsCurrentGuessIncorrect).toHaveBeenCalled();
-  //   expect(mockSetIsCurrentGuessIncorrect.mock.calls[0][0]).toBe(false);
-  // });
+    const mockAddNewGuess = jest.fn() as (
+      formattedGuess: { key: string; colour: string }[]
+    ) => void;
+
+    const mockGuessFormatter = jest.fn() as () => {
+      key: string;
+      colour: string;
+    }[];
+
+    const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
+      SetStateAction<boolean>
+    >;
+
+    (
+      useAddNewGuessHandler as jest.MockedFunction<typeof useAddNewGuessHandler>
+    ).mockReturnValueOnce(mockAddNewGuess);
+
+    (
+      useGuessFormatter as jest.MockedFunction<typeof useGuessFormatter>
+    ).mockReturnValueOnce(mockGuessFormatter);
+
+    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValueOnce({
+      currentGuess: "test",
+      history: [] as string[],
+      isGameOver: false,
+      isGuessAnimationFiring: false,
+      setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
+    } as WordleState);
+
+    // Action
+    const bindingFn = useEnterBinding();
+    bindingFn();
+
+    // Assert
+    expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
+    expect(mockAddNewGuess).not.toHaveBeenCalled();
+    expect(mockGuessFormatter).not.toHaveBeenCalled();
+    expect(toast).not.toHaveBeenCalled();
+  });
+
+  it("word already in history, does not handle new guess", () => {
+    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValueOnce({
+      showStatisticsModal: false,
+      showHelpModal: false,
+    } as ModalsState);
+
+    const mockAddNewGuess = jest.fn() as (
+      formattedGuess: { key: string; colour: string }[]
+    ) => void;
+
+    const mockGuessFormatter = jest.fn() as () => {
+      key: string;
+      colour: string;
+    }[];
+
+    const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
+      SetStateAction<boolean>
+    >;
+
+    (
+      useAddNewGuessHandler as jest.MockedFunction<typeof useAddNewGuessHandler>
+    ).mockReturnValueOnce(mockAddNewGuess);
+
+    (
+      useGuessFormatter as jest.MockedFunction<typeof useGuessFormatter>
+    ).mockReturnValueOnce(mockGuessFormatter);
+
+    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValueOnce({
+      currentGuess: "peach",
+      history: ["peach"] as string[],
+      isGameOver: false,
+      isGuessAnimationFiring: false,
+      setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
+    } as WordleState);
+
+    // Action
+    const bindingFn = useEnterBinding();
+    bindingFn();
+
+    // Assert
+    expect(mockSetIsCurrentGuessIncorrect).toHaveBeenCalledWith(true);
+    expect(mockAddNewGuess).not.toHaveBeenCalled();
+    expect(mockGuessFormatter).not.toHaveBeenCalled();
+    expect(toast).toHaveBeenCalledWith("You have already tried that word");
+  });
+
+  it("word not 5 characters, does not handle new guess", () => {
+    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValueOnce({
+      showStatisticsModal: false,
+      showHelpModal: false,
+    } as ModalsState);
+
+    const mockAddNewGuess = jest.fn() as (
+      formattedGuess: { key: string; colour: string }[]
+    ) => void;
+
+    const mockGuessFormatter = jest.fn() as () => {
+      key: string;
+      colour: string;
+    }[];
+
+    const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
+      SetStateAction<boolean>
+    >;
+
+    (
+      useAddNewGuessHandler as jest.MockedFunction<typeof useAddNewGuessHandler>
+    ).mockReturnValueOnce(mockAddNewGuess);
+
+    (
+      useGuessFormatter as jest.MockedFunction<typeof useGuessFormatter>
+    ).mockReturnValueOnce(mockGuessFormatter);
+
+    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValueOnce({
+      currentGuess: "test",
+      history: [] as string[],
+      isGameOver: false,
+      isGuessAnimationFiring: false,
+      setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
+    } as WordleState);
+
+    // Action
+    const bindingFn = useEnterBinding();
+    bindingFn();
+
+    // Assert
+    expect(mockSetIsCurrentGuessIncorrect).toHaveBeenCalledWith(true);
+    expect(toast).toHaveBeenCalledWith("Word must be 5 characters long");
+  });
+
+  it("word does not exist, does not handle new guess", () => {
+    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValueOnce({
+      showStatisticsModal: false,
+      showHelpModal: false,
+    } as ModalsState);
+
+    const mockAddNewGuess = jest.fn() as (
+      formattedGuess: { key: string; colour: string }[]
+    ) => void;
+
+    const mockGuessFormatter = jest.fn() as () => {
+      key: string;
+      colour: string;
+    }[];
+
+    const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
+      SetStateAction<boolean>
+    >;
+
+    (
+      useAddNewGuessHandler as jest.MockedFunction<typeof useAddNewGuessHandler>
+    ).mockReturnValueOnce(mockAddNewGuess);
+
+    (
+      useGuessFormatter as jest.MockedFunction<typeof useGuessFormatter>
+    ).mockReturnValueOnce(mockGuessFormatter);
+
+    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValueOnce({
+      currentGuess: "peach",
+      history: [] as string[],
+      isGameOver: false,
+      isGuessAnimationFiring: false,
+      setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
+    } as WordleState);
+
+    (wordExists as jest.MockedFunction<typeof wordExists>).mockReturnValueOnce(
+      false
+    );
+
+    // Action
+    const bindingFn = useEnterBinding();
+    bindingFn();
+
+    // Assert
+    expect(wordExists).toHaveBeenCalled();
+    expect(mockSetIsCurrentGuessIncorrect).toHaveBeenCalledWith(true);
+    expect(mockAddNewGuess).not.toHaveBeenCalled();
+    expect(mockGuessFormatter).not.toHaveBeenCalled();
+    expect(toast).toHaveBeenCalledWith("Word does not exist");
+  });
+
+  it("everything value, handles new guess", () => {
+    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValueOnce({
+      showStatisticsModal: false,
+      showHelpModal: false,
+    } as ModalsState);
+
+    const formattedGuess: {
+      key: string;
+      colour: string;
+    }[] = [{ key: "a", colour: "green" }];
+    const mockAddNewGuess = jest.fn() as (
+      formattedGuess: { key: string; colour: string }[]
+    ) => void;
+
+    const mockGuessFormatter = jest
+      .fn()
+      .mockImplementationOnce(() => formattedGuess) as () => {
+      key: string;
+      colour: string;
+    }[];
+
+    const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
+      SetStateAction<boolean>
+    >;
+
+    (
+      useAddNewGuessHandler as jest.MockedFunction<typeof useAddNewGuessHandler>
+    ).mockReturnValueOnce(mockAddNewGuess);
+
+    (
+      useGuessFormatter as jest.MockedFunction<typeof useGuessFormatter>
+    ).mockReturnValueOnce(mockGuessFormatter);
+
+    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValueOnce({
+      currentGuess: "peach",
+      history: [] as string[],
+      isGameOver: false,
+      isGuessAnimationFiring: false,
+      setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
+    } as WordleState);
+
+    (wordExists as jest.MockedFunction<typeof wordExists>).mockReturnValueOnce(
+      true
+    );
+
+    // Action
+    const bindingFn = useEnterBinding();
+    bindingFn();
+
+    // Assert
+    expect(wordExists).toHaveBeenCalled();
+    expect(mockSetIsCurrentGuessIncorrect).not.toHaveBeenCalled();
+    expect(mockGuessFormatter).toHaveBeenCalled();
+    expect(mockAddNewGuess).toHaveBeenCalledWith(formattedGuess);
+    expect(toast).not.toHaveBeenCalled();
+  });
 });

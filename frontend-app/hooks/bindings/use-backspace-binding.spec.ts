@@ -12,7 +12,7 @@ import useBackspaceBinding from "./use-backspace-binding";
 
 describe("useBackspaceBinding", () => {
   it("game is over, does not update state", () => {
-    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
+    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValueOnce({
       showStatisticsModal: false,
       showHelpModal: false,
     } as ModalsState);
@@ -22,7 +22,7 @@ describe("useBackspaceBinding", () => {
       SetStateAction<boolean>
     >;
 
-    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
+    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValueOnce({
       isGameOver: true,
       isGuessAnimationFiring: false,
       setCurrentGuess: mockSetCurrentGuessFn,
@@ -39,7 +39,7 @@ describe("useBackspaceBinding", () => {
   });
 
   it("game animation is firing, does not update state", () => {
-    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
+    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValueOnce({
       showStatisticsModal: false,
       showHelpModal: false,
     } as ModalsState);
@@ -49,7 +49,7 @@ describe("useBackspaceBinding", () => {
       SetStateAction<boolean>
     >;
 
-    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
+    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValueOnce({
       isGameOver: false,
       isGuessAnimationFiring: true,
       setCurrentGuess: mockSetCurrentGuessFn,
@@ -66,7 +66,7 @@ describe("useBackspaceBinding", () => {
   });
 
   it("statistic modal is showing, does not update state", () => {
-    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
+    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValueOnce({
       showStatisticsModal: true,
       showHelpModal: false,
     } as ModalsState);
@@ -76,7 +76,7 @@ describe("useBackspaceBinding", () => {
       SetStateAction<boolean>
     >;
 
-    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
+    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValueOnce({
       isGameOver: false,
       isGuessAnimationFiring: false,
       setCurrentGuess: mockSetCurrentGuessFn,
@@ -93,7 +93,7 @@ describe("useBackspaceBinding", () => {
   });
 
   it("help modal is showing, does not update state", () => {
-    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
+    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValueOnce({
       showStatisticsModal: false,
       showHelpModal: true,
     } as ModalsState);
@@ -103,7 +103,7 @@ describe("useBackspaceBinding", () => {
       SetStateAction<boolean>
     >;
 
-    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
+    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValueOnce({
       isGameOver: false,
       isGuessAnimationFiring: false,
       setCurrentGuess: mockSetCurrentGuessFn,
@@ -120,7 +120,7 @@ describe("useBackspaceBinding", () => {
   });
 
   it("everything is fine, updates the state", () => {
-    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValue({
+    (useModals as jest.MockedFunction<typeof useModals>).mockReturnValueOnce({
       showStatisticsModal: false,
       showHelpModal: false,
     } as ModalsState);
@@ -130,7 +130,7 @@ describe("useBackspaceBinding", () => {
       SetStateAction<boolean>
     >;
 
-    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValue({
+    (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValueOnce({
       isGameOver: false,
       isGuessAnimationFiring: false,
       setCurrentGuess: mockSetCurrentGuessFn,
