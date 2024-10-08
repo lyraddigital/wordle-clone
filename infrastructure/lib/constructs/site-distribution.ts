@@ -27,11 +27,11 @@ import { Construct } from "constructs";
 import { SITE_ROOT_DOMAIN } from "../constants/constants";
 import { DomainProps } from "../props/domain-props";
 
-export interface SiteDistributionProps extends DomainProps {
+export type SiteDistributionProps = DomainProps & {
   siteBucket: IBucket;
   includeWAF: boolean;
   allowedIPSet: string;
-}
+};
 
 export class SiteDistribution extends Construct {
   public instance: IDistribution;

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { PropsWithChildren } from "react";
 
-interface TileProps extends PropsWithChildren {
+type TileProps = PropsWithChildren & {
     classes?: string;
 }
 

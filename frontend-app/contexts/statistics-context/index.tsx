@@ -1,6 +1,6 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 
-export interface StatisticsState {
+export type StatisticsState = {
     gamesPlayed: number;
     gamesWon: number;
     streak: number;

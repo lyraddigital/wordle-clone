@@ -1,3 +1,3 @@
-export interface DomainProps {
+export type DomainProps = {
   subDomain: string;
-}
+};

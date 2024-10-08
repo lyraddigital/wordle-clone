@@ -1,6 +1,6 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 
-export interface ThemeState {
+export type ThemeState = {
     isDarkMode: boolean;
     setIsDarkMode: Dispatch<SetStateAction<boolean>>;
 }

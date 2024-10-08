@@ -1,6 +1,6 @@
 import useStatistics from "@/hooks/statistics/use-statistics";
 
-interface DistributionGridItemProps {
+type DistributionGridItemProps = {
     turn: number;
 }
 

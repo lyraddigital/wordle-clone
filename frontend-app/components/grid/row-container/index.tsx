@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { PropsWithChildren } from "react";
 
-interface RowContainerProps extends PropsWithChildren {
+type RowContainerProps = PropsWithChildren & {
     classes?: string;
 }
 

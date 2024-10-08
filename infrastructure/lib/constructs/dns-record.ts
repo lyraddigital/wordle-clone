@@ -6,9 +6,9 @@ import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 import { SITE_ROOT_DOMAIN } from "../constants/constants";
 import { DomainProps } from "../props/domain-props";
 
-export interface DNSRecordProps extends DomainProps {
+export type DNSRecordProps = DomainProps & {
   distribution: IDistribution;
-}
+};
 
 export class DNSRecord extends Construct {
   constructor(parent: Construct, id: string, props: DNSRecordProps) {

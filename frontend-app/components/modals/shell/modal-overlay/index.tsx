@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 
-interface ModalOverlayProps extends PropsWithChildren {
+type ModalOverlayProps = PropsWithChildren & {
     showModal: boolean;
 }
 

@@ -2,7 +2,7 @@ import { PropsWithChildren, ReactElement } from "react";
 
 import ModalOverlay from '@/components/modals/shell/modal-overlay';
 
-interface ModalOverlayProps extends PropsWithChildren {
+type ModalOverlayProps = PropsWithChildren & {
     footerContent?: ReactElement;
     onClose?: () => void;
     showModal: boolean;

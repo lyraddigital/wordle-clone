@@ -7,9 +7,9 @@ import { DNSRecord } from "./constructs/dns-record";
 import { SiteDeployment } from "./constructs/site-deployment";
 import { DomainProps } from "./props/domain-props";
 
-interface InfrastructureStackProps extends cdk.StackProps {
+type InfrastructureStackProps = cdk.StackProps & {
   includeWAF: boolean;
-}
+};
 
 export class InfrastructureStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: InfrastructureStackProps) {

@@ -3,7 +3,7 @@ import { PropsWithChildren } from "react";
 
 import useKeypadPress from "@/hooks/keyboard/use-keypad-press";
 
-interface KeyPadKeyProps extends PropsWithChildren {
+type KeyPadKeyProps = PropsWithChildren & {
     value: string;
     classes?: string;
 }

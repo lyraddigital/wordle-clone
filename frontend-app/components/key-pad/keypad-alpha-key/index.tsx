@@ -4,7 +4,7 @@ import useWordle from "@/hooks/wordle/use-wordle";
 
 import KeyPadKey from "@/components/key-pad/keypad-key";
 
-interface KeyPadAlphaKeyProps {
+type KeyPadAlphaKeyProps = {
     letter: string;
 }
 

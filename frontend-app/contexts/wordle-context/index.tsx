@@ -1,6 +1,6 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 
-export interface WordleState {
+export type WordleState = {
     solution: string;
     numberOfTurns: number;
     currentGuess: string;

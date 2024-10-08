@@ -3,7 +3,7 @@ import clsx from "clsx";
 import RowContainer from "@/components/grid/row-container/";
 import Tile from "@/components/grid/tile";
 
-export interface ExistingRowProps {
+export type ExistingRowProps = {
     guess: { key: string, colour: string }[];
 }
 
