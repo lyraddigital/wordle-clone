@@ -1,4 +1,4 @@
-import useWordle from ".";
+import useWordle from "./use-wordle";
 
 const formatGuess = (currentGuess: string, solution: string) => {
   let solutionArray: (string | null)[] = [...solution.split("")];

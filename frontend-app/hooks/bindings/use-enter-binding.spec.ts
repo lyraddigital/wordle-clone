@@ -2,8 +2,8 @@ jest.mock("react-hot-toast");
 jest.mock("@/data/words");
 jest.mock("@/hooks/modals/use-modals");
 jest.mock("@/hooks/wordle/use-wordle");
-jest.mock("@/hooks/wordle/use-wordle/use-add-new-guess-handler");
-jest.mock("@/hooks/wordle/use-wordle/use-guess-formatter");
+jest.mock("@/hooks/wordle/use-add-new-guess-handler");
+jest.mock("@/hooks/wordle/use-guess-formatter");
 
 import { Dispatch, SetStateAction } from "react";
 import { toast } from "react-hot-toast";
@@ -13,8 +13,8 @@ import { ModalsState } from "@/contexts/modals-context";
 import { WordleState } from "@/contexts/wordle-context";
 import useModals from "@/hooks/modals/use-modals";
 import useWordle from "@/hooks/wordle/use-wordle";
-import useAddNewGuessHandler from "@/hooks/wordle/use-wordle/use-add-new-guess-handler";
-import useGuessFormatter from "@/hooks/wordle/use-wordle/use-guess-formatter";
+import useAddNewGuessHandler from "@/hooks/wordle/use-add-new-guess-handler";
+import useGuessFormatter from "@/hooks/wordle/use-guess-formatter";
 
 import useEnterBinding from "./use-enter-binding";
 

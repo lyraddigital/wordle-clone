@@ -1,4 +1,4 @@
-import CenteredModalShell from "@/components/modals/shell";
+import CenteredModalShell from "@/components/modals/shell/shell";
 import StatisticsSummary from "@/components/modals/statistics-modal/statistics-summary";
 import DistributionGrid from "@/components/modals/statistics-modal/distribution-grid";
 import useModals from "@/hooks/modals/use-modals";

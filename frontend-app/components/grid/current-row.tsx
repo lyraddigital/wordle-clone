@@ -2,7 +2,7 @@ import clsx from "clsx";
 
 import useWordle from "@/hooks/wordle/use-wordle";
 
-import RowContainer from "@/components/grid/row-container/";
+import RowContainer from "@/components/grid/row-container";
 import Tile from "@/components/grid/tile";
 
 export default function CurrentRow() {

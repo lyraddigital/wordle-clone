@@ -1,6 +1,6 @@
 'use client';
 
-import Grid from "@/components/grid";
+import Grid from "@/components/grid/grid";
 import Help from "@/components/header/help";
 import Statistics from "@/components/header/statistics";
 import Switch from "@/components/header/switch";
@@ -10,7 +10,7 @@ import ThemeProvider from "@/components/providers/theme-provider";
 import WordleProvider from "@/components/providers/wordle-provider";
 import KeyPad from "@/components/key-pad/keypad";
 import HelpModal from "@/components/modals/help-modal";
-import StatisticsModal from "@/components/modals/statistics-modal";
+import StatisticsModal from "@/components/modals/statistics-modal/statistics-modal";
 
 export default function GameBoard() {
     return (

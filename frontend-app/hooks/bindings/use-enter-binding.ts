@@ -3,8 +3,8 @@ import toast from "react-hot-toast";
 import { wordExists } from "@/data/words";
 import useWordle from "@/hooks/wordle/use-wordle";
 import useModals from "@/hooks/modals/use-modals";
-import useGuessFormatter from "@/hooks/wordle/use-wordle/use-guess-formatter";
-import useAddNewGuessHandler from "@/hooks/wordle/use-wordle/use-add-new-guess-handler";
+import useGuessFormatter from "@/hooks/wordle/use-guess-formatter";
+import useAddNewGuessHandler from "@/hooks/wordle/use-add-new-guess-handler";
 
 const useEnterBinding = (): (() => void) => {
   const {

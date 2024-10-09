@@ -1,5 +1,5 @@
 import useModals from "@/hooks/modals/use-modals";
-import CenteredModalShell from "@/components/modals/shell";
+import CenteredModalShell from "@/components/modals/shell/shell";
 
 export default function HelpModal() {
     const { showHelpModal, setShowHelpModal } = useModals();

@@ -1,8 +1,7 @@
 import clsx from "clsx";
 
-import useWordle from "@/hooks/wordle/use-wordle";
-
 import KeyPadKey from "@/components/key-pad/keypad-key";
+import useWordle from "@/hooks/wordle/use-wordle";
 
 type KeyPadAlphaKeyProps = {
     letter: string;

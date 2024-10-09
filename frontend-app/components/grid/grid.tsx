@@ -1,13 +1,12 @@
 import { ToastBar, Toaster } from "react-hot-toast";
 import colors from 'tailwindcss/colors';
 
-import useTheme from "@/hooks/theme/use-theme";
-import useWordle from "@/hooks/wordle/use-wordle";
-import useWordleKeyboard from "@/hooks/keyboard/use-wordle-keyboard";
-
 import CurrentRow from "@/components/grid/current-row";
 import EmptyRow from "@/components/grid/empty-row";
 import ExistingRow from "@/components/grid/existing-row";
+import useTheme from "@/hooks/theme/use-theme";
+import useWordle from "@/hooks/wordle/use-wordle";
+import useWordleKeyboard from "@/hooks/keyboard/use-wordle-keyboard";
 
 export default function Grid() {
     const { guesses, numberOfTurns } = useWordle();
