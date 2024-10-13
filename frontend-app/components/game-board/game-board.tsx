@@ -8,7 +8,7 @@ import ModalsProvider from "@/components/providers/modals-provider";
 import StatisticsProvider from "@/components/providers/statistics-provider";
 import ThemeProvider from "@/components/providers/theme-provider";
 import WordleProvider from "@/components/providers/wordle-provider";
-import KeyPad from "@/components/key-pad/keypad";
+import KeyPad from "@/components/keypad/keypad";
 import HelpModal from "@/components/modals/help-modal";
 import StatisticsModal from "@/components/modals/statistics-modal/statistics-modal";
 
