@@ -125,16 +125,18 @@ describe("useBackspaceBinding", () => {
       showHelpModal: false,
     } as ModalsState);
 
-    const mockSetCurrentGuessFn = jest.fn() as Dispatch<SetStateAction<string>>;
-    const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
-      SetStateAction<boolean>
-    >;
+    const mockSetCurrentGuessFn = jest.fn();
+    const mockSetIsCurrentGuessIncorrect = jest.fn();
 
     (useWordle as jest.MockedFunction<typeof useWordle>).mockReturnValueOnce({
       isGameOver: false,
       isGuessAnimationFiring: false,
-      setCurrentGuess: mockSetCurrentGuessFn,
-      setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect,
+      setCurrentGuess: mockSetCurrentGuessFn as Dispatch<
+        SetStateAction<string>
+      >,
+      setIsCurrentGuessIncorrect: mockSetIsCurrentGuessIncorrect as Dispatch<
+        SetStateAction<boolean>
+      >,
     } as WordleState);
 
     // Action
@@ -145,5 +147,11 @@ describe("useBackspaceBinding", () => {
     expect(mockSetCurrentGuessFn).toHaveBeenCalled();
     expect(mockSetIsCurrentGuessIncorrect).toHaveBeenCalled();
     expect(mockSetIsCurrentGuessIncorrect).toHaveBeenCalledWith(false);
+
+    const setMockSetCurrentGuessCallback = mockSetCurrentGuessFn.mock
+      .calls[0][0] as (value: string) => string;
+    const returnValue = setMockSetCurrentGuessCallback("test");
+
+    expect(returnValue).toBe("tes");
   });
 });
