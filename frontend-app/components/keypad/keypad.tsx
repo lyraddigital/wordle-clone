@@ -1,7 +1,7 @@
-import KeyPadKeySpacer from "@/components/key-pad/key-pad-key-spacer";
-import KeyPadRow from "@/components/key-pad/key-pad-row";
-import KeyPadAlphaKey from "@/components/key-pad/keypad-alpha-key";
-import KeyPadKey from "@/components/key-pad/keypad-key";
+import KeyPadKeySpacer from "@/components/keypad/keypad-key-spacer";
+import KeyPadRow from "@/components/keypad/keypad-row";
+import KeyPadAlphaKey from "@/components/keypad/keypad-alpha-key";
+import KeyPadKey from "@/components/keypad/keypad-key";
 
 const firstRowLetters = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'];
 const secondRowLetters = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'];
