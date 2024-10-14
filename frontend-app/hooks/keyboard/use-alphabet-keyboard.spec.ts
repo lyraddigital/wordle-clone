@@ -48,12 +48,12 @@ describe("useAlphabetKeyboard", () => {
     ]);
   });
 
-  it("useHostKeys is called with all the letters of the alphabet", () => {
+  it("useAlphabetBinding function is called", () => {
     // Arrange
-    const useAlphabetBindingFn = jest.fn();
+    const handleAlphabetCharacterFn = jest.fn();
     (
       useAlphabetBinding as jest.MockedFunction<typeof useAlphabetBinding>
-    ).mockImplementationOnce(useAlphabetBindingFn);
+    ).mockImplementationOnce(() => handleAlphabetCharacterFn);
 
     useAlphabetKeyboard();
 
@@ -61,9 +61,9 @@ describe("useAlphabetKeyboard", () => {
       .calls[0][1];
 
     // Action
-    callback({} as KeyboardEvent, {});
+    callback({} as KeyboardEvent, { keys: ["a"] });
 
     // Assert
-    expect(useAlphabetBindingFn).not.toHaveBeenCalled();
+    expect(handleAlphabetCharacterFn).toHaveBeenCalled();
   });
 });
