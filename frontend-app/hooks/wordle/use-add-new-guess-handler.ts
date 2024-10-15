@@ -1,3 +1,4 @@
+import { GuessColour } from "@/lib/enums";
 import { GuessLetterResult } from "@/lib/types";
 import useStatisticsUpdater from "@/hooks/statistics/use-statistics-updater";
 import useWordle from "@/hooks/wordle/use-wordle";
@@ -47,22 +48,25 @@ export default function useAddNewGuessHandler(): (
       formattedGuess.forEach((lg) => {
         const currentColour = newKeys[lg.letter];
 
-        if (lg.colour === "green") {
-          newKeys[lg.letter] = "green";
-          return;
-        }
-
-        if (lg.colour === "yellow" && currentColour !== "green") {
-          newKeys[lg.letter] = "yellow";
+        if (lg.colour === GuessColour.green) {
+          newKeys[lg.letter] = GuessColour.green;
           return;
         }
 
         if (
-          lg.colour === "grey" &&
-          currentColour !== "green" &&
-          currentColour !== "yellow"
+          lg.colour === GuessColour.yellow &&
+          currentColour !== GuessColour.green
         ) {
-          newKeys[lg.letter] = "grey";
+          newKeys[lg.letter] = GuessColour.yellow;
+          return;
+        }
+
+        if (
+          lg.colour === GuessColour.grey &&
+          currentColour !== GuessColour.green &&
+          currentColour !== GuessColour.yellow
+        ) {
+          newKeys[lg.letter] = GuessColour.grey;
           return;
         }
       });

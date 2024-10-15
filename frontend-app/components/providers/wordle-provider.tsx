@@ -1,8 +1,9 @@
 import { PropsWithChildren, useState } from "react";
 
+import { GuessColour } from "@/lib/enums";
+import { GuessLetterResult } from "@/lib/types";
 import WordleContext, { WordleState } from "@/contexts/wordle-context";
 import getRandomWord from "@/data/words";
-import { GuessLetterResult } from "@/lib/types";
 
 const randomWord = getRandomWord();
 
@@ -13,7 +14,7 @@ export default function WordleProvider({ children }: PropsWithChildren) {
     const [guesses, setGuesses] = useState<(GuessLetterResult[] | undefined)[]>([...Array(6)]); // each guess is an array
     const [history, setHistory] = useState<string[]>([]);
     const [isCorrect, setIsCorrect] = useState<boolean>(false);
-    const [usedKeys, setUsedKeys] = useState<{ [key: string]: string }>({});
+    const [usedKeys, setUsedKeys] = useState<{ [key: string]: GuessColour }>({});
     const [isCurrentGuessIncorrect, setIsCurrentGuessIncorrect] = useState<boolean>(false);
     const [isGameOver, setIsGameOver] = useState<boolean>(false);
     const [isGuessAnimationFiring, setIsGuessAnimationFiring] = useState<boolean>(false);

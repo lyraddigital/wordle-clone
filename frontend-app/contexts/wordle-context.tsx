@@ -1,4 +1,6 @@
 import { createContext, Dispatch, SetStateAction } from "react";
+
+import { GuessColour } from "@/lib/enums";
 import { GuessLetterResult } from "@/lib/types";
 
 export type WordleState = {
@@ -18,7 +20,7 @@ export type WordleState = {
     setGuesses: Dispatch<SetStateAction<(GuessLetterResult[] | undefined)[]>>;
     setHistory: Dispatch<SetStateAction<string[]>>;
     setIsCorrect: Dispatch<SetStateAction<boolean>>;
-    setUsedKeys: Dispatch<SetStateAction<{ [key: string]: string }>>;
+    setUsedKeys: Dispatch<SetStateAction<{ [key: string]: GuessColour }>>;
     setIsCurrentGuessIncorrect: Dispatch<SetStateAction<boolean>>;
     setIsGameOver: Dispatch<SetStateAction<boolean>>;
     setIsGuessAnimationFiring: Dispatch<SetStateAction<boolean>>;

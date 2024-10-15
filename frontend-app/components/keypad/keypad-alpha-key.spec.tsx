@@ -3,6 +3,7 @@ jest.mock('@/hooks/wordle/use-wordle');
 import { render, screen } from '@testing-library/react';
 
 import { WordleState } from '@/contexts/wordle-context';
+import { GuessColour } from '@/lib/enums';
 import useWordle from "@/hooks/wordle/use-wordle";
 
 import KeyPadAlphaKey from './keypad-alpha-key';
@@ -51,7 +52,7 @@ describe('KeyPadAlphaKey', () => {
         const letter: string = "a";
 
         (useWordle as jest.MockedFunction<typeof useWordle>).mockImplementation(() => ({
-            usedKeys: { [letter]: "green" }
+            usedKeys: { [letter]: GuessColour.green }
         }) as WordleState);
 
         // Action
