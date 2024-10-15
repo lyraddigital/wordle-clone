@@ -1,10 +1,11 @@
 import { createContext, Dispatch, SetStateAction } from "react";
+import { GuessLetterResult } from "@/lib/types";
 
 export type WordleState = {
     solution: string;
     numberOfTurns: number;
     currentGuess: string;
-    guesses: ({ key: string, colour: string }[] | undefined)[];
+    guesses: (GuessLetterResult[] | undefined)[];
     history: string[];
     isCorrect: boolean;
     usedKeys: { [key: string]: string };
@@ -14,7 +15,7 @@ export type WordleState = {
     setSolution: Dispatch<SetStateAction<string>>;
     setNumberOfTurns: Dispatch<SetStateAction<number>>;
     setCurrentGuess: Dispatch<SetStateAction<string>>;
-    setGuesses: Dispatch<SetStateAction<({ key: string, colour: string }[] | undefined)[]>>;
+    setGuesses: Dispatch<SetStateAction<(GuessLetterResult[] | undefined)[]>>;
     setHistory: Dispatch<SetStateAction<string[]>>;
     setIsCorrect: Dispatch<SetStateAction<boolean>>;
     setUsedKeys: Dispatch<SetStateAction<{ [key: string]: string }>>;

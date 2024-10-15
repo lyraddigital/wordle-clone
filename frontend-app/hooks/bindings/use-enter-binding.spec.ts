@@ -11,6 +11,8 @@ import { toast } from "react-hot-toast";
 import { wordExists } from "@/data/words";
 import { ModalsState } from "@/contexts/modals-context";
 import { WordleState } from "@/contexts/wordle-context";
+import { GuessColour } from "@/lib/enums";
+import { GuessLetterResult } from "@/lib/types";
 import useModals from "@/hooks/modals/use-modals";
 import useWordle from "@/hooks/wordle/use-wordle";
 import useAddNewGuessHandler from "@/hooks/wordle/use-add-new-guess-handler";
@@ -26,13 +28,10 @@ describe("useEnterBinding", () => {
     } as ModalsState);
 
     const mockAddNewGuess = jest.fn() as (
-      formattedGuess: { key: string; colour: string }[]
+      formattedGuess: GuessLetterResult[]
     ) => void;
 
-    const mockGuessFormatter = jest.fn() as () => {
-      key: string;
-      colour: string;
-    }[];
+    const mockGuessFormatter = jest.fn() as () => GuessLetterResult[];
 
     const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
       SetStateAction<boolean>
@@ -72,13 +71,10 @@ describe("useEnterBinding", () => {
     } as ModalsState);
 
     const mockAddNewGuess = jest.fn() as (
-      formattedGuess: { key: string; colour: string }[]
+      formattedGuess: GuessLetterResult[]
     ) => void;
 
-    const mockGuessFormatter = jest.fn() as () => {
-      key: string;
-      colour: string;
-    }[];
+    const mockGuessFormatter = jest.fn() as () => GuessLetterResult[];
 
     const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
       SetStateAction<boolean>
@@ -118,13 +114,10 @@ describe("useEnterBinding", () => {
     } as ModalsState);
 
     const mockAddNewGuess = jest.fn() as (
-      formattedGuess: { key: string; colour: string }[]
+      formattedGuess: GuessLetterResult[]
     ) => void;
 
-    const mockGuessFormatter = jest.fn() as () => {
-      key: string;
-      colour: string;
-    }[];
+    const mockGuessFormatter = jest.fn() as () => GuessLetterResult[];
 
     const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
       SetStateAction<boolean>
@@ -164,13 +157,10 @@ describe("useEnterBinding", () => {
     } as ModalsState);
 
     const mockAddNewGuess = jest.fn() as (
-      formattedGuess: { key: string; colour: string }[]
+      formattedGuess: GuessLetterResult[]
     ) => void;
 
-    const mockGuessFormatter = jest.fn() as () => {
-      key: string;
-      colour: string;
-    }[];
+    const mockGuessFormatter = jest.fn() as () => GuessLetterResult[];
 
     const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
       SetStateAction<boolean>
@@ -210,13 +200,10 @@ describe("useEnterBinding", () => {
     } as ModalsState);
 
     const mockAddNewGuess = jest.fn() as (
-      formattedGuess: { key: string; colour: string }[]
+      formattedGuess: GuessLetterResult[]
     ) => void;
 
-    const mockGuessFormatter = jest.fn() as () => {
-      key: string;
-      colour: string;
-    }[];
+    const mockGuessFormatter = jest.fn() as () => GuessLetterResult[];
 
     const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
       SetStateAction<boolean>
@@ -256,13 +243,10 @@ describe("useEnterBinding", () => {
     } as ModalsState);
 
     const mockAddNewGuess = jest.fn() as (
-      formattedGuess: { key: string; colour: string }[]
+      formattedGuess: GuessLetterResult[]
     ) => void;
 
-    const mockGuessFormatter = jest.fn() as () => {
-      key: string;
-      colour: string;
-    }[];
+    const mockGuessFormatter = jest.fn() as () => GuessLetterResult[];
 
     const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
       SetStateAction<boolean>
@@ -300,13 +284,10 @@ describe("useEnterBinding", () => {
     } as ModalsState);
 
     const mockAddNewGuess = jest.fn() as (
-      formattedGuess: { key: string; colour: string }[]
+      formattedGuess: GuessLetterResult[]
     ) => void;
 
-    const mockGuessFormatter = jest.fn() as () => {
-      key: string;
-      colour: string;
-    }[];
+    const mockGuessFormatter = jest.fn() as () => GuessLetterResult[];
 
     const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
       SetStateAction<boolean>
@@ -350,20 +331,18 @@ describe("useEnterBinding", () => {
       showHelpModal: false,
     } as ModalsState);
 
-    const formattedGuess: {
-      key: string;
-      colour: string;
-    }[] = [{ key: "a", colour: "green" }];
+    const formattedGuess: GuessLetterResult[] = [
+      { letter: "a", colour: GuessColour.green },
+    ];
     const mockAddNewGuess = jest.fn() as (
-      formattedGuess: { key: string; colour: string }[]
+      formattedGuess: GuessLetterResult[]
     ) => void;
 
     const mockGuessFormatter = jest
       .fn()
-      .mockImplementationOnce(() => formattedGuess) as () => {
-      key: string;
-      colour: string;
-    }[];
+      .mockImplementationOnce(
+        () => formattedGuess
+      ) as () => GuessLetterResult[];
 
     const mockSetIsCurrentGuessIncorrect = jest.fn() as Dispatch<
       SetStateAction<boolean>

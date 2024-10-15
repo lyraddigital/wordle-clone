@@ -1,34 +1,38 @@
+import { GuessColour } from "@/lib/enums";
+import { GuessLetterResult } from "@/lib/types";
 import useWordle from "./use-wordle";
 
-const formatGuess = (currentGuess: string, solution: string) => {
+const formatGuess = (
+  currentGuess: string,
+  solution: string
+): GuessLetterResult[] => {
   let solutionArray: (string | null)[] = [...solution.split("")];
-  let formattedGuess = [...currentGuess.split("")].map((l) => {
-    return { key: l, colour: "grey" };
-  });
+  let formattedGuess = [...currentGuess.split("")].map<GuessLetterResult>(
+    (l) => {
+      return { letter: l, colour: GuessColour.grey };
+    }
+  );
 
   // find any green letters
   formattedGuess.forEach((l, i) => {
-    if (solutionArray[i] === l.key) {
-      formattedGuess[i].colour = "green";
+    if (solutionArray[i] === l.letter) {
+      formattedGuess[i].colour = GuessColour.green;
       solutionArray[i] = null;
     }
   });
 
   // find any yellow letters
   formattedGuess.forEach((l, i) => {
-    if (solutionArray.includes(l.key) && l.colour !== "green") {
-      formattedGuess[i].colour = "yellow";
-      solutionArray[solutionArray.indexOf(l.key)] = null;
+    if (solutionArray.includes(l.letter) && l.colour !== GuessColour.green) {
+      formattedGuess[i].colour = GuessColour.yellow;
+      solutionArray[solutionArray.indexOf(l.letter)] = null;
     }
   });
 
   return formattedGuess;
 };
 
-export default function useGuessFormatter(): () => {
-  key: string;
-  colour: string;
-}[] {
+export default function useGuessFormatter(): () => GuessLetterResult[] {
   const { currentGuess, solution } = useWordle();
   return () => formatGuess(currentGuess, solution);
 }

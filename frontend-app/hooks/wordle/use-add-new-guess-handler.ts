@@ -1,8 +1,9 @@
+import { GuessLetterResult } from "@/lib/types";
 import useStatisticsUpdater from "@/hooks/statistics/use-statistics-updater";
 import useWordle from "@/hooks/wordle/use-wordle";
 
 export default function useAddNewGuessHandler(): (
-  formattedGuess: { key: string; colour: string }[]
+  formattedGuess: GuessLetterResult[]
 ) => void {
   const {
     numberOfTurns,
@@ -20,7 +21,7 @@ export default function useAddNewGuessHandler(): (
 
   const updateStatisticsByGameResult = useStatisticsUpdater();
 
-  return (formattedGuess: { key: string; colour: string }[]) => {
+  return (formattedGuess: GuessLetterResult[]) => {
     if (currentGuess === solution) {
       setIsCorrect(true);
       setIsGameOver(true);
@@ -43,25 +44,25 @@ export default function useAddNewGuessHandler(): (
     setUsedKeys((prevUsedKeys) => {
       let newKeys = { ...prevUsedKeys };
 
-      formattedGuess.forEach((l) => {
-        const currentColour = newKeys[l.key];
+      formattedGuess.forEach((lg) => {
+        const currentColour = newKeys[lg.letter];
 
-        if (l.colour === "green") {
-          newKeys[l.key] = "green";
+        if (lg.colour === "green") {
+          newKeys[lg.letter] = "green";
           return;
         }
 
-        if (l.colour === "yellow" && currentColour !== "green") {
-          newKeys[l.key] = "yellow";
+        if (lg.colour === "yellow" && currentColour !== "green") {
+          newKeys[lg.letter] = "yellow";
           return;
         }
 
         if (
-          l.colour === "grey" &&
+          lg.colour === "grey" &&
           currentColour !== "green" &&
           currentColour !== "yellow"
         ) {
-          newKeys[l.key] = "grey";
+          newKeys[lg.letter] = "grey";
           return;
         }
       });

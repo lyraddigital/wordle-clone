@@ -1,10 +1,11 @@
 import clsx from "clsx";
 
+import { GuessLetterResult } from "@/lib/types";
 import RowContainer from "@/components/grid/row-container";
 import Tile from "@/components/grid/tile";
 
 export type ExistingRowProps = {
-    guess: { key: string, colour: string }[];
+    guess: GuessLetterResult[];
 }
 
 export default function ExistingRow({ guess }: ExistingRowProps) {
@@ -19,7 +20,7 @@ export default function ExistingRow({ guess }: ExistingRowProps) {
 
                 return (
                     <Tile key={i} classes={filledTileClasses}>
-                        {l.key}
+                        {l.letter}
                     </Tile>
                 );
             })}
