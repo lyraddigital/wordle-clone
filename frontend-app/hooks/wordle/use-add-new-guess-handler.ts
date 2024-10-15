@@ -23,7 +23,9 @@ export default function useAddNewGuessHandler(): (
   const updateStatisticsByGameResult = useStatisticsUpdater();
 
   return (formattedGuess: GuessLetterResult[]) => {
-    if (currentGuess === solution) {
+    const isGameOver = currentGuess === solution;
+
+    if (isGameOver) {
       setIsCorrect(true);
       setIsGameOver(true);
       updateStatisticsByGameResult(true, numberOfTurns);
@@ -74,14 +76,16 @@ export default function useAddNewGuessHandler(): (
       return newKeys;
     });
 
-    if (numberOfTurns === 5) {
-      setIsGameOver(true);
-      updateStatisticsByGameResult(false);
-    } else {
-      setIsGuessAnimationFiring(true);
-      setTimeout(() => {
-        setIsGuessAnimationFiring(false);
-      }, 750);
+    if (!isGameOver) {
+      if (numberOfTurns === 5) {
+        setIsGameOver(true);
+        updateStatisticsByGameResult(false);
+      } else {
+        setIsGuessAnimationFiring(true);
+        setTimeout(() => {
+          setIsGuessAnimationFiring(false);
+        }, 750);
+      }
     }
 
     setCurrentGuess("");
