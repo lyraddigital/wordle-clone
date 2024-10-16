@@ -1,3 +1,5 @@
+jest.mock("@/hooks/wordle/use-wordle");
+
 import { WordleState } from "@/contexts/wordle-context";
 import { GuessColour } from "@/lib/enums";
 import useWordle from "@/hooks/wordle/use-wordle";
