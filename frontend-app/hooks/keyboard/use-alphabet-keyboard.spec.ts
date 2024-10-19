@@ -15,8 +15,10 @@ describe("useAlphabetKeyboard", () => {
     // Assert
     expect(useHotkeys).toHaveBeenCalled();
 
-    const lettersArray = (useHotkeys as jest.MockedFunction<typeof useHotkeys>)
-      .mock.calls[0][0];
+    const useHotkeysCall = (
+      useHotkeys as jest.MockedFunction<typeof useHotkeys>
+    ).mock.calls[0];
+    const lettersArray = useHotkeysCall ? useHotkeysCall[0] : [];
 
     expect(lettersArray).toStrictEqual([
       "a",
@@ -57,11 +59,16 @@ describe("useAlphabetKeyboard", () => {
 
     useAlphabetKeyboard();
 
-    const callback = (useHotkeys as jest.MockedFunction<typeof useHotkeys>).mock
-      .calls[0][1];
+    const useHotKeysCall = (
+      useHotkeys as jest.MockedFunction<typeof useHotkeys>
+    ).mock.calls[0];
+    const callback =
+      useHotKeysCall && useHotKeysCall.length > 1
+        ? useHotKeysCall[1]
+        : undefined;
 
     // Action
-    callback({} as KeyboardEvent, { keys: ["a"] });
+    callback && callback({} as KeyboardEvent, { keys: ["a"] });
 
     // Assert
     expect(handleAlphabetCharacterFn).toHaveBeenCalled();
@@ -76,11 +83,16 @@ describe("useAlphabetKeyboard", () => {
 
     useAlphabetKeyboard();
 
-    const callback = (useHotkeys as jest.MockedFunction<typeof useHotkeys>).mock
-      .calls[0][1];
+    const useHotKeysCall = (
+      useHotkeys as jest.MockedFunction<typeof useHotkeys>
+    ).mock.calls[0];
+    const callback =
+      useHotKeysCall && useHotKeysCall.length > 1
+        ? useHotKeysCall[1]
+        : undefined;
 
     // Action
-    callback({} as KeyboardEvent, {});
+    callback && callback({} as KeyboardEvent, {});
 
     // Assert
     expect(handleAlphabetCharacterFn).not.toHaveBeenCalled();

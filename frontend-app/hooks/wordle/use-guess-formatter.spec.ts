@@ -26,15 +26,20 @@ describe("useGuessFormatter", () => {
     const formattedGuess = formatGuess();
 
     // Assert
-    expect(formattedGuess[0].letter).toBe("c");
-    expect(formattedGuess[0].colour).toBe(GuessColour.yellow);
-    expect(formattedGuess[1].letter).toBe("h");
-    expect(formattedGuess[1].colour).toBe(GuessColour.yellow);
-    expect(formattedGuess[2].letter).toBe("a");
-    expect(formattedGuess[2].colour).toBe(GuessColour.green);
-    expect(formattedGuess[3].letter).toBe("i");
-    expect(formattedGuess[3].colour).toBe(GuessColour.grey);
-    expect(formattedGuess[4].letter).toBe("r");
-    expect(formattedGuess[4].colour).toBe(GuessColour.grey);
+    expect(formattedGuess[0]).toBeDefined();
+    expect(formattedGuess[0]!.letter).toBe("c");
+    expect(formattedGuess[0]!.colour).toBe(GuessColour.yellow);
+    expect(formattedGuess[1]).toBeDefined();
+    expect(formattedGuess[1]!.letter).toBe("h");
+    expect(formattedGuess[1]!.colour).toBe(GuessColour.yellow);
+    expect(formattedGuess[2]).toBeDefined();
+    expect(formattedGuess[2]!.letter).toBe("a");
+    expect(formattedGuess[2]!.colour).toBe(GuessColour.green);
+    expect(formattedGuess[3]).toBeDefined();
+    expect(formattedGuess[3]!.letter).toBe("i");
+    expect(formattedGuess[3]!.colour).toBe(GuessColour.grey);
+    expect(formattedGuess[4]).toBeDefined();
+    expect(formattedGuess[4]!.letter).toBe("r");
+    expect(formattedGuess[4]!.colour).toBe(GuessColour.grey);
   });
 });

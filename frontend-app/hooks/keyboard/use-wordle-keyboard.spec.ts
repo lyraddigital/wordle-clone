@@ -11,7 +11,6 @@ import useWordleKeyboard from "./use-wordle-keyboard";
 describe("useWordleKeyboard", () => {
   it("calls all the correct hooks", () => {
     // Arrange
-    const keyPressed = "a";
     const mockUseAlphabetKeyboard = jest.fn();
     const mockUseEnterKeyboard = jest.fn();
     const mockUseBackspaceKeyboard = jest.fn();

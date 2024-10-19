@@ -9,7 +9,7 @@ describe('KeyPadRow', () => {
         const rowDiv = container.children[0];
 
         // Assert
-        expect(rowDiv.className).toBe("flex mx-3 gap-[2px] sm:gap-[6px]");
+        expect(rowDiv?.className).toBe("flex mx-3 gap-[2px] sm:gap-[6px]");
     });
 
     it('children is inside the div', () => {

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 import KeyPadKeySpacer from './keypad-key-spacer';
 
@@ -9,6 +9,6 @@ describe('KeyPadKeySpacer', () => {
         const spacerDiv = container.children[0];
 
         // Assert
-        expect(spacerDiv.className).toBe("flex-[0.5]");
+        expect(spacerDiv?.className).toBe("flex-[0.5]");
     });
 });

@@ -6,7 +6,7 @@ type DistributionGridItemProps = {
 
 export default function DistributionGridItem({ turn }: DistributionGridItemProps) {
     const { gamesPlayed, gamesWon, guessDistribution } = useStatistics();
-    const distributionPercentage = gamesPlayed === 0 ? 0 : ((guessDistribution[turn] / gamesWon) * 100).toFixed(0);
+    const distributionPercentage = gamesPlayed === 0 || !guessDistribution[turn] ? 0 : ((guessDistribution[turn] / gamesWon) * 100).toFixed(0);
 
     return (
         <div className="flex gap-2 items-center mb-1">

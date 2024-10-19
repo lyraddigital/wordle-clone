@@ -15,7 +15,7 @@ const formatGuess = (
 
   // find any green letters
   formattedGuess.forEach((l, i) => {
-    if (solutionArray[i] === l.letter) {
+    if (formattedGuess[i] && solutionArray[i] === l.letter) {
       formattedGuess[i].colour = GuessColour.green;
       solutionArray[i] = null;
     }
@@ -23,7 +23,11 @@ const formatGuess = (
 
   // find any yellow letters
   formattedGuess.forEach((l, i) => {
-    if (solutionArray.includes(l.letter) && l.colour !== GuessColour.green) {
+    if (
+      formattedGuess[i] &&
+      solutionArray.includes(l.letter) &&
+      l.colour !== GuessColour.green
+    ) {
       formattedGuess[i].colour = GuessColour.yellow;
       solutionArray[solutionArray.indexOf(l.letter)] = null;
     }

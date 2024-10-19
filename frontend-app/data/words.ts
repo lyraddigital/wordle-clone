@@ -9003,7 +9003,7 @@ const words: string[] = [
 
 const getRandomWord = (): string => {
   const randomIndex = Math.floor(Math.random() * words.length);
-  return words[randomIndex];
+  return words[randomIndex]!;
 };
 
 export const wordExists = (word: string): boolean => {

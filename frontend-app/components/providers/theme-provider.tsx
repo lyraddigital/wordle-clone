@@ -11,9 +11,9 @@ export default function ThemeProvider({ children }: PropsWithChildren) {
         const htmlElement = document.getElementsByTagName("html")[0];
 
         if (isDarkMode) {
-            htmlElement.classList.add("dark");
+            htmlElement?.classList.add("dark");
         } else {
-            htmlElement.classList.remove("dark");
+            htmlElement?.classList.remove("dark");
         }
     }, [isDarkMode]);
 

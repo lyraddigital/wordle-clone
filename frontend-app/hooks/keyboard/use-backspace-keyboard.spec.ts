@@ -15,9 +15,10 @@ describe("useBackspaceKeyboard", () => {
     // Assert
     expect(useHotkeys).toHaveBeenCalled();
 
-    const bindingCharacter = (
+    const useHotkeysCall = (
       useHotkeys as jest.MockedFunction<typeof useHotkeys>
-    ).mock.calls[0][0];
+    ).mock.calls[0];
+    const bindingCharacter = useHotkeysCall ? useHotkeysCall[0] : "";
 
     expect(bindingCharacter).toBe("Backspace");
   });
@@ -31,11 +32,14 @@ describe("useBackspaceKeyboard", () => {
 
     useBackspaceKeyboard();
 
-    const callback = (useHotkeys as jest.MockedFunction<typeof useHotkeys>).mock
-      .calls[0][1];
+    const useHotkeysCall = (
+      useHotkeys as jest.MockedFunction<typeof useHotkeys>
+    ).mock.calls[0];
+
+    const callback = useHotkeysCall ? useHotkeysCall[1] : undefined;
 
     // Action
-    callback({} as KeyboardEvent, {});
+    callback && callback!({} as KeyboardEvent, {});
 
     // Assert
     expect(useBackspaceBindingFn).toHaveBeenCalled();

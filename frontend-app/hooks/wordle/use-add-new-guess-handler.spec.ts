@@ -679,13 +679,6 @@ describe("useAddNewGuessHandler", () => {
       { letter: "d", colour: GuessColour.grey },
       { letter: "e", colour: GuessColour.green },
     ];
-    const currentUsedKeys: { [key: string]: GuessColour } = {
-      ["a"]: GuessColour.grey,
-      ["b"]: GuessColour.yellow,
-      ["c"]: GuessColour.grey,
-      ["d"]: GuessColour.grey,
-      ["e"]: GuessColour.grey,
-    };
 
     const setIsGameOverFn = jest.fn();
     const setCurrentGuessFn = jest.fn();

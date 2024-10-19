@@ -33,7 +33,10 @@ const useStatisticsUpdater = (): ((
       if (currentTurn !== undefined) {
         setGuessDistribution((prevGuessDistribution) => {
           const newGuessDistribution = { ...prevGuessDistribution };
-          newGuessDistribution[currentTurn + 1] += 1;
+
+          if (newGuessDistribution[currentTurn + 1] !== undefined) {
+            newGuessDistribution[currentTurn + 1]! += 1;
+          }
 
           return newGuessDistribution;
         });

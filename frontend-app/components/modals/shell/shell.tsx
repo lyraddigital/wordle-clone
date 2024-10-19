@@ -1,9 +1,9 @@
-import { PropsWithChildren, ReactElement } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 
 import ModalOverlay from '@/components/modals/shell/modal-overlay';
 
 type ModalOverlayProps = PropsWithChildren & {
-    footerContent?: ReactElement;
+    footerContent?: ReactNode;
     onClose?: () => void;
     showModal: boolean;
     showCloseBox?: boolean;

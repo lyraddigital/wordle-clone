@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
+// import { render, screen } from '@testing-library/react';
 
-import KeyPad from './keypad';
-import WordleProvider from '../providers/wordle-provider';
+// import KeyPad from './keypad';
+// import WordleProvider from '../providers/wordle-provider';
 
 describe('KeyPad', () => {
     it('contains 3 rows of letters', () => {
