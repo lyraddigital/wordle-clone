@@ -1,29 +1,43 @@
-jest.mock("@/hooks/wordle/use-wordle");
+import { PropsWithChildren } from "react";
+import { renderHook } from "@testing-library/react";
 
-import { WordleState } from "@/contexts/wordle-context";
+import WordleContext, { WordleState } from "@/contexts/wordle-context";
 import { GuessColour } from "@/lib/enums";
-import useWordle from "@/hooks/wordle/use-wordle";
 
 import useGuessFormatter from "./use-guess-formatter";
+
+const createWrapperComponent = (
+  currentGuess: string,
+  solution: string
+): React.FC<PropsWithChildren> => {
+  return function WrapperComponent({
+    children,
+  }: PropsWithChildren): React.ReactNode {
+    const wordleState = {
+      currentGuess,
+      solution,
+    } as WordleState;
+
+    return (
+      <WordleContext.Provider value={wordleState}>
+        {children}
+      </WordleContext.Provider>
+    );
+  };
+};
 
 describe("useGuessFormatter", () => {
   it("first turn and guess is not the solution, calls correct wordle dispatchers", () => {
     // Arrange
-    const currentGuess = "chair";
-    const solution = "peach";
-
-    (useWordle as jest.MockedFunction<typeof useWordle>).mockImplementationOnce(
-      () =>
-        ({
-          currentGuess,
-          solution,
-        } as WordleState)
+    const wrapper = createWrapperComponent(
+      "chair",
+      "peach"
     );
 
-    const formatGuess = useGuessFormatter();
+    const { result } = renderHook(() => useGuessFormatter(), { wrapper });
 
     // Action
-    const formattedGuess = formatGuess();
+    const formattedGuess = result.current();
 
     // Assert
     expect(formattedGuess[0]).toBeDefined();
