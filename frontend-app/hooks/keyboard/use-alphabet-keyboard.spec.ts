@@ -1,26 +1,24 @@
-jest.mock("react-hotkeys-hook");
 jest.mock("@/hooks/bindings/use-alphabet-binding");
 
-import { useHotkeys } from "react-hotkeys-hook";
+import { renderHook } from "@testing-library/react";
+import user from "@testing-library/user-event";
 
 import useAlphabetBinding from "@/hooks/bindings/use-alphabet-binding";
 
 import useAlphabetKeyboard from "./use-alphabet-keyboard";
 
 describe("useAlphabetKeyboard", () => {
-  it("useHostKeys is called with all the letters of the alphabet", () => {
-    // Arrange / Action
-    useAlphabetKeyboard();
+  it("useAlphabetBinding function can be called with all the letters of the alphabet", async () => {
+    // Arrange
+    const handleAlphabetCharacterFn = jest.fn();
+    (
+      useAlphabetBinding as jest.MockedFunction<typeof useAlphabetBinding>
+    ).mockImplementationOnce(() => handleAlphabetCharacterFn);
 
-    // Assert
-    expect(useHotkeys).toHaveBeenCalled();
+    renderHook(() => useAlphabetKeyboard());
 
-    const useHotkeysCall = (
-      useHotkeys as jest.MockedFunction<typeof useHotkeys>
-    ).mock.calls[0];
-    const lettersArray = useHotkeysCall ? useHotkeysCall[0] : [];
-
-    expect(lettersArray).toStrictEqual([
+    // Action / Assert
+    const letters = [
       "a",
       "b",
       "c",
@@ -47,54 +45,61 @@ describe("useAlphabetKeyboard", () => {
       "x",
       "y",
       "z",
-    ]);
+    ];
+
+    for (let i = 0; i < letters.length; i++) {
+      // Action
+      const letter = letters[i];
+
+      await user.keyboard(letter!);
+
+      // Assert
+      expect(handleAlphabetCharacterFn).toHaveBeenCalledWith(letter);
+    }
   });
 
-  it("useAlphabetBinding function is called with a letter", () => {
+  it("useAlphabetBinding is not when when not using a letters of the alphabet", async () => {
     // Arrange
     const handleAlphabetCharacterFn = jest.fn();
     (
       useAlphabetBinding as jest.MockedFunction<typeof useAlphabetBinding>
     ).mockImplementationOnce(() => handleAlphabetCharacterFn);
 
-    useAlphabetKeyboard();
+    renderHook(() => useAlphabetKeyboard());
 
-    const useHotKeysCall = (
-      useHotkeys as jest.MockedFunction<typeof useHotkeys>
-    ).mock.calls[0];
-    const callback =
-      useHotKeysCall && useHotKeysCall.length > 1
-        ? useHotKeysCall[1]
-        : undefined;
+    // Action / Assert
+    const letters = [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "0",
+      "-",
+      "=",
+      "{\\]}",
+      "{\\[}",
+      "\\",
+      ",",
+      ".",
+      "/",
+      "`",
+      "[Enter]",
+      "[Backspace]",
+    ];
 
-    // Action
-    callback && callback({} as KeyboardEvent, { keys: ["a"] });
+    for (let i = 0; i < letters.length; i++) {
+      // Action
+      const letter = letters[i];
 
-    // Assert
-    expect(handleAlphabetCharacterFn).toHaveBeenCalled();
-  });
+      await user.keyboard(letter!);
 
-  it("useAlphabetBinding function is called with no key", () => {
-    // Arrange
-    const handleAlphabetCharacterFn = jest.fn();
-    (
-      useAlphabetBinding as jest.MockedFunction<typeof useAlphabetBinding>
-    ).mockImplementationOnce(() => handleAlphabetCharacterFn);
-
-    useAlphabetKeyboard();
-
-    const useHotKeysCall = (
-      useHotkeys as jest.MockedFunction<typeof useHotkeys>
-    ).mock.calls[0];
-    const callback =
-      useHotKeysCall && useHotKeysCall.length > 1
-        ? useHotKeysCall[1]
-        : undefined;
-
-    // Action
-    callback && callback({} as KeyboardEvent, {});
-
-    // Assert
-    expect(handleAlphabetCharacterFn).not.toHaveBeenCalled();
+      // Assert
+      expect(handleAlphabetCharacterFn).not.toHaveBeenCalled();
+    }
   });
 });
