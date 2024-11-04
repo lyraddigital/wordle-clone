@@ -1,47 +1,43 @@
-jest.mock("react-hotkeys-hook");
 jest.mock("@/hooks/bindings/use-backspace-binding");
 
+import { renderHook } from "@testing-library/react";
 import { useHotkeys } from "react-hotkeys-hook";
+import user from "@testing-library/user-event";
 
 import useBackspaceBinding from "@/hooks/bindings/use-backspace-binding";
 
 import useBackspaceKeyboard from "./use-backspace-keyboard";
 
 describe("useBackspaceKeyboard", () => {
-  it("useHostKeys is called with 'Backspace'", () => {
-    // Arrange / Action
-    useBackspaceKeyboard();
-
-    // Assert
-    expect(useHotkeys).toHaveBeenCalled();
-
-    const useHotkeysCall = (
-      useHotkeys as jest.MockedFunction<typeof useHotkeys>
-    ).mock.calls[0];
-    const bindingCharacter = useHotkeysCall ? useHotkeysCall[0] : "";
-
-    expect(bindingCharacter).toBe("Backspace");
-  });
-
-  it("useBackspaceBinding function is called", () => {
+  it("user presses Backspace, useBackspaceBinding function is called", async () => {
     // Arrange
-    const useBackspaceBindingFn = jest.fn();
+    const handleBackspaceFn = jest.fn();
     (
       useBackspaceBinding as jest.MockedFunction<typeof useBackspaceBinding>
-    ).mockImplementationOnce(() => useBackspaceBindingFn);
+    ).mockImplementationOnce(() => handleBackspaceFn);
 
-    useBackspaceKeyboard();
-
-    const useHotkeysCall = (
-      useHotkeys as jest.MockedFunction<typeof useHotkeys>
-    ).mock.calls[0];
-
-    const callback = useHotkeysCall ? useHotkeysCall[1] : undefined;
+    renderHook(() => useBackspaceKeyboard());
 
     // Action
-    callback && callback!({} as KeyboardEvent, {});
+    await user.keyboard("[Backspace]");
 
     // Assert
-    expect(useBackspaceBindingFn).toHaveBeenCalled();
+    expect(handleBackspaceFn).toHaveBeenCalled();
+  });
+
+  it("user does not press Backspace, useBackspaceBinding function is not called", async () => {
+    // Arrange
+    const handleBackspaceFn = jest.fn();
+    (
+      useBackspaceBinding as jest.MockedFunction<typeof useBackspaceBinding>
+    ).mockImplementationOnce(() => handleBackspaceFn);
+
+    renderHook(() => useBackspaceKeyboard());
+
+    // Action
+    await user.keyboard("a");
+
+    // Assert
+    expect(handleBackspaceFn).not.toHaveBeenCalled();
   });
 });

@@ -36,7 +36,6 @@ const useAlphabetKeyboard = () => {
       "z",
     ],
     (_: KeyboardEvent, handler: HotkeysEvent) => {
-      console.log("Inside useHotKeys handler");
       const keyPressed = handler.keys ? handler.keys[0] : null;
 
       if (keyPressed) {
