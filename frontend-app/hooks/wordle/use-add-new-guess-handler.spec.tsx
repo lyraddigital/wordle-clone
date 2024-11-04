@@ -19,7 +19,7 @@ const createWrapperComponent = (
   defaultIsCorrect: boolean,
   defaultUsedKeys: { [key: string]: GuessColour },
   defaultIsGuessAnimating: boolean,
-  defaultSolution: string
+  solution: string
 ): React.FC<PropsWithChildren> => {
   return function WrapperComponent({
     children,
@@ -32,7 +32,6 @@ const createWrapperComponent = (
     const [isCorrect, setIsCorrect] = useState<boolean>(defaultIsCorrect);
     const [usedKeys, setUsedKeys] = useState<{ [key: string]: GuessColour }>(defaultUsedKeys);
     const [isGuessAnimationFiring, setIsGuessAnimationFiring] = useState<boolean>(defaultIsGuessAnimating);
-    const [solution, setSolution] = useState<string>(defaultSolution);
     const wordleState = {
       numberOfTurns,
       currentGuess,
@@ -50,8 +49,7 @@ const createWrapperComponent = (
       setHistory,
       setIsCorrect,
       setUsedKeys,
-      setIsGuessAnimationFiring,
-      setSolution
+      setIsGuessAnimationFiring
     } as WordleState;
 
     return (
@@ -77,7 +75,7 @@ describe("useAddNewGuessHandler", () => {
   it("first turn and guess is not the solution, sets correct state", () => {
     // Arrange
     const numberOfTurns = 0;
-    const currentGuess = "a";
+    const currentGuess = "abecd";
     const isGameOver = false;
     const guesses: (GuessLetterResult[])[] = [];
     const history: string[] = [];
@@ -88,22 +86,22 @@ describe("useAddNewGuessHandler", () => {
     const formattedGuess: GuessLetterResult[] = [
       {
         letter: "a",
-        colour: GuessColour.green,
+        colour: GuessColour.yellow,
       },
       {
         letter: "b",
         colour: GuessColour.grey,
       },
       {
-        letter: "c",
+        letter: "e",
         colour: GuessColour.yellow,
       },
       {
-        letter: "d",
-        colour: GuessColour.grey,
+        letter: "c",
+        colour: GuessColour.green,
       },
       {
-        letter: "e",
+        letter: "d",
         colour: GuessColour.grey,
       },
     ];
@@ -142,24 +140,23 @@ describe("useAddNewGuessHandler", () => {
     const isCorrectDiv = screen.getByTestId('is-correct');
     const usedKeysDiv = screen.getByTestId('used-keys');
     const isGuessAnimationFiringDiv = screen.getByTestId('is-guess-animation-firing');
-    const solutionDiv = screen.getByTestId('solution');
 
     // Assert
     expect(numberOfTurnsDiv.textContent).toBe((1).toString());
     expect(currentGuessDiv.textContent).toBe('');
     expect(isGameOverDiv.textContent).toBe('false');
-    expect(guessesDiv.textContent).toBe('[[{\"letter\":\"a\",\"colour\":\"green\"},{\"letter\":\"b\",\"colour\":\"grey\"},{\"letter\":\"c\",\"colour\":\"yellow\"},{\"letter\":\"d\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"grey\"}]]');
-    expect(historyDiv.textContent).toBe('[\"a\"]');
+    expect(guessesDiv.textContent).toBe('[[{\"letter\":\"a\",\"colour\":\"yellow\"},{\"letter\":\"b\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"yellow\"},{\"letter\":\"c\",\"colour\":\"green\"},{\"letter\":\"d\",\"colour\":\"grey\"}]]');
+    expect(historyDiv.textContent).toBe('[\"abecd\"]');
     expect(isCorrectDiv.textContent).toBe('false');
-    expect(usedKeysDiv.textContent).toBe('{\"a\":\"green\",\"b\":\"grey\",\"c\":\"yellow\",\"d\":\"grey\",\"e\":\"grey\"}');
+    expect(usedKeysDiv.textContent).toBe('{\"a\":\"yellow\",\"b\":\"grey\",\"e\":\"yellow\",\"c\":\"green\",\"d\":\"grey\"}');
     expect(isGuessAnimationFiringDiv.textContent).toBe('true');
-    expect(solutionDiv.textContent).toBe('peach');
 
     act(() => {
       jest.runAllTimers();
     });
 
     expect(isGuessAnimationFiringDiv.textContent).toBe('false');
+    expect(updateStatisticsByGameResultFn).not.toHaveBeenCalled();
   });
 
   it("second turn and guess is not the solution, sets correct state", () => {
@@ -170,23 +167,29 @@ describe("useAddNewGuessHandler", () => {
     const isGameOver = false;
     const currentGuesses: (GuessLetterResult[] | undefined)[] = [
       [
-        { letter: "d", colour: GuessColour.grey },
-        { letter: "e", colour: GuessColour.grey },
         { letter: "a", colour: GuessColour.yellow },
-        { letter: "t", colour: GuessColour.grey },
-        { letter: "h", colour: GuessColour.grey },
+        { letter: "b", colour: GuessColour.grey },
+        { letter: "e", colour: GuessColour.yellow },
+        { letter: "c", colour: GuessColour.green },
+        { letter: "d", colour: GuessColour.grey },
       ],
     ];
-    const history: string[] = ['abcdf'];
+    const history: string[] = ['abecd'];
     const isCorrect = false;
-    const usedKeys = {};
+    const usedKeys: { [key: string]: GuessColour } = {
+      "a": GuessColour.yellow,
+      "b": GuessColour.grey,
+      "e": GuessColour.yellow,
+      "c": GuessColour.green,
+      "d": GuessColour.grey,
+    };
     const isGuessAnimating = false;
     const formattedGuess: GuessLetterResult[] = [
-      { letter: "d", colour: GuessColour.green },
-      { letter: "e", colour: GuessColour.grey },
-      { letter: "a", colour: GuessColour.yellow },
+      { letter: "d", colour: GuessColour.grey },
+      { letter: "e", colour: GuessColour.green },
+      { letter: "a", colour: GuessColour.green },
       { letter: "t", colour: GuessColour.grey },
-      { letter: "h", colour: GuessColour.grey },
+      { letter: "h", colour: GuessColour.green },
     ];
 
     const wrapper = createWrapperComponent(
@@ -223,589 +226,536 @@ describe("useAddNewGuessHandler", () => {
     const isCorrectDiv = screen.getByTestId('is-correct');
     const usedKeysDiv = screen.getByTestId('used-keys');
     const isGuessAnimationFiringDiv = screen.getByTestId('is-guess-animation-firing');
-    const solutionDiv = screen.getByTestId('solution');
 
     // Assert
     expect(numberOfTurnsDiv.textContent).toBe((2).toString());
     expect(currentGuessDiv.textContent).toBe('');
     expect(isGameOverDiv.textContent).toBe('false');
-    expect(guessesDiv.textContent).toBe('[[{\"letter\":\"d\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"grey\"},{\"letter\":\"a\",\"colour\":\"yellow\"},{\"letter\":\"t\",\"colour\":\"grey\"},{\"letter\":\"h\",\"colour\":\"grey\"}],[{\"letter\":\"d\",\"colour\":\"green\"},{\"letter\":\"e\",\"colour\":\"grey\"},{\"letter\":\"a\",\"colour\":\"yellow\"},{\"letter\":\"t\",\"colour\":\"grey\"},{\"letter\":\"h\",\"colour\":\"grey\"}]]');
-    expect(historyDiv.textContent).toBe('[\"abcdf\",\"death\"]');
+    expect(guessesDiv.textContent).toBe('[[{\"letter\":\"a\",\"colour\":\"yellow\"},{\"letter\":\"b\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"yellow\"},{\"letter\":\"c\",\"colour\":\"green\"},{\"letter\":\"d\",\"colour\":\"grey\"}],[{\"letter\":\"d\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"green\"},{\"letter\":\"a\",\"colour\":\"green\"},{\"letter\":\"t\",\"colour\":\"grey\"},{\"letter\":\"h\",\"colour\":\"green\"}]]');
+    expect(historyDiv.textContent).toBe('[\"abecd\",\"death\"]');
     expect(isCorrectDiv.textContent).toBe('false');
-    expect(usedKeysDiv.textContent).toBe('{\"d\":\"green\",\"e\":\"grey\",\"a\":\"yellow\",\"t\":\"grey\",\"h\":\"grey\"}');
+    expect(usedKeysDiv.textContent).toBe('{\"a\":\"green\",\"b\":\"grey\",\"e\":\"green\",\"c\":\"green\",\"d\":\"grey\",\"t\":\"grey\",\"h\":\"green\"}');
     expect(isGuessAnimationFiringDiv.textContent).toBe('true');
-    expect(solutionDiv.textContent).toBe('peach');
 
-    // Action
-    // addNewGuess(formattedGuess);
-    // jest.runAllTimers();
+    act(() => {
+      jest.runAllTimers();
+    });
 
-    // Assert
-    //expect(setGuessesFn).toHaveBeenCalled();
-
-    // const setGuessesCallback = setGuessesFn.mock.calls[0][0] as (
-    //   prevGuesses: (GuessLetterResult[] | undefined)[]
-    // ) => (GuessLetterResult[] | undefined)[];
-
-    // const newGuesses: (GuessLetterResult[] | undefined)[] =
-    //   setGuessesCallback(currentGuesses);
-
-    // expect(newGuesses).toStrictEqual([
-    //   [
-    //     { letter: "d", colour: "grey" },
-    //     { letter: "e", colour: "grey" },
-    //     { letter: "a", colour: "yellow" },
-    //     { letter: "t", colour: "grey" },
-    //     { letter: "h", colour: "grey" },
-    //   ],
-    //   [
-    //     { letter: "a", colour: "green" },
-    //     { letter: "b", colour: "grey" },
-    //     { letter: "c", colour: "yellow" },
-    //     { letter: "d", colour: "grey" },
-    //     { letter: "e", colour: "grey" },
-    //   ],
-    // ]);
+    expect(isGuessAnimationFiringDiv.textContent).toBe('false');
+    expect(updateStatisticsByGameResultFn).not.toHaveBeenCalled();
   });
 
-  // it("first turn and guess is not the solution, setHistory dispatch returns correct new history", () => {
-  //   // Arrange
-  //   const numberOfTurns = 1;
-  //   const currentGuess = "abcde";
-  //   const solution = "peach";
-  //   const formattedGuess: GuessLetterResult[] = [
-  //     { letter: "a", colour: GuessColour.green },
-  //     { letter: "b", colour: GuessColour.grey },
-  //     { letter: "c", colour: GuessColour.yellow },
-  //     { letter: "d", colour: GuessColour.grey },
-  //     { letter: "e", colour: GuessColour.grey },
-  //   ];
-  //   const currentHistory = ["tests"];
+  it("third turn and guess is not the solution, sets correct state", () => {
+    // Arrange
+    const numberOfTurns = 2;
+    const currentGuess = "pizza";
+    const solution = "peach";
+    const isGameOver = false;
+    const currentGuesses: (GuessLetterResult[] | undefined)[] = [
+      [
+        { letter: "a", colour: GuessColour.yellow },
+        { letter: "b", colour: GuessColour.grey },
+        { letter: "e", colour: GuessColour.yellow },
+        { letter: "c", colour: GuessColour.green },
+        { letter: "d", colour: GuessColour.grey },
+      ],
+      [
+        { letter: "d", colour: GuessColour.grey },
+        { letter: "e", colour: GuessColour.green },
+        { letter: "a", colour: GuessColour.green },
+        { letter: "t", colour: GuessColour.grey },
+        { letter: "h", colour: GuessColour.green },
+      ]
+    ];
+    const history: string[] = ['abecd', 'death'];
+    const isCorrect = false;
+    const usedKeys: { [key: string]: GuessColour } = {
+      "a": GuessColour.green,
+      "b": GuessColour.grey,
+      "e": GuessColour.green,
+      "c": GuessColour.green,
+      "d": GuessColour.grey,
+      "t": GuessColour.grey,
+      "h": GuessColour.green,
+    };
+    const isGuessAnimating = false;
+    const formattedGuess: GuessLetterResult[] = [
+      { letter: "p", colour: GuessColour.green },
+      { letter: "i", colour: GuessColour.grey },
+      { letter: "z", colour: GuessColour.grey },
+      { letter: "z", colour: GuessColour.grey },
+      { letter: "a", colour: GuessColour.yellow },
+    ];
 
-  //   const setIsGameOverFn = jest.fn();
-  //   const setCurrentGuessFn = jest.fn();
-  //   const setGuessesFn = jest.fn();
-  //   const setHistoryFn = jest.fn();
-  //   const setIsCorrectFn = jest.fn();
-  //   const setNumberOfTurnsFn = jest.fn();
-  //   const setUsedKeysFn = jest.fn();
-  //   const setIsGuessAnimationFiringFn = jest.fn();
-  //   const updateStatisticsByGameResultFn = jest.fn();
+    const wrapper = createWrapperComponent(
+      numberOfTurns,
+      currentGuess,
+      isGameOver,
+      currentGuesses,
+      history,
+      isCorrect,
+      usedKeys,
+      isGuessAnimating,
+      solution
+    );
+    const updateStatisticsByGameResultFn = jest.fn();
 
-  //   (useWordle as jest.MockedFunction<typeof useWordle>).mockImplementationOnce(
-  //     () =>
-  //     ({
-  //       numberOfTurns,
-  //       currentGuess,
-  //       solution,
-  //       setIsGameOver: setIsGameOverFn as Dispatch<SetStateAction<boolean>>,
-  //       setCurrentGuess: setCurrentGuessFn as Dispatch<
-  //         SetStateAction<string>
-  //       >,
-  //       setGuesses: setGuessesFn as Dispatch<
-  //         SetStateAction<({ key: string; colour: string }[] | undefined)[]>
-  //       >,
-  //       setHistory: setHistoryFn as Dispatch<SetStateAction<string[]>>,
-  //       setIsCorrect: setIsCorrectFn as Dispatch<SetStateAction<boolean>>,
-  //       setNumberOfTurns: setNumberOfTurnsFn as Dispatch<
-  //         SetStateAction<number>
-  //       >,
-  //       setUsedKeys: setUsedKeysFn as Dispatch<
-  //         SetStateAction<{ [key: string]: string }>
-  //       >,
-  //       setIsGuessAnimationFiring: setIsGuessAnimationFiringFn as Dispatch<
-  //         SetStateAction<boolean>
-  //       >,
-  //     } as WordleState)
-  //   );
+    (
+      useStatisticsUpdater as jest.MockedFunction<typeof useStatisticsUpdater>
+    ).mockImplementationOnce(() => updateStatisticsByGameResultFn);
 
-  //   (
-  //     useStatisticsUpdater as jest.MockedFunction<typeof useStatisticsUpdater>
-  //   ).mockImplementationOnce(() => updateStatisticsByGameResultFn);
+    const newGuessHook = renderHook(() => useAddNewGuessHandler(), {
+      wrapper
+    });
 
-  //   const addNewGuess = useAddNewGuessHandler();
+    // Action
+    act(() => {
+      newGuessHook.result.current(formattedGuess);
+    });
 
-  //   // Action
-  //   addNewGuess(formattedGuess);
-  //   jest.runAllTimers();
+    const numberOfTurnsDiv = screen.getByTestId('number-of-turns');
+    const currentGuessDiv = screen.getByTestId('current-guess');
+    const isGameOverDiv = screen.getByTestId('is-game-over');
+    const guessesDiv = screen.getByTestId('guesses');
+    const historyDiv = screen.getByTestId('history');
+    const isCorrectDiv = screen.getByTestId('is-correct');
+    const usedKeysDiv = screen.getByTestId('used-keys');
+    const isGuessAnimationFiringDiv = screen.getByTestId('is-guess-animation-firing');
 
-  //   // Assert
-  //   expect(setHistoryFn).toHaveBeenCalled();
+    // Assert
+    expect(numberOfTurnsDiv.textContent).toBe((3).toString());
+    expect(currentGuessDiv.textContent).toBe('');
+    expect(isGameOverDiv.textContent).toBe('false');
+    expect(guessesDiv.textContent).toBe('[[{\"letter\":\"a\",\"colour\":\"yellow\"},{\"letter\":\"b\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"yellow\"},{\"letter\":\"c\",\"colour\":\"green\"},{\"letter\":\"d\",\"colour\":\"grey\"}],[{\"letter\":\"d\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"green\"},{\"letter\":\"a\",\"colour\":\"green\"},{\"letter\":\"t\",\"colour\":\"grey\"},{\"letter\":\"h\",\"colour\":\"green\"}],[{\"letter\":\"p\",\"colour\":\"green\"},{\"letter\":\"i\",\"colour\":\"grey\"},{\"letter\":\"z\",\"colour\":\"grey\"},{\"letter\":\"z\",\"colour\":\"grey\"},{\"letter\":\"a\",\"colour\":\"yellow\"}]]');
+    expect(historyDiv.textContent).toBe('[\"abecd\",\"death\",\"pizza\"]');
+    expect(isCorrectDiv.textContent).toBe('false');
+    expect(usedKeysDiv.textContent).toBe('{\"a\":\"green\",\"b\":\"grey\",\"e\":\"green\",\"c\":\"green\",\"d\":\"grey\",\"t\":\"grey\",\"h\":\"green\",\"p\":\"green\",\"i\":\"grey\",\"z\":\"grey\"}');
+    expect(isGuessAnimationFiringDiv.textContent).toBe('true');
 
-  //   const setHistoryCallback = setHistoryFn.mock.calls[0][0] as (
-  //     prevHistory: string[]
-  //   ) => string[];
+    act(() => {
+      jest.runAllTimers();
+    });
 
-  //   const newHistory: string[] = setHistoryCallback(currentHistory);
+    expect(isGuessAnimationFiringDiv.textContent).toBe('false');
+    expect(updateStatisticsByGameResultFn).not.toHaveBeenCalled();
+  });
 
-  //   expect(newHistory).toStrictEqual(["tests", currentGuess]);
-  // });
+  it("fourth turn and guess is not the solution, sets correct state", () => {
+    // Arrange
+    const numberOfTurns = 3;
+    const currentGuess = "porch";
+    const solution = "peach";
+    const isGameOver = false;
+    const currentGuesses: (GuessLetterResult[] | undefined)[] = [
+      [
+        { letter: "a", colour: GuessColour.yellow },
+        { letter: "b", colour: GuessColour.grey },
+        { letter: "e", colour: GuessColour.yellow },
+        { letter: "c", colour: GuessColour.green },
+        { letter: "d", colour: GuessColour.grey },
+      ],
+      [
+        { letter: "d", colour: GuessColour.grey },
+        { letter: "e", colour: GuessColour.green },
+        { letter: "a", colour: GuessColour.green },
+        { letter: "t", colour: GuessColour.grey },
+        { letter: "h", colour: GuessColour.grey },
+      ],
+      [
+        { letter: "p", colour: GuessColour.green },
+        { letter: "i", colour: GuessColour.grey },
+        { letter: "z", colour: GuessColour.grey },
+        { letter: "z", colour: GuessColour.grey },
+        { letter: "a", colour: GuessColour.yellow },
+      ]
+    ];
+    const history: string[] = ['abecd', 'death', 'pizza'];
+    const isCorrect = false;
+    const usedKeys: { [key: string]: GuessColour } = {
+      "a": GuessColour.green,
+      "b": GuessColour.grey,
+      "e": GuessColour.green,
+      "c": GuessColour.green,
+      "d": GuessColour.grey,
+      "t": GuessColour.grey,
+      "h": GuessColour.green,
+      "i": GuessColour.grey,
+      "p": GuessColour.green,
+      "z": GuessColour.grey
+    };
+    const isGuessAnimating = false;
+    const formattedGuess: GuessLetterResult[] = [
+      { letter: "p", colour: GuessColour.green },
+      { letter: "o", colour: GuessColour.grey },
+      { letter: "r", colour: GuessColour.grey },
+      { letter: "c", colour: GuessColour.green },
+      { letter: "h", colour: GuessColour.green },
+    ];
 
-  // it("first turn and guess is not the solution, setNumberOfTurns dispatch returns correct new number of turns", () => {
-  //   // Arrange
-  //   const numberOfTurns = 1;
-  //   const currentGuess = "abcde";
-  //   const solution = "peach";
-  //   const formattedGuess: GuessLetterResult[] = [
-  //     { letter: "a", colour: GuessColour.green },
-  //     { letter: "b", colour: GuessColour.grey },
-  //     { letter: "c", colour: GuessColour.yellow },
-  //     { letter: "d", colour: GuessColour.grey },
-  //     { letter: "e", colour: GuessColour.grey },
-  //   ];
+    const wrapper = createWrapperComponent(
+      numberOfTurns,
+      currentGuess,
+      isGameOver,
+      currentGuesses,
+      history,
+      isCorrect,
+      usedKeys,
+      isGuessAnimating,
+      solution
+    );
+    const updateStatisticsByGameResultFn = jest.fn();
 
-  //   const setIsGameOverFn = jest.fn();
-  //   const setCurrentGuessFn = jest.fn();
-  //   const setGuessesFn = jest.fn();
-  //   const setHistoryFn = jest.fn();
-  //   const setIsCorrectFn = jest.fn();
-  //   const setNumberOfTurnsFn = jest.fn();
-  //   const setUsedKeysFn = jest.fn();
-  //   const setIsGuessAnimationFiringFn = jest.fn();
-  //   const updateStatisticsByGameResultFn = jest.fn();
+    (
+      useStatisticsUpdater as jest.MockedFunction<typeof useStatisticsUpdater>
+    ).mockImplementationOnce(() => updateStatisticsByGameResultFn);
 
-  //   (useWordle as jest.MockedFunction<typeof useWordle>).mockImplementationOnce(
-  //     () =>
-  //     ({
-  //       numberOfTurns,
-  //       currentGuess,
-  //       solution,
-  //       setIsGameOver: setIsGameOverFn as Dispatch<SetStateAction<boolean>>,
-  //       setCurrentGuess: setCurrentGuessFn as Dispatch<
-  //         SetStateAction<string>
-  //       >,
-  //       setGuesses: setGuessesFn as Dispatch<
-  //         SetStateAction<({ key: string; colour: string }[] | undefined)[]>
-  //       >,
-  //       setHistory: setHistoryFn as Dispatch<SetStateAction<string[]>>,
-  //       setIsCorrect: setIsCorrectFn as Dispatch<SetStateAction<boolean>>,
-  //       setNumberOfTurns: setNumberOfTurnsFn as Dispatch<
-  //         SetStateAction<number>
-  //       >,
-  //       setUsedKeys: setUsedKeysFn as Dispatch<
-  //         SetStateAction<{ [key: string]: string }>
-  //       >,
-  //       setIsGuessAnimationFiring: setIsGuessAnimationFiringFn as Dispatch<
-  //         SetStateAction<boolean>
-  //       >,
-  //     } as WordleState)
-  //   );
+    const newGuessHook = renderHook(() => useAddNewGuessHandler(), {
+      wrapper
+    });
 
-  //   (
-  //     useStatisticsUpdater as jest.MockedFunction<typeof useStatisticsUpdater>
-  //   ).mockImplementationOnce(() => updateStatisticsByGameResultFn);
+    // Action
+    act(() => {
+      newGuessHook.result.current(formattedGuess);
+    });
 
-  //   const addNewGuess = useAddNewGuessHandler();
+    const numberOfTurnsDiv = screen.getByTestId('number-of-turns');
+    const currentGuessDiv = screen.getByTestId('current-guess');
+    const isGameOverDiv = screen.getByTestId('is-game-over');
+    const guessesDiv = screen.getByTestId('guesses');
+    const historyDiv = screen.getByTestId('history');
+    const isCorrectDiv = screen.getByTestId('is-correct');
+    const usedKeysDiv = screen.getByTestId('used-keys');
+    const isGuessAnimationFiringDiv = screen.getByTestId('is-guess-animation-firing');
 
-  //   // Action
-  //   addNewGuess(formattedGuess);
-  //   jest.runAllTimers();
+    // Assert
+    expect(numberOfTurnsDiv.textContent).toBe((4).toString());
+    expect(currentGuessDiv.textContent).toBe('');
+    expect(isGameOverDiv.textContent).toBe('false');
+    expect(guessesDiv.textContent).toBe('[[{\"letter\":\"a\",\"colour\":\"yellow\"},{\"letter\":\"b\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"yellow\"},{\"letter\":\"c\",\"colour\":\"green\"},{\"letter\":\"d\",\"colour\":\"grey\"}],[{\"letter\":\"d\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"green\"},{\"letter\":\"a\",\"colour\":\"green\"},{\"letter\":\"t\",\"colour\":\"grey\"},{\"letter\":\"h\",\"colour\":\"grey\"}],[{\"letter\":\"p\",\"colour\":\"green\"},{\"letter\":\"i\",\"colour\":\"grey\"},{\"letter\":\"z\",\"colour\":\"grey\"},{\"letter\":\"z\",\"colour\":\"grey\"},{\"letter\":\"a\",\"colour\":\"yellow\"}],[{\"letter\":\"p\",\"colour\":\"green\"},{\"letter\":\"o\",\"colour\":\"grey\"},{\"letter\":\"r\",\"colour\":\"grey\"},{\"letter\":\"c\",\"colour\":\"green\"},{\"letter\":\"h\",\"colour\":\"green\"}]]');
+    expect(historyDiv.textContent).toBe('[\"abecd\",\"death\",\"pizza\",\"porch\"]');
+    expect(isCorrectDiv.textContent).toBe('false');
+    expect(usedKeysDiv.textContent).toBe('{\"a\":\"green\",\"b\":\"grey\",\"e\":\"green\",\"c\":\"green\",\"d\":\"grey\",\"t\":\"grey\",\"h\":\"green\",\"i\":\"grey\",\"p\":\"green\",\"z\":\"grey\",\"o\":\"grey\",\"r\":\"grey\"}');
+    expect(isGuessAnimationFiringDiv.textContent).toBe('true');
 
-  //   // Assert
-  //   expect(setNumberOfTurnsFn).toHaveBeenCalled();
+    act(() => {
+      jest.runAllTimers();
+    });
 
-  //   const setNumberOfTurnsCallback = setNumberOfTurnsFn.mock.calls[0][0] as (
-  //     prevNumberOfTurns: number
-  //   ) => number;
+    expect(isGuessAnimationFiringDiv.textContent).toBe('false');
+    expect(updateStatisticsByGameResultFn).not.toHaveBeenCalled();
+  });
 
-  //   const newNumberOfTurns = setNumberOfTurnsCallback(numberOfTurns);
+  it("fifth turn and guess is not the solution, sets correct state", () => {
+    // Arrange
+    const numberOfTurns = 4;
+    const currentGuess = "perch";
+    const solution = "peach";
+    const isGameOver = false;
+    const currentGuesses: (GuessLetterResult[] | undefined)[] = [
+      [
+        { letter: "a", colour: GuessColour.yellow },
+        { letter: "b", colour: GuessColour.grey },
+        { letter: "e", colour: GuessColour.yellow },
+        { letter: "c", colour: GuessColour.green },
+        { letter: "d", colour: GuessColour.grey },
+      ],
+      [
+        { letter: "d", colour: GuessColour.grey },
+        { letter: "e", colour: GuessColour.green },
+        { letter: "a", colour: GuessColour.green },
+        { letter: "t", colour: GuessColour.grey },
+        { letter: "h", colour: GuessColour.grey },
+      ],
+      [
+        { letter: "p", colour: GuessColour.green },
+        { letter: "i", colour: GuessColour.grey },
+        { letter: "z", colour: GuessColour.grey },
+        { letter: "z", colour: GuessColour.grey },
+        { letter: "a", colour: GuessColour.yellow },
+      ],
+      [
+        { letter: "p", colour: GuessColour.green },
+        { letter: "o", colour: GuessColour.grey },
+        { letter: "r", colour: GuessColour.grey },
+        { letter: "c", colour: GuessColour.green },
+        { letter: "h", colour: GuessColour.green },
+      ]
+    ];
+    const history: string[] = ['abecd', 'death', 'pizza', 'parch'];
+    const isCorrect = false;
+    const usedKeys: { [key: string]: GuessColour } = {
+      "a": GuessColour.green,
+      "b": GuessColour.grey,
+      "e": GuessColour.green,
+      "c": GuessColour.green,
+      "d": GuessColour.grey,
+      "t": GuessColour.grey,
+      "h": GuessColour.green,
+      "i": GuessColour.grey,
+      "p": GuessColour.green,
+      "z": GuessColour.grey,
+      "r": GuessColour.grey
+    };
+    const isGuessAnimating = false;
+    const formattedGuess: GuessLetterResult[] = [
+      { letter: "p", colour: GuessColour.green },
+      { letter: "a", colour: GuessColour.yellow },
+      { letter: "r", colour: GuessColour.grey },
+      { letter: "c", colour: GuessColour.green },
+      { letter: "h", colour: GuessColour.green },
+    ];
 
-  //   expect(newNumberOfTurns).toBe(2);
-  // });
+    const wrapper = createWrapperComponent(
+      numberOfTurns,
+      currentGuess,
+      isGameOver,
+      currentGuesses,
+      history,
+      isCorrect,
+      usedKeys,
+      isGuessAnimating,
+      solution
+    );
+    const updateStatisticsByGameResultFn = jest.fn();
 
-  // it("first turn and guess is not the solution and no previous used keys, setUsedKeys dispatch returns correct new used keys", () => {
-  //   // Arrange
-  //   const numberOfTurns = 1;
-  //   const currentGuess = "abcde";
-  //   const solution = "peach";
-  //   const formattedGuess: GuessLetterResult[] = [
-  //     { letter: "a", colour: GuessColour.green },
-  //     { letter: "b", colour: GuessColour.grey },
-  //     { letter: "c", colour: GuessColour.yellow },
-  //     { letter: "d", colour: GuessColour.green },
-  //     { letter: "e", colour: GuessColour.green },
-  //   ];
-  //   const currentUsedKeys: { [key: string]: GuessColour } = {};
+    (
+      useStatisticsUpdater as jest.MockedFunction<typeof useStatisticsUpdater>
+    ).mockImplementationOnce(() => updateStatisticsByGameResultFn);
 
-  //   const setIsGameOverFn = jest.fn();
-  //   const setCurrentGuessFn = jest.fn();
-  //   const setGuessesFn = jest.fn();
-  //   const setHistoryFn = jest.fn();
-  //   const setIsCorrectFn = jest.fn();
-  //   const setNumberOfTurnsFn = jest.fn();
-  //   const setUsedKeysFn = jest.fn();
-  //   const setIsGuessAnimationFiringFn = jest.fn();
-  //   const updateStatisticsByGameResultFn = jest.fn();
+    const newGuessHook = renderHook(() => useAddNewGuessHandler(), {
+      wrapper
+    });
 
-  //   (useWordle as jest.MockedFunction<typeof useWordle>).mockImplementationOnce(
-  //     () =>
-  //     ({
-  //       numberOfTurns,
-  //       currentGuess,
-  //       solution,
-  //       setIsGameOver: setIsGameOverFn as Dispatch<SetStateAction<boolean>>,
-  //       setCurrentGuess: setCurrentGuessFn as Dispatch<
-  //         SetStateAction<string>
-  //       >,
-  //       setGuesses: setGuessesFn as Dispatch<
-  //         SetStateAction<({ key: string; colour: string }[] | undefined)[]>
-  //       >,
-  //       setHistory: setHistoryFn as Dispatch<SetStateAction<string[]>>,
-  //       setIsCorrect: setIsCorrectFn as Dispatch<SetStateAction<boolean>>,
-  //       setNumberOfTurns: setNumberOfTurnsFn as Dispatch<
-  //         SetStateAction<number>
-  //       >,
-  //       setUsedKeys: setUsedKeysFn as Dispatch<
-  //         SetStateAction<{ [key: string]: string }>
-  //       >,
-  //       setIsGuessAnimationFiring: setIsGuessAnimationFiringFn as Dispatch<
-  //         SetStateAction<boolean>
-  //       >,
-  //     } as WordleState)
-  //   );
+    // Action
+    act(() => {
+      newGuessHook.result.current(formattedGuess);
+    });
 
-  //   (
-  //     useStatisticsUpdater as jest.MockedFunction<typeof useStatisticsUpdater>
-  //   ).mockImplementationOnce(() => updateStatisticsByGameResultFn);
+    const numberOfTurnsDiv = screen.getByTestId('number-of-turns');
+    const currentGuessDiv = screen.getByTestId('current-guess');
+    const isGameOverDiv = screen.getByTestId('is-game-over');
+    const guessesDiv = screen.getByTestId('guesses');
+    const historyDiv = screen.getByTestId('history');
+    const isCorrectDiv = screen.getByTestId('is-correct');
+    const usedKeysDiv = screen.getByTestId('used-keys');
+    const isGuessAnimationFiringDiv = screen.getByTestId('is-guess-animation-firing');
 
-  //   const addNewGuess = useAddNewGuessHandler();
+    // Assert
+    expect(numberOfTurnsDiv.textContent).toBe((5).toString());
+    expect(currentGuessDiv.textContent).toBe('');
+    expect(isGameOverDiv.textContent).toBe('false');
+    expect(guessesDiv.textContent).toBe('[[{\"letter\":\"a\",\"colour\":\"yellow\"},{\"letter\":\"b\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"yellow\"},{\"letter\":\"c\",\"colour\":\"green\"},{\"letter\":\"d\",\"colour\":\"grey\"}],[{\"letter\":\"d\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"green\"},{\"letter\":\"a\",\"colour\":\"green\"},{\"letter\":\"t\",\"colour\":\"grey\"},{\"letter\":\"h\",\"colour\":\"grey\"}],[{\"letter\":\"p\",\"colour\":\"green\"},{\"letter\":\"i\",\"colour\":\"grey\"},{\"letter\":\"z\",\"colour\":\"grey\"},{\"letter\":\"z\",\"colour\":\"grey\"},{\"letter\":\"a\",\"colour\":\"yellow\"}],[{\"letter\":\"p\",\"colour\":\"green\"},{\"letter\":\"o\",\"colour\":\"grey\"},{\"letter\":\"r\",\"colour\":\"grey\"},{\"letter\":\"c\",\"colour\":\"green\"},{\"letter\":\"h\",\"colour\":\"green\"}],[{\"letter\":\"p\",\"colour\":\"green\"},{\"letter\":\"a\",\"colour\":\"yellow\"},{\"letter\":\"r\",\"colour\":\"grey\"},{\"letter\":\"c\",\"colour\":\"green\"},{\"letter\":\"h\",\"colour\":\"green\"}]]');
+    expect(historyDiv.textContent).toBe('[\"abecd\",\"death\",\"pizza\",\"parch\",\"perch\"]');
+    expect(isCorrectDiv.textContent).toBe('false');
+    expect(usedKeysDiv.textContent).toBe('{\"a\":\"green\",\"b\":\"grey\",\"e\":\"green\",\"c\":\"green\",\"d\":\"grey\",\"t\":\"grey\",\"h\":\"green\",\"i\":\"grey\",\"p\":\"green\",\"z\":\"grey\",\"r\":\"grey\"}');
+    expect(isGuessAnimationFiringDiv.textContent).toBe('true');
 
-  //   // Action
-  //   addNewGuess(formattedGuess);
-  //   jest.runAllTimers();
+    act(() => {
+      jest.runAllTimers();
+    });
 
-  //   // Assert
-  //   expect(setUsedKeysFn).toHaveBeenCalled();
+    expect(isGuessAnimationFiringDiv.textContent).toBe('false');
+    expect(updateStatisticsByGameResultFn).not.toHaveBeenCalled();
+  });
 
-  //   const setUsedKeysCallback = setUsedKeysFn.mock
-  //     .calls[0][0] as (prevUsedKeys: { [key: string]: GuessColour }) => {
-  //       [key: string]: GuessColour;
-  //     };
+  it("sixth turn and guess is not the solution, sets correct state", () => {
+    // Arrange
+    const numberOfTurns = 5;
+    const currentGuess = "piece";
+    const solution = "peach";
+    const isGameOver = false;
+    const currentGuesses: (GuessLetterResult[] | undefined)[] = [
+      [
+        { letter: "a", colour: GuessColour.yellow },
+        { letter: "b", colour: GuessColour.grey },
+        { letter: "e", colour: GuessColour.yellow },
+        { letter: "c", colour: GuessColour.green },
+        { letter: "d", colour: GuessColour.grey },
+      ],
+      [
+        { letter: "d", colour: GuessColour.grey },
+        { letter: "e", colour: GuessColour.green },
+        { letter: "a", colour: GuessColour.green },
+        { letter: "t", colour: GuessColour.grey },
+        { letter: "h", colour: GuessColour.grey },
+      ],
+      [
+        { letter: "p", colour: GuessColour.green },
+        { letter: "i", colour: GuessColour.grey },
+        { letter: "z", colour: GuessColour.grey },
+        { letter: "z", colour: GuessColour.grey },
+        { letter: "a", colour: GuessColour.yellow },
+      ],
+      [
+        { letter: "p", colour: GuessColour.green },
+        { letter: "o", colour: GuessColour.grey },
+        { letter: "r", colour: GuessColour.grey },
+        { letter: "c", colour: GuessColour.green },
+        { letter: "h", colour: GuessColour.green },
+      ],
+      [
+        { letter: "p", colour: GuessColour.green },
+        { letter: "a", colour: GuessColour.yellow },
+        { letter: "r", colour: GuessColour.grey },
+        { letter: "c", colour: GuessColour.green },
+        { letter: "h", colour: GuessColour.green },
+      ],
+      [
+        { letter: "p", colour: GuessColour.green },
+        { letter: "e", colour: GuessColour.yellow },
+        { letter: "r", colour: GuessColour.grey },
+        { letter: "c", colour: GuessColour.green },
+        { letter: "h", colour: GuessColour.green },
+      ]
+    ];
+    const history: string[] = ['abecd', 'death', 'pizza', 'parch', 'perch'];
+    const isCorrect = false;
+    const usedKeys: { [key: string]: GuessColour } = {
+      "a": GuessColour.green,
+      "b": GuessColour.grey,
+      "e": GuessColour.green,
+      "c": GuessColour.green,
+      "d": GuessColour.grey,
+      "t": GuessColour.grey,
+      "h": GuessColour.green,
+      "i": GuessColour.grey,
+      "p": GuessColour.green,
+      "z": GuessColour.grey,
+      "r": GuessColour.grey
+    };
+    const isGuessAnimating = false;
+    const formattedGuess: GuessLetterResult[] = [
+      { letter: "p", colour: GuessColour.green },
+      { letter: "i", colour: GuessColour.grey },
+      { letter: "e", colour: GuessColour.yellow },
+      { letter: "c", colour: GuessColour.green },
+      { letter: "e", colour: GuessColour.yellow },
+    ];
 
-  //   const newUsedKeys = setUsedKeysCallback(currentUsedKeys);
+    const wrapper = createWrapperComponent(
+      numberOfTurns,
+      currentGuess,
+      isGameOver,
+      currentGuesses,
+      history,
+      isCorrect,
+      usedKeys,
+      isGuessAnimating,
+      solution
+    );
+    const updateStatisticsByGameResultFn = jest.fn();
 
-  //   expect(newUsedKeys).toBeDefined();
-  //   expect(newUsedKeys["a"]).toBe(GuessColour.green);
-  //   expect(newUsedKeys["b"]).toBe(GuessColour.grey);
-  //   expect(newUsedKeys["c"]).toBe(GuessColour.yellow);
-  //   expect(newUsedKeys["d"]).toBe(GuessColour.green);
-  //   expect(newUsedKeys["e"]).toBe(GuessColour.green);
-  // });
+    (
+      useStatisticsUpdater as jest.MockedFunction<typeof useStatisticsUpdater>
+    ).mockImplementationOnce(() => updateStatisticsByGameResultFn);
 
-  // it("first turn and guess is not the solution and has previous used keys that have better accuracy, setUsedKeys dispatch returns correct new used keys", () => {
-  //   // Arrange
-  //   const numberOfTurns = 1;
-  //   const currentGuess = "abcde";
-  //   const solution = "peach";
-  //   const formattedGuess: GuessLetterResult[] = [
-  //     { letter: "a", colour: GuessColour.yellow },
-  //     { letter: "b", colour: GuessColour.grey },
-  //     { letter: "c", colour: GuessColour.grey },
-  //     { letter: "d", colour: GuessColour.grey },
-  //     { letter: "e", colour: GuessColour.green },
-  //   ];
-  //   const currentUsedKeys: { [key: string]: GuessColour } = {
-  //     ["a"]: GuessColour.green,
-  //     ["b"]: GuessColour.green,
-  //     ["c"]: GuessColour.yellow,
-  //     ["d"]: GuessColour.grey,
-  //     ["e"]: GuessColour.green,
-  //   };
+    const newGuessHook = renderHook(() => useAddNewGuessHandler(), {
+      wrapper
+    });
 
-  //   const setIsGameOverFn = jest.fn();
-  //   const setCurrentGuessFn = jest.fn();
-  //   const setGuessesFn = jest.fn();
-  //   const setHistoryFn = jest.fn();
-  //   const setIsCorrectFn = jest.fn();
-  //   const setNumberOfTurnsFn = jest.fn();
-  //   const setUsedKeysFn = jest.fn();
-  //   const setIsGuessAnimationFiringFn = jest.fn();
-  //   const updateStatisticsByGameResultFn = jest.fn();
+    // Action
+    act(() => {
+      newGuessHook.result.current(formattedGuess);
+    });
 
-  //   (useWordle as jest.MockedFunction<typeof useWordle>).mockImplementationOnce(
-  //     () =>
-  //     ({
-  //       numberOfTurns,
-  //       currentGuess,
-  //       solution,
-  //       setIsGameOver: setIsGameOverFn as Dispatch<SetStateAction<boolean>>,
-  //       setCurrentGuess: setCurrentGuessFn as Dispatch<
-  //         SetStateAction<string>
-  //       >,
-  //       setGuesses: setGuessesFn as Dispatch<
-  //         SetStateAction<({ key: string; colour: string }[] | undefined)[]>
-  //       >,
-  //       setHistory: setHistoryFn as Dispatch<SetStateAction<string[]>>,
-  //       setIsCorrect: setIsCorrectFn as Dispatch<SetStateAction<boolean>>,
-  //       setNumberOfTurns: setNumberOfTurnsFn as Dispatch<
-  //         SetStateAction<number>
-  //       >,
-  //       setUsedKeys: setUsedKeysFn as Dispatch<
-  //         SetStateAction<{ [key: string]: string }>
-  //       >,
-  //       setIsGuessAnimationFiring: setIsGuessAnimationFiringFn as Dispatch<
-  //         SetStateAction<boolean>
-  //       >,
-  //     } as WordleState)
-  //   );
+    const numberOfTurnsDiv = screen.getByTestId('number-of-turns');
+    const currentGuessDiv = screen.getByTestId('current-guess');
+    const isGameOverDiv = screen.getByTestId('is-game-over');
+    const guessesDiv = screen.getByTestId('guesses');
+    const historyDiv = screen.getByTestId('history');
+    const isCorrectDiv = screen.getByTestId('is-correct');
+    const usedKeysDiv = screen.getByTestId('used-keys');
+    const isGuessAnimationFiringDiv = screen.getByTestId('is-guess-animation-firing');
 
-  //   (
-  //     useStatisticsUpdater as jest.MockedFunction<typeof useStatisticsUpdater>
-  //   ).mockImplementationOnce(() => updateStatisticsByGameResultFn);
+    // Assert
+    expect(numberOfTurnsDiv.textContent).toBe((6).toString());
+    expect(currentGuessDiv.textContent).toBe('');
+    expect(isGameOverDiv.textContent).toBe('true');
+    expect(guessesDiv.textContent).toBe('[[{\"letter\":\"a\",\"colour\":\"yellow\"},{\"letter\":\"b\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"yellow\"},{\"letter\":\"c\",\"colour\":\"green\"},{\"letter\":\"d\",\"colour\":\"grey\"}],[{\"letter\":\"d\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"green\"},{\"letter\":\"a\",\"colour\":\"green\"},{\"letter\":\"t\",\"colour\":\"grey\"},{\"letter\":\"h\",\"colour\":\"grey\"}],[{\"letter\":\"p\",\"colour\":\"green\"},{\"letter\":\"i\",\"colour\":\"grey\"},{\"letter\":\"z\",\"colour\":\"grey\"},{\"letter\":\"z\",\"colour\":\"grey\"},{\"letter\":\"a\",\"colour\":\"yellow\"}],[{\"letter\":\"p\",\"colour\":\"green\"},{\"letter\":\"o\",\"colour\":\"grey\"},{\"letter\":\"r\",\"colour\":\"grey\"},{\"letter\":\"c\",\"colour\":\"green\"},{\"letter\":\"h\",\"colour\":\"green\"}],[{\"letter\":\"p\",\"colour\":\"green\"},{\"letter\":\"a\",\"colour\":\"yellow\"},{\"letter\":\"r\",\"colour\":\"grey\"},{\"letter\":\"c\",\"colour\":\"green\"},{\"letter\":\"h\",\"colour\":\"green\"}],[{\"letter\":\"p\",\"colour\":\"green\"},{\"letter\":\"i\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"yellow\"},{\"letter\":\"c\",\"colour\":\"green\"},{\"letter\":\"e\",\"colour\":\"yellow\"}]]');
+    expect(historyDiv.textContent).toBe('[\"abecd\",\"death\",\"pizza\",\"parch\",\"perch\",\"piece\"]');
+    expect(isCorrectDiv.textContent).toBe('false');
+    expect(usedKeysDiv.textContent).toBe('{\"a\":\"green\",\"b\":\"grey\",\"e\":\"green\",\"c\":\"green\",\"d\":\"grey\",\"t\":\"grey\",\"h\":\"green\",\"i\":\"grey\",\"p\":\"green\",\"z\":\"grey\",\"r\":\"grey\"}');
+    expect(isGuessAnimationFiringDiv.textContent).toBe('false');
+    expect(updateStatisticsByGameResultFn).toHaveBeenCalledWith(false);
+  });
 
-  //   const addNewGuess = useAddNewGuessHandler();
+  it("guess is the solution, calls correct wordle dispatchers", () => {
+    // Arrange
+    const numberOfTurns = 1;
+    const currentGuess = "peach";
+    const solution = "peach";
+    const isGameOver = false;
+    const currentGuesses: (GuessLetterResult[] | undefined)[] = [
+      [
+        { letter: "a", colour: GuessColour.yellow },
+        { letter: "b", colour: GuessColour.grey },
+        { letter: "e", colour: GuessColour.yellow },
+        { letter: "c", colour: GuessColour.green },
+        { letter: "d", colour: GuessColour.grey },
+      ],
+    ];
+    const history: string[] = ['abecd'];
+    const isCorrect = false;
+    const usedKeys: { [key: string]: GuessColour } = {
+      "a": GuessColour.yellow,
+      "b": GuessColour.grey,
+      "e": GuessColour.yellow,
+      "c": GuessColour.green,
+      "d": GuessColour.grey,
+    };
+    const isGuessAnimating = false;
+    const formattedGuess: GuessLetterResult[] = [
+      { letter: "p", colour: GuessColour.green },
+      { letter: "e", colour: GuessColour.green },
+      { letter: "a", colour: GuessColour.green },
+      { letter: "c", colour: GuessColour.green },
+      { letter: "h", colour: GuessColour.green },
+    ];
 
-  //   // Action
-  //   addNewGuess(formattedGuess);
-  //   jest.runAllTimers();
+    const wrapper = createWrapperComponent(
+      numberOfTurns,
+      currentGuess,
+      isGameOver,
+      currentGuesses,
+      history,
+      isCorrect,
+      usedKeys,
+      isGuessAnimating,
+      solution
+    );
+    const updateStatisticsByGameResultFn = jest.fn();
 
-  //   // Assert
-  //   expect(setUsedKeysFn).toHaveBeenCalled();
+    (
+      useStatisticsUpdater as jest.MockedFunction<typeof useStatisticsUpdater>
+    ).mockImplementationOnce(() => updateStatisticsByGameResultFn);
 
-  //   const setUsedKeysCallback = setUsedKeysFn.mock
-  //     .calls[0][0] as (prevUsedKeys: { [key: string]: GuessColour }) => {
-  //       [key: string]: GuessColour;
-  //     };
+    const newGuessHook = renderHook(() => useAddNewGuessHandler(), {
+      wrapper
+    });
 
-  //   const newUsedKeys = setUsedKeysCallback(currentUsedKeys);
+    // Action
+    act(() => {
+      newGuessHook.result.current(formattedGuess);
+    });
 
-  //   expect(newUsedKeys).toBeDefined();
-  //   expect(newUsedKeys["a"]).toBe(GuessColour.green);
-  //   expect(newUsedKeys["b"]).toBe(GuessColour.green);
-  //   expect(newUsedKeys["c"]).toBe(GuessColour.yellow);
-  //   expect(newUsedKeys["d"]).toBe(GuessColour.grey);
-  //   expect(newUsedKeys["e"]).toBe(GuessColour.green);
-  // });
+    const numberOfTurnsDiv = screen.getByTestId('number-of-turns');
+    const currentGuessDiv = screen.getByTestId('current-guess');
+    const isGameOverDiv = screen.getByTestId('is-game-over');
+    const guessesDiv = screen.getByTestId('guesses');
+    const historyDiv = screen.getByTestId('history');
+    const isCorrectDiv = screen.getByTestId('is-correct');
+    const usedKeysDiv = screen.getByTestId('used-keys');
+    const isGuessAnimationFiringDiv = screen.getByTestId('is-guess-animation-firing');
 
-  // it("first turn and guess is not the solution and has previous used keys that have worse accuracy, setUsedKeys dispatch returns correct new used keys", () => {
-  //   // Arrange
-  //   const numberOfTurns = 1;
-  //   const currentGuess = "abcde";
-  //   const solution = "peach";
-  //   const formattedGuess: GuessLetterResult[] = [
-  //     { letter: "a", colour: GuessColour.yellow },
-  //     { letter: "b", colour: GuessColour.green },
-  //     { letter: "c", colour: GuessColour.grey },
-  //     { letter: "d", colour: GuessColour.grey },
-  //     { letter: "e", colour: GuessColour.green },
-  //   ];
-  //   const currentUsedKeys: { [key: string]: GuessColour } = {
-  //     ["a"]: GuessColour.grey,
-  //     ["b"]: GuessColour.yellow,
-  //     ["c"]: GuessColour.grey,
-  //     ["d"]: GuessColour.grey,
-  //     ["e"]: GuessColour.grey,
-  //   };
-
-  //   const setIsGameOverFn = jest.fn();
-  //   const setCurrentGuessFn = jest.fn();
-  //   const setGuessesFn = jest.fn();
-  //   const setHistoryFn = jest.fn();
-  //   const setIsCorrectFn = jest.fn();
-  //   const setNumberOfTurnsFn = jest.fn();
-  //   const setUsedKeysFn = jest.fn();
-  //   const setIsGuessAnimationFiringFn = jest.fn();
-  //   const updateStatisticsByGameResultFn = jest.fn();
-
-  //   (useWordle as jest.MockedFunction<typeof useWordle>).mockImplementationOnce(
-  //     () =>
-  //     ({
-  //       numberOfTurns,
-  //       currentGuess,
-  //       solution,
-  //       setIsGameOver: setIsGameOverFn as Dispatch<SetStateAction<boolean>>,
-  //       setCurrentGuess: setCurrentGuessFn as Dispatch<
-  //         SetStateAction<string>
-  //       >,
-  //       setGuesses: setGuessesFn as Dispatch<
-  //         SetStateAction<({ key: string; colour: string }[] | undefined)[]>
-  //       >,
-  //       setHistory: setHistoryFn as Dispatch<SetStateAction<string[]>>,
-  //       setIsCorrect: setIsCorrectFn as Dispatch<SetStateAction<boolean>>,
-  //       setNumberOfTurns: setNumberOfTurnsFn as Dispatch<
-  //         SetStateAction<number>
-  //       >,
-  //       setUsedKeys: setUsedKeysFn as Dispatch<
-  //         SetStateAction<{ [key: string]: string }>
-  //       >,
-  //       setIsGuessAnimationFiring: setIsGuessAnimationFiringFn as Dispatch<
-  //         SetStateAction<boolean>
-  //       >,
-  //     } as WordleState)
-  //   );
-
-  //   (
-  //     useStatisticsUpdater as jest.MockedFunction<typeof useStatisticsUpdater>
-  //   ).mockImplementationOnce(() => updateStatisticsByGameResultFn);
-
-  //   const addNewGuess = useAddNewGuessHandler();
-
-  //   // Action
-  //   addNewGuess(formattedGuess);
-  //   jest.runAllTimers();
-
-  //   // Assert
-  //   expect(setUsedKeysFn).toHaveBeenCalled();
-
-  //   const setUsedKeysCallback = setUsedKeysFn.mock
-  //     .calls[0][0] as (prevUsedKeys: { [key: string]: GuessColour }) => {
-  //       [key: string]: GuessColour;
-  //     };
-
-  //   const newUsedKeys = setUsedKeysCallback(currentUsedKeys);
-
-  //   expect(newUsedKeys).toBeDefined();
-  //   expect(newUsedKeys["a"]).toBe(GuessColour.yellow);
-  //   expect(newUsedKeys["b"]).toBe(GuessColour.green);
-  //   expect(newUsedKeys["c"]).toBe(GuessColour.grey);
-  //   expect(newUsedKeys["d"]).toBe(GuessColour.grey);
-  //   expect(newUsedKeys["e"]).toBe(GuessColour.green);
-  // });
-
-  // it("guess is the solution, calls correct wordle dispatchers", () => {
-  //   // Arrange
-  //   const numberOfTurns = 1;
-  //   const currentGuess = "abcde";
-  //   const solution = "abcde";
-  //   const formattedGuess: GuessLetterResult[] = [
-  //     { letter: "a", colour: GuessColour.yellow },
-  //     { letter: "b", colour: GuessColour.green },
-  //     { letter: "c", colour: GuessColour.grey },
-  //     { letter: "d", colour: GuessColour.grey },
-  //     { letter: "e", colour: GuessColour.green },
-  //   ];
-
-  //   const setIsGameOverFn = jest.fn();
-  //   const setCurrentGuessFn = jest.fn();
-  //   const setGuessesFn = jest.fn();
-  //   const setHistoryFn = jest.fn();
-  //   const setIsCorrectFn = jest.fn();
-  //   const setNumberOfTurnsFn = jest.fn();
-  //   const setUsedKeysFn = jest.fn();
-  //   const setIsGuessAnimationFiringFn = jest.fn();
-  //   const updateStatisticsByGameResultFn = jest.fn();
-
-  //   (useWordle as jest.MockedFunction<typeof useWordle>).mockImplementationOnce(
-  //     () =>
-  //     ({
-  //       numberOfTurns,
-  //       currentGuess,
-  //       solution,
-  //       setIsGameOver: setIsGameOverFn as Dispatch<SetStateAction<boolean>>,
-  //       setCurrentGuess: setCurrentGuessFn as Dispatch<
-  //         SetStateAction<string>
-  //       >,
-  //       setGuesses: setGuessesFn as Dispatch<
-  //         SetStateAction<({ key: string; colour: string }[] | undefined)[]>
-  //       >,
-  //       setHistory: setHistoryFn as Dispatch<SetStateAction<string[]>>,
-  //       setIsCorrect: setIsCorrectFn as Dispatch<SetStateAction<boolean>>,
-  //       setNumberOfTurns: setNumberOfTurnsFn as Dispatch<
-  //         SetStateAction<number>
-  //       >,
-  //       setUsedKeys: setUsedKeysFn as Dispatch<
-  //         SetStateAction<{ [key: string]: string }>
-  //       >,
-  //       setIsGuessAnimationFiring: setIsGuessAnimationFiringFn as Dispatch<
-  //         SetStateAction<boolean>
-  //       >,
-  //     } as WordleState)
-  //   );
-
-  //   (
-  //     useStatisticsUpdater as jest.MockedFunction<typeof useStatisticsUpdater>
-  //   ).mockImplementationOnce(() => updateStatisticsByGameResultFn);
-
-  //   const addNewGuess = useAddNewGuessHandler();
-
-  //   // Action
-  //   addNewGuess(formattedGuess);
-  //   jest.runAllTimers();
-
-  //   // Assert
-  //   expect(setIsCorrectFn).toHaveBeenCalledWith(true);
-  //   expect(setIsGameOverFn).toHaveBeenCalledWith(true);
-  //   expect(updateStatisticsByGameResultFn).toHaveBeenCalledWith(
-  //     true,
-  //     numberOfTurns
-  //   );
-  //   expect(setGuessesFn).toHaveBeenCalled();
-  //   expect(setHistoryFn).toHaveBeenCalled();
-  //   expect(setNumberOfTurnsFn).toHaveBeenCalled();
-  //   expect(setUsedKeysFn).toHaveBeenCalled();
-  //   expect(setIsGuessAnimationFiringFn).toHaveBeenCalledTimes(0);
-  //   expect(setCurrentGuessFn).toHaveBeenCalled();
-  // });
-
-  // it("last turn and guess is not the solution, calls correct wordle dispatchers", () => {
-  //   // Arrange
-  //   const numberOfTurns = 5;
-  //   const currentGuess = "abcde";
-  //   const solution = "peach";
-  //   const formattedGuess: GuessLetterResult[] = [
-  //     { letter: "a", colour: GuessColour.yellow },
-  //     { letter: "b", colour: GuessColour.green },
-  //     { letter: "c", colour: GuessColour.grey },
-  //     { letter: "d", colour: GuessColour.grey },
-  //     { letter: "e", colour: GuessColour.green },
-  //   ];
-
-  //   const setIsGameOverFn = jest.fn();
-  //   const setCurrentGuessFn = jest.fn();
-  //   const setGuessesFn = jest.fn();
-  //   const setHistoryFn = jest.fn();
-  //   const setIsCorrectFn = jest.fn();
-  //   const setNumberOfTurnsFn = jest.fn();
-  //   const setUsedKeysFn = jest.fn();
-  //   const setIsGuessAnimationFiringFn = jest.fn();
-  //   const updateStatisticsByGameResultFn = jest.fn();
-
-  //   (useWordle as jest.MockedFunction<typeof useWordle>).mockImplementationOnce(
-  //     () =>
-  //     ({
-  //       numberOfTurns,
-  //       currentGuess,
-  //       solution,
-  //       setIsGameOver: setIsGameOverFn as Dispatch<SetStateAction<boolean>>,
-  //       setCurrentGuess: setCurrentGuessFn as Dispatch<
-  //         SetStateAction<string>
-  //       >,
-  //       setGuesses: setGuessesFn as Dispatch<
-  //         SetStateAction<({ key: string; colour: string }[] | undefined)[]>
-  //       >,
-  //       setHistory: setHistoryFn as Dispatch<SetStateAction<string[]>>,
-  //       setIsCorrect: setIsCorrectFn as Dispatch<SetStateAction<boolean>>,
-  //       setNumberOfTurns: setNumberOfTurnsFn as Dispatch<
-  //         SetStateAction<number>
-  //       >,
-  //       setUsedKeys: setUsedKeysFn as Dispatch<
-  //         SetStateAction<{ [key: string]: string }>
-  //       >,
-  //       setIsGuessAnimationFiring: setIsGuessAnimationFiringFn as Dispatch<
-  //         SetStateAction<boolean>
-  //       >,
-  //     } as WordleState)
-  //   );
-
-  //   (
-  //     useStatisticsUpdater as jest.MockedFunction<typeof useStatisticsUpdater>
-  //   ).mockImplementationOnce(() => updateStatisticsByGameResultFn);
-
-  //   const addNewGuess = useAddNewGuessHandler();
-
-  //   // Action
-  //   addNewGuess(formattedGuess);
-  //   jest.runAllTimers();
-
-  //   // Assert
-  //   expect(setIsCorrectFn).not.toHaveBeenCalled();
-  //   expect(setIsGameOverFn).toHaveBeenCalledWith(true);
-  //   expect(updateStatisticsByGameResultFn).toHaveBeenCalledWith(false);
-  //   expect(setGuessesFn).toHaveBeenCalled();
-  //   expect(setHistoryFn).toHaveBeenCalled();
-  //   expect(setNumberOfTurnsFn).toHaveBeenCalled();
-  //   expect(setUsedKeysFn).toHaveBeenCalled();
-  //   expect(setIsGuessAnimationFiringFn).toHaveBeenCalledTimes(0);
-  //   expect(setCurrentGuessFn).toHaveBeenCalled();
-  // });
+    // Assert
+    expect(numberOfTurnsDiv.textContent).toBe((2).toString());
+    expect(currentGuessDiv.textContent).toBe('');
+    expect(isGameOverDiv.textContent).toBe('true');
+    expect(guessesDiv.textContent).toBe('[[{\"letter\":\"a\",\"colour\":\"yellow\"},{\"letter\":\"b\",\"colour\":\"grey\"},{\"letter\":\"e\",\"colour\":\"yellow\"},{\"letter\":\"c\",\"colour\":\"green\"},{\"letter\":\"d\",\"colour\":\"grey\"}],[{\"letter\":\"p\",\"colour\":\"green\"},{\"letter\":\"e\",\"colour\":\"green\"},{\"letter\":\"a\",\"colour\":\"green\"},{\"letter\":\"c\",\"colour\":\"green\"},{\"letter\":\"h\",\"colour\":\"green\"}]]');
+    expect(historyDiv.textContent).toBe('[\"abecd\",\"peach\"]');
+    expect(isCorrectDiv.textContent).toBe('true');
+    expect(usedKeysDiv.textContent).toBe('{\"a\":\"green\",\"b\":\"grey\",\"e\":\"green\",\"c\":\"green\",\"d\":\"grey\",\"p\":\"green\",\"h\":\"green\"}');
+    expect(isGuessAnimationFiringDiv.textContent).toBe('false');
+    expect(updateStatisticsByGameResultFn).toHaveBeenCalledWith(true, 1);
+  });
 });
