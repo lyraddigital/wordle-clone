@@ -45,7 +45,7 @@ describe("useTheme", () => {
     expect(isDarkModeDiv.textContent).toBe(actualIsDarkMode.toString());
   });
 
-  it("All Theme context data is returned from the hook correctly and all state is set correctly", () => {
+  it("All Theme context data is returned from the hook correctly and all state is set correctly after calling dispatchers", () => {
     // Arrange
     const isDarkMode = false;
     const wrapper = createWrapperComponent(isDarkMode);
