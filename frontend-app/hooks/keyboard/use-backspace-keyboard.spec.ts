@@ -1,7 +1,6 @@
 jest.mock("@/hooks/bindings/use-backspace-binding");
 
 import { renderHook } from "@testing-library/react";
-import { useHotkeys } from "react-hotkeys-hook";
 import user from "@testing-library/user-event";
 
 import useBackspaceBinding from "@/hooks/bindings/use-backspace-binding";

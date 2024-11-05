@@ -2,6 +2,7 @@ jest.mock("@/hooks/keyboard/use-alphabet-keyboard");
 jest.mock("@/hooks/keyboard/use-backspace-keyboard");
 jest.mock("@/hooks/keyboard/use-enter-keyboard");
 
+import { act, renderHook } from "@testing-library/react";
 import useAlphabetKeyboard from "@/hooks/keyboard/use-alphabet-keyboard";
 import useEnterKeyboard from "@/hooks/keyboard/use-backspace-keyboard";
 import useBackspaceKeyboard from "@/hooks/keyboard/use-enter-keyboard";
@@ -26,7 +27,9 @@ describe("useWordleKeyboard", () => {
     ).mockImplementationOnce(mockUseBackspaceKeyboard);
 
     // Action
-    useWordleKeyboard();
+    act(() => {
+      renderHook(() => useWordleKeyboard());
+    });
 
     // Assert
     expect(mockUseAlphabetKeyboard).toHaveBeenCalled();

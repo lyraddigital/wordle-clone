@@ -36,7 +36,7 @@ const useAlphabetKeyboard = () => {
       "z",
     ],
     (_: KeyboardEvent, handler: HotkeysEvent) => {
-      const keyPressed = handler.keys ? handler.keys[0] : null;
+      const keyPressed = handler.keys![0]!;
 
       if (keyPressed) {
         handleAlphabetCharacter(keyPressed);

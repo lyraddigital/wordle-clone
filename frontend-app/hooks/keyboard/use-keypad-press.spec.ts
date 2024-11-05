@@ -2,6 +2,7 @@ jest.mock("@/hooks/bindings/use-alphabet-binding");
 jest.mock("@/hooks/bindings/use-backspace-binding");
 jest.mock("@/hooks/bindings/use-enter-binding");
 
+import { act, renderHook } from "@testing-library/react";
 import useAlphabetBinding from "@/hooks/bindings/use-alphabet-binding";
 import useBackspaceBinding from "@/hooks/bindings/use-backspace-binding";
 import useEnterBinding from "@/hooks/bindings/use-enter-binding";
@@ -26,10 +27,12 @@ describe("useKeypadPress", () => {
       useEnterBinding as jest.MockedFunction<typeof useEnterBinding>
     ).mockImplementationOnce(() => mockHandleEnter);
 
-    const keyPressHandler = useKeypadPress();
+    const { result } = renderHook(() => useKeypadPress());
 
     // Action
-    keyPressHandler(keyPressed);
+    act(() => {
+      result.current(keyPressed);
+    });
 
     // Assert
     expect(mockHandleAlphabetCharacter).toHaveBeenCalledWith(keyPressed);
@@ -54,10 +57,12 @@ describe("useKeypadPress", () => {
       useEnterBinding as jest.MockedFunction<typeof useEnterBinding>
     ).mockImplementationOnce(() => mockHandleEnter);
 
-    const keyPressHandler = useKeypadPress();
+    const { result } = renderHook(() => useKeypadPress());
 
     // Action
-    keyPressHandler(keyPressed);
+    act(() => {
+      result.current(keyPressed);
+    });
 
     // Assert
     expect(mockHandleAlphabetCharacter).not.toHaveBeenCalled();
@@ -82,10 +87,12 @@ describe("useKeypadPress", () => {
       useEnterBinding as jest.MockedFunction<typeof useEnterBinding>
     ).mockImplementationOnce(() => mockHandleEnter);
 
-    const keyPressHandler = useKeypadPress();
+    const { result } = renderHook(() => useKeypadPress());
 
     // Action
-    keyPressHandler(keyPressed);
+    act(() => {
+      result.current(keyPressed);
+    });
 
     // Assert
     expect(mockHandleAlphabetCharacter).not.toHaveBeenCalled();
