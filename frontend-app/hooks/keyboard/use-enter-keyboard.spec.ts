@@ -1,7 +1,7 @@
 jest.mock("@/hooks/bindings/use-enter-binding");
 
 import { renderHook } from "@testing-library/react";
-import user from "@testing-library/user-event";
+import userEvent from "@testing-library/user-event";
 
 import useEnterBinding from "@/hooks/bindings/use-enter-binding";
 
@@ -10,6 +10,7 @@ import useEnterKeyboard from "./use-enter-keyboard";
 describe("useEnterKeyboard", () => {
   it("user presses Enter, useEnterBinding function is called", async () => {
     // Arrange
+    const user = userEvent.setup();
     const handleEnterFn = jest.fn();
     (
       useEnterBinding as jest.MockedFunction<typeof useEnterBinding>
@@ -26,6 +27,7 @@ describe("useEnterKeyboard", () => {
 
   it("user does not press Enter, handleEnterFn function is not called", async () => {
     // Arrange
+    const user = userEvent.setup();
     const handleEnterFn = jest.fn();
     (
       useEnterBinding as jest.MockedFunction<typeof useEnterBinding>

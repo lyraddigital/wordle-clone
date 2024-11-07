@@ -1,7 +1,7 @@
 jest.mock("@/hooks/bindings/use-alphabet-binding");
 
 import { renderHook } from "@testing-library/react";
-import user from "@testing-library/user-event";
+import userEvent from "@testing-library/user-event";
 
 import useAlphabetBinding from "@/hooks/bindings/use-alphabet-binding";
 
@@ -10,6 +10,7 @@ import useAlphabetKeyboard from "./use-alphabet-keyboard";
 describe("useAlphabetKeyboard", () => {
   it("useAlphabetBinding function can be called with all the letters of the alphabet", async () => {
     // Arrange
+    const user = userEvent.setup();
     const handleAlphabetCharacterFn = jest.fn();
     (
       useAlphabetBinding as jest.MockedFunction<typeof useAlphabetBinding>
@@ -60,6 +61,7 @@ describe("useAlphabetKeyboard", () => {
 
   it("useAlphabetBinding is not when when not using a letters of the alphabet", async () => {
     // Arrange
+    const user = userEvent.setup();
     const handleAlphabetCharacterFn = jest.fn();
     (
       useAlphabetBinding as jest.MockedFunction<typeof useAlphabetBinding>

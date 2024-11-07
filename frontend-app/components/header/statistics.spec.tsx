@@ -1,6 +1,6 @@
 import { PropsWithChildren, useState } from 'react';
 import { render, screen } from '@testing-library/react';
-import user from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 
 import ModalsContext, { ModalsState } from '@/contexts/modals-context';
 
@@ -31,6 +31,7 @@ const createWrapperComponent = (
 describe('Statistics Component', () => {
     it('show statics modal flag is set when clicking on the statistics div', async () => {
         // Arrange
+        const user = userEvent.setup();
         const wrapper = createWrapperComponent(
             false
         );

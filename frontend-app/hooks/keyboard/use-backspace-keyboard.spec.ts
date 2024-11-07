@@ -1,7 +1,7 @@
 jest.mock("@/hooks/bindings/use-backspace-binding");
 
 import { renderHook } from "@testing-library/react";
-import user from "@testing-library/user-event";
+import userEvent from "@testing-library/user-event";
 
 import useBackspaceBinding from "@/hooks/bindings/use-backspace-binding";
 
@@ -10,6 +10,7 @@ import useBackspaceKeyboard from "./use-backspace-keyboard";
 describe("useBackspaceKeyboard", () => {
   it("user presses Backspace, useBackspaceBinding function is called", async () => {
     // Arrange
+    const user = userEvent.setup();
     const handleBackspaceFn = jest.fn();
     (
       useBackspaceBinding as jest.MockedFunction<typeof useBackspaceBinding>
@@ -26,6 +27,7 @@ describe("useBackspaceKeyboard", () => {
 
   it("user does not press Backspace, useBackspaceBinding function is not called", async () => {
     // Arrange
+    const user = userEvent.setup();
     const handleBackspaceFn = jest.fn();
     (
       useBackspaceBinding as jest.MockedFunction<typeof useBackspaceBinding>

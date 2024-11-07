@@ -1,7 +1,7 @@
 jest.mock('@/hooks/keyboard/use-keypad-press');
 
 import { render, screen } from '@testing-library/react';
-import user from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 
 import useKeypadPress from "@/hooks/keyboard/use-keypad-press";
 
@@ -39,6 +39,7 @@ describe('KeyPadKey', () => {
 
     it('calls click event handler with value when keypad key is pressed', async () => {
         // Arrange
+        const user = userEvent.setup();
         const value = "a";
         const initialButtonContent = (
             <span>{value}</span>
