@@ -70,7 +70,9 @@ const createWrapperComponent = (
 };
 
 describe("useAddNewGuessHandler", () => {
-  jest.useFakeTimers();
+  beforeAll(() => {
+    jest.useFakeTimers();
+  });
 
   it("first turn and guess is not the solution, sets correct state", () => {
     // Arrange

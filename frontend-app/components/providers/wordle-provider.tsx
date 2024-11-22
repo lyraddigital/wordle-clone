@@ -5,10 +5,8 @@ import { GuessLetterResult } from "@/lib/types";
 import WordleContext, { WordleState } from "@/contexts/wordle-context";
 import getRandomWord from "@/data/words";
 
-const randomWord = getRandomWord();
-
 export default function WordleProvider({ children }: PropsWithChildren) {
-    const [solution, setSolution] = useState<string>(randomWord);
+    const [solution, setSolution] = useState<string>(getRandomWord());
     const [numberOfTurns, setNumberOfTurns] = useState<number>(0);
     const [currentGuess, setCurrentGuess] = useState<string>("");
     const [guesses, setGuesses] = useState<(GuessLetterResult[] | undefined)[]>([...Array(6)]); // each guess is an array
