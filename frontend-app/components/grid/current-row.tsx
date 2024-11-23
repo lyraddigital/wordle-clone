@@ -8,7 +8,6 @@ import Tile from "@/components/grid/tile";
 export default function CurrentRow() {
     const { currentGuess, isCurrentGuessIncorrect } = useWordle();
     const filledClasses = clsx(
-        " ",
         isCurrentGuessIncorrect ? "incorrect" : undefined
     );
     const unfilledClasses = clsx(
