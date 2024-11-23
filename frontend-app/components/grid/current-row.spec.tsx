@@ -24,6 +24,21 @@ const createWrapperComponent = (
 }
 
 describe('CurrentRow', () => {
+    it('sets the correct class on the row container', () => {
+        // Arrange
+        const currentGuess = '';
+        const isCurrentGuessIncorrect = false;
+        const wrapper = createWrapperComponent(currentGuess, isCurrentGuessIncorrect);
+
+        // Action
+        const { container } = render(<CurrentRow />, { wrapper });
+
+        // Assert
+        const rowContainerEl = container.querySelector('.current');
+
+        expect(rowContainerEl).not.toBeNull();
+    });
+
     it('shows the correct tiles when no letters of a guess is made', () => {
         // Arrange
         const currentGuess = '';

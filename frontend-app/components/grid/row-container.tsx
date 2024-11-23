@@ -7,7 +7,7 @@ type RowContainerProps = PropsWithChildren & {
 
 export default function RowContainer({ children, classes }: RowContainerProps) {
     const rowContainerClasses = clsx(
-        "flex gap-[5px] justify-center",
+        "row-container flex gap-[5px] justify-center",
         classes
     );
 

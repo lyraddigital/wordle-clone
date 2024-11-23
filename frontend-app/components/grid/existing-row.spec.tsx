@@ -6,6 +6,26 @@ import { GuessColour } from "@/lib/enums";
 import ExistingRow from "./existing-row";
 
 describe('ExistingRow', () => {
+    it('sets the correct class on the row container', () => {
+        // Arrange
+        const guess: GuessLetterResult[] = [
+            { letter: 'a', colour: GuessColour.grey },
+            { letter: 'b', colour: GuessColour.yellow },
+            { letter: 'c', colour: GuessColour.green },
+            { letter: 'd', colour: GuessColour.yellow },
+            { letter: 'e', colour: GuessColour.grey },
+        ];
+
+
+        // Action
+        const { container } = render(<ExistingRow guess={guess} />);
+
+        // Assert
+        const rowContainerEl = container.querySelector('.validated');
+
+        expect(rowContainerEl).not.toBeNull();
+    });
+
     it('shows the correct tiles based on the letter result (grey, yellow or green)', () => {
         // Arrange
         const guess: GuessLetterResult[] = [
@@ -16,6 +36,7 @@ describe('ExistingRow', () => {
             { letter: 'e', colour: GuessColour.grey },
         ];
 
+        // Action
         const { container } = render(<ExistingRow guess={guess} />);
 
         // Assert
