@@ -1,8 +1,11 @@
 import { wordExists } from "@/app/api/data/words";
-import GuessColour from "@/app/api/enums/guess-colour";
-import GuessLetterResult from "@/app/api/models/guess-letter-result";
 import GuessRequest from "@/app/api/models/guess-request";
 import GuessResult from "@/app/api/models/guess-result";
+import formatGuess from "@/app/api/services/guess.service";
+import generateSuccess, {
+  generateBadRequest,
+  generateFalsePositive,
+} from "@/app/api/services/response.service";
 import gameState from "@/app/api/state/game-state";
 
 export async function PATCH(request: Request) {
@@ -10,54 +13,43 @@ export async function PATCH(request: Request) {
 
   if (body?.guess) {
     if (gameState.isGameOver) {
-      return Response.json(
-        { message: "Cannot perform a guess. The game is over" },
-        { status: 400 }
-      );
+      return generateBadRequest("Cannot perform a guess. The game is over");
     }
 
     if (gameState.history.includes(body.guess)) {
-      return Response.json({
-        isSuccess: false,
-        reason: "You have already tried that word",
-      });
+      return generateBadRequest("You have already tried that word");
     }
 
     if (body.guess.length !== 5) {
-      return Response.json({
-        isSuccess: false,
-        reason: "Word must be 5 characters long",
-      });
+      return generateBadRequest("Word must be 5 characters long");
     }
 
     const doesWordExist = await wordExists(body.guess);
 
     if (!doesWordExist) {
-      return Response.json({
-        isSuccess: false,
-        reason: "Cannot submit guess. Word does not exist",
-      });
+      return generateFalsePositive("Cannot submit guess. Word does not exist");
     }
+
+    const currentSolution = gameState.currentWord!;
+    const isCorrect =
+      currentSolution.toLowerCase() === body.guess!.toLowerCase();
 
     gameState.history.push(body.guess);
     gameState.numberOfTurns += 1;
-    gameState.isGameOver = gameState.numberOfTurns === 5;
+    gameState.isGameOver = gameState.numberOfTurns === 5 || isCorrect;
 
-    const currentSolution = gameState.currentWord;
     const numberOfTurns = gameState.numberOfTurns;
-    const guessLetterResults: GuessLetterResult[] = [
-      { letter: "a", colour: GuessColour.yellow },
-    ];
+    const isGameOver = gameState.isGameOver;
+    const letterResults = formatGuess(currentSolution, body.guess!);
     const result: GuessResult = {
-      isGameOver: false,
-      letterResults: guessLetterResults,
+      letterResults,
+      numberOfTurns,
+      isGameOver,
+      isCorrect,
     };
 
-    return Response.json(result);
+    return generateSuccess(result);
   } else {
-    return Response.json(
-      { message: 'Please include a "guess" field in your payload' },
-      { status: 400 }
-    );
+    return generateBadRequest('Please include a "guess" field in your payload');
   }
 }
