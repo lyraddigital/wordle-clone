@@ -41,8 +41,11 @@ export async function PATCH(request: Request) {
     const numberOfTurns = gameState.numberOfTurns;
     const isGameOver = gameState.isGameOver;
     const letterResults = formatGuess(currentSolution, body.guess!);
+
+    gameState.guesses[numberOfTurns] = letterResults;
+
     const result: GuessResult = {
-      letterResults,
+      guesses: gameState.guesses,
       numberOfTurns,
       isGameOver,
       isCorrect,

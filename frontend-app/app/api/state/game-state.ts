@@ -1,3 +1,5 @@
+import GuessLetterResult from "@/app/api/models/guess-letter-result";
+
 export type GameState = {
   currentWord?: string;
   numberOfTurns: number;
@@ -5,6 +7,7 @@ export type GameState = {
   isSuccessfulGuess: boolean;
   reason?: string;
   history: string[];
+  guesses: GuessLetterResult[][];
 };
 
 const gameState: GameState = {
@@ -12,6 +15,7 @@ const gameState: GameState = {
   isGameOver: false,
   isSuccessfulGuess: true,
   history: [],
+  guesses: [],
 };
 
 export default gameState;

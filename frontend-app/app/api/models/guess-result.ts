@@ -4,7 +4,7 @@ type GuessResult = {
   isGameOver: boolean;
   isCorrect: boolean;
   numberOfTurns: number;
-  letterResults: GuessLetterResult[];
+  guesses: GuessLetterResult[][];
 };
 
 export default GuessResult;
