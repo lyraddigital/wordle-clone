@@ -12,6 +12,12 @@ export async function PATCH(request: Request) {
   const body = (await request.json()) as GuessRequest;
 
   if (body?.guess) {
+    if (!gameState.currentWord) {
+      return generateBadRequest(
+        "Cannot perform a guess. You need to get a new word first"
+      );
+    }
+
     if (gameState.isGameOver) {
       return generateBadRequest("Cannot perform a guess. The game is over");
     }
