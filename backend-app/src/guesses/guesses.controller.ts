@@ -1,12 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './services/guesses.service';
+import { Body, Controller, Patch } from '@nestjs/common';
 
-@Controller()
-export class AppController {
-  constructor(private readonly appService: AppService) {}
+import { GuessRequest, GuessResponse } from 'src/guesses/models';
+import { GuessesService } from 'src/guesses/services';
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+@Controller('guesses')
+export class GuessesController {
+  constructor(private readonly guessesService: GuessesService) {}
+
+  @Patch()
+  public async guessWord(
+    @Body() request: GuessRequest,
+  ): Promise<GuessResponse> {
+    await this.guessesService.ensureGuessAllowed(request.guess);
+    return this.guessesService.addNewGuess(request.guess);
   }
 }

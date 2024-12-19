@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { GameState } from '../models/game-state';
+import { GameState } from 'src/core/models';
 
 @Injectable()
 export class StateService {
@@ -23,6 +23,12 @@ export class StateService {
   }
 
   private initializeState(): void {
-    this.state = {};
+    this.state = {
+      guesses: [],
+      history: [],
+      isCorrect: false,
+      isGameOver: false,
+      numberOfTurns: 0,
+    };
   }
 }

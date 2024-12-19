@@ -1,6 +1,10 @@
+import { GuessLetterResult } from './guess-letter-result';
+
 export type GameState = {
   word?: string;
-  history: string[];
   numberOfTurns: number;
+  history: string[];
+  isCorrect: boolean;
   isGameOver: boolean;
+  guesses: Array<Array<GuessLetterResult>>;
 };
