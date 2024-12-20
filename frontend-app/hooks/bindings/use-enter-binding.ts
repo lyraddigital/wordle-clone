@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 
+import submitGuess from "@/actions/submit-guess.action";
 import { wordExists } from "@/data/words";
 import useWordle from "@/hooks/wordle/use-wordle";
 import useModals from "@/hooks/modals/use-modals";
@@ -15,10 +16,11 @@ const useEnterBinding = (): (() => void) => {
     setIsCurrentGuessIncorrect,
   } = useWordle();
   const { showStatisticsModal, showHelpModal } = useModals();
+
   const formatGuess = useGuessFormatter();
   const addNewGuess = useAddNewGuessHandler();
 
-  const handleEnter = () => {
+  const handleEnter = async () => {
     if (
       isGameOver ||
       isGuessAnimationFiring ||
@@ -28,16 +30,18 @@ const useEnterBinding = (): (() => void) => {
       return;
     }
 
-    // do not allow duplicate words
-    if (history.includes(currentGuess)) {
-      toast("You have already tried that word");
+    // check word is 5 chars long
+    if (currentGuess.length !== 5) {
+      toast("Word must be 5 characters long");
       setIsCurrentGuessIncorrect(true);
       return;
     }
 
-    // check word is 5 chars long
-    if (currentGuess.length !== 5) {
-      toast("Word must be 5 characters long");
+    const result = await submitGuess();
+
+    // do not allow duplicate words
+    if (history.includes(currentGuess)) {
+      toast("You have already tried that word");
       setIsCurrentGuessIncorrect(true);
       return;
     }

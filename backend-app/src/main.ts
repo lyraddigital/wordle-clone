@@ -8,24 +8,29 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({
-      stopAtFirstError: true,
       exceptionFactory: (errors: ValidationError[]) => {
-        throw new BadRequestException({
-          errors: [
-            ...errors.map((e) => ({
-              code:
-                e.constraints &&
-                e.contexts &&
-                Object.keys(e.constraints).length >= 1
-                  ? e.contexts[Object.keys(e.constraints)[0]].code
-                  : undefined,
-              field: e.property,
-              message:
-                e.constraints && Object.keys(e.constraints).length >= 1
-                  ? e.constraints[Object.keys(e.constraints)[0]]
-                  : undefined,
+        const fieldErrors = [];
+
+        errors.forEach((error) => {
+          if (!error.constraints) {
+            return;
+          }
+
+          const constraintKeys = Object.keys(error.constraints);
+
+          fieldErrors.push(
+            ...constraintKeys.map((k) => ({
+              code: error.contexts ? error.contexts[k].code : undefined,
+              fieldName: error.property,
+              message: error.constraints[k],
             })),
-          ],
+          );
+        });
+
+        fieldErrors.sort((a, b) => (a.code < b.code ? -1 : 1));
+
+        throw new BadRequestException({
+          errors: fieldErrors,
         });
       },
     }),

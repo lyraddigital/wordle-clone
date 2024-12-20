@@ -5,7 +5,7 @@ import { GuessErrorStatusCodes } from 'src/guesses/enums';
 export class GuessRequest {
   @IsNotEmpty({
     context: { code: GuessErrorStatusCodes.GuessFieldEmpty },
-    message: 'The guess field must is required.',
+    message: 'The guess field is required.',
   })
   @IsLowercase({
     context: { code: GuessErrorStatusCodes.GuessFieldLowerCase },
