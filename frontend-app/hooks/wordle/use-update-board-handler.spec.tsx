@@ -8,7 +8,7 @@ import { GuessColour } from "@/lib/enums";
 import { GuessLetterResult } from "@/lib/types";
 import useStatisticsUpdater from "@/hooks/statistics/use-statistics-updater";
 
-import useAddNewGuessHandler from "./use-add-new-guess-handler";
+import useAddNewGuessHandler from "./use-update-board-handler";
 
 const createWrapperComponent = (
   defaultNumberOfTurns: number,

@@ -11,7 +11,7 @@ import ModalsContext, { ModalsState } from "@/contexts/modals-context";
 import WordleContext, { WordleState } from "@/contexts/wordle-context";
 import { wordExists } from "@/data/words";
 import useGuessFormatter from "@/hooks/wordle/use-guess-formatter";
-import useAddNewGuessHandler from "@/hooks/wordle/use-add-new-guess-handler";
+import useAddNewGuessHandler from "@/hooks/wordle/use-update-board-handler";
 import { GuessColour } from "@/lib/enums";
 import { GuessLetterResult } from "@/lib/types";
 

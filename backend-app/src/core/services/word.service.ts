@@ -19,6 +19,7 @@ export class WordService {
       word: newWord,
     };
 
+    this.stateService.resetAllState();
     this.stateService.patchState(patchedGameState);
 
     return await Promise.resolve();

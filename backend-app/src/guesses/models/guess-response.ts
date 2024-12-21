@@ -4,5 +4,6 @@ export type GuessResponse = {
   isGameOver: boolean;
   isCorrect: boolean;
   numberOfTurns: number;
-  guesses: GuessLetterResult[][];
+  currentGuess: GuessLetterResult[];
+  allGuesses: GuessLetterResult[][];
 };

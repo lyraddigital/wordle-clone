@@ -64,9 +64,11 @@ export class GuessesService {
     currentGuesses.push(currentGuessFormatted);
     currentNumberOfTurns += 1;
 
+    console.log(currentWord);
+
     const isCorrectGuess =
       currentWord.toLowerCase() === currentGuess.toLowerCase();
-    const isGameOver = currentNumberOfTurns === 5 || isCorrectGuess;
+    const isGameOver = currentNumberOfTurns === 6 || isCorrectGuess;
     const patchedGameState: Partial<GameState> = {
       guesses: currentGuesses,
       history: currentHistory,
@@ -78,10 +80,11 @@ export class GuessesService {
     this.stateService.patchState(patchedGameState);
 
     return {
+      allGuesses: currentGuesses,
+      currentGuess: currentGuessFormatted,
       isCorrect: isCorrectGuess,
       isGameOver,
       numberOfTurns: currentNumberOfTurns,
-      guesses: currentGuesses,
     };
   }
 

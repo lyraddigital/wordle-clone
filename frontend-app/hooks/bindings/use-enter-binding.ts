@@ -1,24 +1,21 @@
 import toast from "react-hot-toast";
 
 import submitGuess from "@/actions/submit-guess.action";
-import { wordExists } from "@/data/words";
 import useWordle from "@/hooks/wordle/use-wordle";
 import useModals from "@/hooks/modals/use-modals";
-import useGuessFormatter from "@/hooks/wordle/use-guess-formatter";
-import useAddNewGuessHandler from "@/hooks/wordle/use-add-new-guess-handler";
+import useUpdateBoardHandler from "@/hooks/wordle/use-update-board-handler";
+import { GuessErrorStatusCodes } from "@/lib/enums";
 
 const useEnterBinding = (): (() => void) => {
   const {
     isGameOver,
     currentGuess,
     isGuessAnimationFiring,
-    history,
     setIsCurrentGuessIncorrect,
   } = useWordle();
   const { showStatisticsModal, showHelpModal } = useModals();
 
-  const formatGuess = useGuessFormatter();
-  const addNewGuess = useAddNewGuessHandler();
+  const updateBoard = useUpdateBoardHandler();
 
   const handleEnter = async () => {
     if (
@@ -30,30 +27,41 @@ const useEnterBinding = (): (() => void) => {
       return;
     }
 
-    // check word is 5 chars long
     if (currentGuess.length !== 5) {
       toast("Word must be 5 characters long");
       setIsCurrentGuessIncorrect(true);
       return;
     }
 
-    const result = await submitGuess();
+    const result = await submitGuess(currentGuess);
 
-    // do not allow duplicate words
-    if (history.includes(currentGuess)) {
-      toast("You have already tried that word");
-      setIsCurrentGuessIncorrect(true);
-      return;
+    if (result.errors) {
+      const wordAlreadyTriedError = result.errors.find(
+        (e) => e.code === GuessErrorStatusCodes.wordAlreadyTried
+      );
+      const wordNotFoundError = result.errors.find(
+        (e) => e.code === GuessErrorStatusCodes.wordDoesNotExist
+      );
+
+      if (wordAlreadyTriedError) {
+        toast(wordAlreadyTriedError.message);
+        return;
+      } else if (wordNotFoundError) {
+        toast(wordNotFoundError.message);
+        return;
+      } else {
+        toast("An unknown issue has occurred. Try again later.");
+        return;
+      }
     }
 
-    if (!wordExists(currentGuess)) {
-      toast("Word does not exist");
-      setIsCurrentGuessIncorrect(true);
-      return;
-    }
-
-    const formatted = formatGuess();
-    addNewGuess(formatted);
+    updateBoard(
+      result.currentGuess!,
+      result.allGuesses!,
+      result.isCorrect!,
+      result.isGameOver!,
+      result.numberOfTurns!
+    );
   };
 
   return handleEnter;

@@ -3,51 +3,47 @@ import { GuessLetterResult } from "@/lib/types";
 import useStatisticsUpdater from "@/hooks/statistics/use-statistics-updater";
 import useWordle from "@/hooks/wordle/use-wordle";
 
-export default function useAddNewGuessHandler(): (
-  formattedGuess: GuessLetterResult[]
+export default function useUpdateBoardHandler(): (
+  currentGuess: GuessLetterResult[],
+  allGuesses: GuessLetterResult[][],
+  isCorrect: boolean,
+  isGameOver: boolean,
+  numberOfTurns: number
 ) => void {
   const {
-    numberOfTurns,
-    currentGuess,
-    setIsGameOver,
     setCurrentGuess,
     setGuesses,
-    setHistory,
-    setIsCorrect,
     setNumberOfTurns,
     setUsedKeys,
+    setIsGameOver,
     setIsGuessAnimationFiring,
-    solution,
   } = useWordle();
 
   const updateStatisticsByGameResult = useStatisticsUpdater();
 
-  return (formattedGuess: GuessLetterResult[]) => {
-    const isGameOver = currentGuess === solution;
-
+  return (
+    currentGuess: GuessLetterResult[],
+    allGuesses: GuessLetterResult[][],
+    isCorrect: boolean,
+    isGameOver: boolean,
+    numberOfTurns: number
+  ) => {
     if (isGameOver) {
-      setIsCorrect(true);
-      setIsGameOver(true);
-      updateStatisticsByGameResult(true, numberOfTurns);
+      updateStatisticsByGameResult(isCorrect, numberOfTurns);
+    } else {
+      setIsGuessAnimationFiring(true);
+      setTimeout(() => {
+        setIsGuessAnimationFiring(false);
+      }, 750);
     }
 
-    setGuesses((prevGuesses) => {
-      let newGuesses = [...prevGuesses];
-      newGuesses[numberOfTurns] = formattedGuess;
-
-      return newGuesses;
-    });
-
-    setHistory((prevHistory) => {
-      return [...prevHistory, currentGuess];
-    });
-
-    setNumberOfTurns((prevTurn) => prevTurn + 1);
-
+    setIsGameOver(isGameOver);
+    setGuesses([...allGuesses, ...Array(6 - numberOfTurns)]);
+    setNumberOfTurns(numberOfTurns);
     setUsedKeys((prevUsedKeys) => {
       let newKeys = { ...prevUsedKeys };
 
-      formattedGuess.forEach((lg) => {
+      currentGuess.forEach((lg) => {
         const currentColour = newKeys[lg.letter];
 
         if (lg.colour === GuessColour.green) {
@@ -75,18 +71,6 @@ export default function useAddNewGuessHandler(): (
 
       return newKeys;
     });
-
-    if (!isGameOver) {
-      if (numberOfTurns === 5) {
-        setIsGameOver(true);
-        updateStatisticsByGameResult(false);
-      } else {
-        setIsGuessAnimationFiring(true);
-        setTimeout(() => {
-          setIsGuessAnimationFiring(false);
-        }, 750);
-      }
-    }
 
     setCurrentGuess("");
   };
